@@ -90,6 +90,63 @@ console.log("解析并替换字符串中的模板")
 console.log(MOCK.resolveTemplate("你好啊, 你的用户名是 {{$string.nanoid}}, UUID是 {{$string.uuid}}"))
 ```
 
+如果你还需要自定义分类, 方法, 处理器分类, 处理器方法~ (真是小馋猫呢, 什么都想要~)
+
+```js
+import {createMockService} from "@erhai_lake/mock-service"
+
+const userCategory = (categoryRegistry, processorRegistry) => {
+	const CATEGORY = categoryRegistry.registerCategory({
+		id: "user",
+		title: "用户相关",
+		description: "用户信息生成"
+	})
+
+	CATEGORY.methods.registerMethod({
+		id: "name",
+		title: "用户名",
+		description: "随机用户名",
+		generate() {
+			return "user_" + Math.random().toString(36).slice(2, 8)
+		}
+	})
+
+	CATEGORY.methods.registerMethod({
+		id: "age",
+		title: "年龄",
+		description: "随机年龄",
+		generate() {
+			return Math.floor(Math.random() * 60) + 18
+		}
+	})
+}
+
+const mock = createMockService({
+	categoryRegisters: [userCategory],
+	processorRegisters: []
+})
+
+console.log("获取所有分类")
+console.log(mock.getAllCategory())
+```
+
+```ts
+import type {CategoryRegistry, ProcessorCategoryRegistry} from "@erhai_lake/mock-service"
+import {createMockService} from "@erhai_lake/mock-service"
+
+const userCategory = (categoryRegistry: CategoryRegistry, processorRegistry: ProcessorCategoryRegistry) => {
+	...
+}
+
+const mock = createMockService({
+	categoryRegisters: [userCategory],
+	processorRegisters: []
+})
+
+console.log("获取所有分类")
+console.log(mock.getAllCategory())
+```
+
 ## 内容
 
 ### 目前有的类别和方法

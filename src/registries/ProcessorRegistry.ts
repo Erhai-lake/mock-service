@@ -1,7 +1,7 @@
 /**
  * 处理器定义
  */
-export interface ProcessorDefinition<P = any, R = any> {
+export interface Processor<P = any, R = any> {
 	id: string
 	title: string
 	description: string
@@ -13,7 +13,7 @@ export interface ProcessorDefinition<P = any, R = any> {
  * 处理器注册类
  */
 export class ProcessorRegistry {
-	private processors: Map<string, ProcessorDefinition>
+	private processors: Map<string, Processor>
 
 	constructor() {
 		this.processors = new Map()
@@ -22,7 +22,7 @@ export class ProcessorRegistry {
 	/**
 	 * 注册处理器
 	 */
-	registerProcessor<P = any, R = any>(definition: ProcessorDefinition<P, R>): ProcessorDefinition<P, R> {
+	registerProcessor<P = any, R = any>(definition: Processor<P, R>): Processor<P, R> {
 		const { id, title, description } = definition
 		if (!id) throw new Error("处理器必须具有id!")
 		if (!title) throw new Error("处理器必须具有标题!")
@@ -35,14 +35,14 @@ export class ProcessorRegistry {
 	/**
 	 * 获取处理器
 	 */
-	getProcessor(id: string): ProcessorDefinition | undefined {
+	getProcessor(id: string): Processor | undefined {
 		return this.processors.get(id)
 	}
 
 	/**
 	 * 获取所有处理器
 	 */
-	getAllProcessors(): ProcessorDefinition[] {
+	getAllProcessors(): Processor[] {
 		return Array.from(this.processors.values())
 	}
 }

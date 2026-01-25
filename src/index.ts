@@ -1,8 +1,14 @@
-import {CATEGORY_REGISTRY, PROCESSOR_CATEGORY_REGISTRY} from "./registries"
+import {createCategoryRegistry, createProcessorCategoryRegistry} from "./registries"
 import {buildParamsString, normalizeCallParams, parseParams, resolveParamValue, splitByTopLevelPipe} from "./Tools"
 import stringCategory from "./builtin/categorys/string"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
+
+export type { Category } from "./registries/CategoryRegistry"
+export type { Method } from "./registries/MethodRegistry"
+export type { Processor } from "./registries/ProcessorRegistry"
+export type { CategoryRegistry } from "./registries/CategoryRegistry"
+export type { ProcessorCategoryRegistry } from "./registries/ProcessorCategoryRegistry"
 
 export interface ProcessorCallConfig {
 	id: string
@@ -16,43 +22,46 @@ export interface GenerateTemplateConfig {
 	processors?: ProcessorCallConfig[]
 }
 
-class MockService {
-	private categoryRegistry = CATEGORY_REGISTRY
-	private processorRegistry = PROCESSOR_CATEGORY_REGISTRY
-	private _pluginQueue: Array<{ register: Function; priority: number }> = []
+export interface MockServiceOptions {
+	categoryRegisters?: Function[]
+	processorRegisters?: Function[]
+}
 
-	constructor({categoryRegisters = [], processorRegisters = []}: {
-		categoryRegisters?: Function[];
-		processorRegisters?: Function[]
-	} = {}) {
-		this._applyRegisters([
-			{
-				register: () => stringCategory(this.categoryRegistry, this.processorRegistry),
-				priority: 0
-			},
-			{
-				register: () => registerStringProcessors(this.categoryRegistry, this.processorRegistry),
-				priority: 0
-			},
-			{
-				register: () => registerEncodingProcessors(this.categoryRegistry, this.processorRegistry), priority: 0
-			}
-		])
-		for (const FN of [...categoryRegisters, ...processorRegisters]) {
-			this._pluginQueue.push({
-				register: FN,
-				priority: (FN as any).priority ?? 1
-			})
-		}
-		this._rebuildFromPlugins()
+class MockService {
+	private categoryRegistry = createCategoryRegistry()
+	private processorRegistry = createProcessorCategoryRegistry()
+	private plugins: Function[] = []
+
+	constructor(options: MockServiceOptions = {}) {
+		const {categoryRegisters = [], processorRegisters = []} = options
+		// 内置
+		stringCategory(this.categoryRegistry, this.processorRegistry)
+		registerStringProcessors(this.categoryRegistry, this.processorRegistry)
+		registerEncodingProcessors(this.categoryRegistry, this.processorRegistry)
+		// 自定义
+		this.plugins.push(...categoryRegisters, ...processorRegisters)
+		// 应用
+		this._applyPlugins()
 	}
 
 	/**
-	 * 应用注册函数
+	 * 应用所有插件
 	 */
-	private _applyRegisters(registers: Array<{ register: Function; priority: number }>) {
-		registers.sort((a, b) => a.priority - b.priority)
-		for (const {register} of registers) register?.(this.categoryRegistry, this.processorRegistry)
+	private _applyPlugins() {
+		for (const plugin of this.plugins) {
+			plugin?.(this.categoryRegistry, this.processorRegistry)
+		}
+		this._resolveAllMethodProcessors()
+	}
+
+	/**
+	 * 使用插件
+	 */
+	usePlugin(pluginFn: Function) {
+		this.plugins.push(pluginFn)
+		pluginFn(this.categoryRegistry, this.processorRegistry)
+		this._resolveAllMethodProcessors()
+		return this
 	}
 
 	/**
@@ -60,7 +69,9 @@ class MockService {
 	 */
 	private _resolveAllMethodProcessors() {
 		for (const CATEGORY of this.categoryRegistry.getAllCategories()) {
-			for (const METHOD of CATEGORY.methods.getAllMethods()) this._resolveMethodProcessors(METHOD)
+			for (const METHOD of CATEGORY.methods.getAllMethods()) {
+				this._resolveMethodProcessors(METHOD)
+			}
 		}
 	}
 
@@ -72,32 +83,10 @@ class MockService {
 		for (const CATEGORY_ID of method.processorIds) {
 			const PROCESSOR_CATEGORY = this.getProcessorCategory(CATEGORY_ID)
 			if (!PROCESSOR_CATEGORY) continue
-			for (const PROCESSOR of PROCESSOR_CATEGORY.methods.getAllProcessors()) method.registerProcessor(PROCESSOR)
+			for (const PROCESSOR of PROCESSOR_CATEGORY.methods.getAllProcessors()) {
+				method.registerProcessor(PROCESSOR)
+			}
 		}
-	}
-
-	/**
-	 * 从插件队列中重建分类和处理器
-	 */
-	private _rebuildFromPlugins() {
-		this._pluginQueue
-			.sort((a, b) => a.priority - b.priority)
-			.forEach(({register}) =>
-				register(this.categoryRegistry, this.processorRegistry)
-			)
-		this._resolveAllMethodProcessors()
-	}
-
-
-	/**
-	 * 使用插件
-	 */
-	usePlugin(pluginFn: Function) {
-		const RESULT: any = pluginFn(this.categoryRegistry, this.processorRegistry)
-		const PRIORITY = RESULT?.priority ?? 1
-		this._pluginQueue.push({register: pluginFn, priority: PRIORITY})
-		this._applyRegisters([{register: pluginFn, priority: PRIORITY}])
-		return this
 	}
 
 	/**
@@ -118,16 +107,14 @@ class MockService {
 	 * 获取指定分类下的所有方法
 	 */
 	getAllMethods(categoryId: string) {
-		const CATEGORY = this.getCategory(categoryId)
-		return CATEGORY ? CATEGORY.methods.getAllMethods() : []
+		return this.getCategory(categoryId)?.methods.getAllMethods() ?? []
 	}
 
 	/**
 	 * 获取指定分类下的指定方法
 	 */
 	getMethod(categoryId: string, methodId: string) {
-		const CATEGORY = this.getCategory(categoryId)
-		return CATEGORY?.methods.getMethod(methodId) ?? null
+		return this.getCategory(categoryId)?.methods.getMethod(methodId) ?? null
 	}
 
 	/**
@@ -251,4 +238,10 @@ class MockService {
 	}
 }
 
-export default MockService
+// 高级
+export function createMockService(options?: MockServiceOptions) {
+	return new MockService(options)
+}
+
+const defaultMockService = createMockService()
+export default defaultMockService

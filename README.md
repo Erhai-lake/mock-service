@@ -93,6 +93,63 @@ console.log("Parse and replace templates in a string")
 console.log(MOCK.resolveTemplate("Hello there, your username is {{$string.nanoid}}, and your UUID is {{$string.uuid}}"))
 ```
 
+If you still need custom categories, methods, processor categories, processor methods
+
+```js
+import {createMockService} from "@erhai_lake/mock-service"
+
+const userCategory = (categoryRegistry, processorRegistry) => {
+	const CATEGORY = categoryRegistry.registerCategory({
+		id: "user",
+		title: "User Related",
+		description: "User information generation"
+	})
+
+	CATEGORY.methods.registerMethod({
+		id: "name",
+		title: "Username",
+		description: "Random username",
+		generate() {
+			return "user_" + Math.random().toString(36).slice(2, 8)
+		}
+	})
+
+	CATEGORY.methods.registerMethod({
+		id: "age",
+		title: "Age",
+		description: "Random age",
+		generate() {
+			return Math.floor(Math.random() * 60) + 18
+		}
+	})
+}
+
+const mock = createMockService({
+	categoryRegisters: [userCategory],
+	processorRegisters: []
+})
+
+console.log("获取所有分类")
+console.log(mock.getAllCategory())
+```
+
+```ts
+import type {CategoryRegistry, ProcessorCategoryRegistry} from "@erhai_lake/mock-service"
+import {createMockService} from "@erhai_lake/mock-service"
+
+const userCategory = (categoryRegistry: CategoryRegistry, processorRegistry: ProcessorCategoryRegistry) => {
+	...
+}
+
+const mock = createMockService({
+	categoryRegisters: [userCategory],
+	processorRegisters: []
+})
+
+console.log("Get all categories")
+console.log(mock.getAllCategory())
+```
+
 ## Contents
 
 ### Currently Available Categories and Methods
