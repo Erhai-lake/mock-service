@@ -1,0 +1,6 @@
+/dist
+
+/node_modules
+/pnpm-lock.yaml
+
+/erhai_lake-mock-service-*.tgz
