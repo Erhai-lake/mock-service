@@ -3,6 +3,7 @@ import {buildParamsString, normalizeCallParams, parseParams, resolveParamValue, 
 import stringCategory from "./builtin/categorys/string"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
+import {MethodProcessor} from "./registries/MethodRegistry"
 
 export interface ProcessorCallConfig {
 	id: string
@@ -19,6 +20,13 @@ export interface GenerateTemplateConfig {
 export interface MockServiceOptions {
 	categoryRegisters?: Function[]
 	processorRegisters?: Function[]
+}
+
+export interface ProcessorGroup {
+	id: string
+	title: string
+	description: string
+	methods: MethodProcessor[]
 }
 
 class MockService {
@@ -141,6 +149,37 @@ class MockService {
 		const METHOD = this.getMethod(categoryId, methodId)
 		if (!METHOD) return null
 		return METHOD.getProcessor(processorId) ?? null
+	}
+
+	/**
+	 * 获取某个方法可用的处理器(按分类分组)
+	 */
+	getMethodProcessorGroups(categoryId: string, methodId: string): ProcessorGroup[] {
+		const METHOD = this.getMethod(categoryId, methodId)
+		if (!METHOD) return []
+		const RESULT: ProcessorGroup[] = []
+		for (const PROCESSOR_CATEGORY of this.processorRegistry.getAllCategories()) {
+			const processors: MethodProcessor[] = []
+			for (const PROCESSOR of PROCESSOR_CATEGORY.methods.getAllProcessors()) {
+				if (METHOD.getProcessor(PROCESSOR.id)) {
+					processors.push({
+						id: PROCESSOR.id,
+						title: PROCESSOR.title,
+						description: PROCESSOR.description,
+						params: PROCESSOR.params
+					})
+				}
+			}
+			if (processors.length) {
+				RESULT.push({
+					id: PROCESSOR_CATEGORY.id,
+					title: PROCESSOR_CATEGORY.title,
+					description: PROCESSOR_CATEGORY.description,
+					methods: processors
+				})
+			}
+		}
+		return RESULT
 	}
 
 	/**
