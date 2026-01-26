@@ -4,12 +4,6 @@ import stringCategory from "./builtin/categorys/string"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
 
-export type { Category } from "./registries/CategoryRegistry"
-export type { Method } from "./registries/MethodRegistry"
-export type { Processor } from "./registries/ProcessorRegistry"
-export type { CategoryRegistry } from "./registries/CategoryRegistry"
-export type { ProcessorCategoryRegistry } from "./registries/ProcessorCategoryRegistry"
-
 export interface ProcessorCallConfig {
 	id: string
 	params?: Record<string, any>
@@ -127,8 +121,26 @@ class MockService {
 	/**
 	 * 获取指定处理器分类
 	 */
-	getProcessorCategory(id: string) {
-		return this.processorRegistry.getCategory(id)
+	getProcessorCategory(categoryId: string) {
+		return this.processorRegistry.getCategory(categoryId)
+	}
+
+	/**
+	 * 获取指定分类下的指定方法的所有处理器
+	 */
+	getMethodsAllProcessor(categoryId: string, methodId: string) {
+		const METHOD = this.getMethod(categoryId, methodId)
+		if (!METHOD) return []
+		return METHOD.getAllProcessors() ?? []
+	}
+
+	/**
+	 * 获取指定分类下的指定方法的指定处理器
+	 */
+	getMethodsProcessor(categoryId: string, methodId: string, processorId: string) {
+		const METHOD = this.getMethod(categoryId, methodId)
+		if (!METHOD) return null
+		return METHOD.getProcessor(processorId) ?? null
 	}
 
 	/**
@@ -243,5 +255,12 @@ export function createMockService(options?: MockServiceOptions) {
 	return new MockService(options)
 }
 
-const defaultMockService = createMockService()
+export const defaultMockService = new MockService()
+
 export default defaultMockService
+
+export type {Category} from "./registries/CategoryRegistry"
+export type {Method} from "./registries/MethodRegistry"
+export type {Processor} from "./registries/ProcessorRegistry"
+export type {CategoryRegistry} from "./registries/CategoryRegistry"
+export type {ProcessorCategoryRegistry} from "./registries/ProcessorCategoryRegistry"

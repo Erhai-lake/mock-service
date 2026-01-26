@@ -2,8 +2,12 @@ import {defineConfig} from "tsup"
 
 export default defineConfig({
 	entry: ["src/index.ts"],
-	format: ["esm", "cjs"],
+	format: ["cjs", "esm"],
 	dts: true,
-	sourcemap: true,
+	splitting: false,
 	clean: true,
+	cjsInterop: true,
+	esbuildOptions(options) {
+		options.inject = []
+	}
 })
