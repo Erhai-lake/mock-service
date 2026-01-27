@@ -1,6 +1,7 @@
 import {createCategoryRegistry, createProcessorCategoryRegistry} from "./registries"
 import {buildParamsString, normalizeCallParams, parseParams, resolveParamValue, splitByTopLevelPipe} from "./Tools"
 import stringCategory from "./builtin/categorys/string"
+import loremCategory from "./builtin/categorys/lorem"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
 import {MethodProcessor} from "./registries/MethodRegistry"
@@ -38,6 +39,8 @@ class MockService {
 		const {categoryRegisters = [], processorRegisters = []} = options
 		// 内置
 		stringCategory(this.categoryRegistry, this.processorRegistry)
+		loremCategory(this.categoryRegistry, this.processorRegistry)
+
 		registerStringProcessors(this.categoryRegistry, this.processorRegistry)
 		registerEncodingProcessors(this.categoryRegistry, this.processorRegistry)
 		// 自定义

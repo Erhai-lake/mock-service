@@ -166,6 +166,14 @@ console.log(mock.getAllCategory())
 	* binary
 	* octal
 	* hexadecimal
+* lorem
+	* sentence
+	* sentences
+	* paragraph
+	* paragraphs
+	* word
+	* words
+	* slug
 
 ### Currently Available Processor Categories and Methods
 

@@ -163,6 +163,14 @@ console.log(mock.getAllCategory())
 	* binary
 	* octal
 	* hexadecimal
+* lorem
+	* sentence
+	* sentences
+	* paragraph
+	* paragraphs
+	* word
+	* words
+	* slug
 
 ### 目前有的处理器类别和方法
 
