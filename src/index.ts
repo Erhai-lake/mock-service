@@ -1,10 +1,16 @@
-import {createCategoryRegistry, createProcessorCategoryRegistry} from "./registries"
+import {createCategoryRegistry, createProcessorCategoryRegistry, createI18nRegistry} from "./registries"
 import {buildParamsString, normalizeCallParams, parseParams, resolveParamValue, splitByTopLevelPipe} from "./Tools"
+import {MethodProcessor} from "./registries/MethodRegistry"
+import {Category} from "./registries/CategoryRegistry"
+import {Method} from "./registries/MethodRegistry"
+import {ProcessorCategory} from "./registries/ProcessorCategoryRegistry"
+import {Locale} from "./registries/I18nRegistry"
 import stringCategory from "./builtin/categorys/string"
 import loremCategory from "./builtin/categorys/lorem"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
-import {MethodProcessor} from "./registries/MethodRegistry"
+import registerZhCN from "./builtin/i18n/zh-CN"
+import registerEnUS from "./builtin/i18n/en-US"
 
 export interface ProcessorCallConfig {
 	id: string
@@ -20,7 +26,8 @@ export interface GenerateTemplateConfig {
 
 export interface MockServiceOptions {
 	categoryRegisters?: Function[]
-	processorRegisters?: Function[]
+	processorRegisters?: Function[],
+	i18nRegisters?: Function[]
 }
 
 export interface ProcessorGroup {
@@ -33,19 +40,27 @@ export interface ProcessorGroup {
 class MockService {
 	private categoryRegistry = createCategoryRegistry()
 	private processorRegistry = createProcessorCategoryRegistry()
-	private plugins: Function[] = []
+	private i18nRegistry = createI18nRegistry()
+	private categoryPlugins: Function[] = []
+	private processorPlugins: Function[] = []
+	private i18nPlugin: Function[] = []
 
 	constructor(options: MockServiceOptions = {}) {
-		const {categoryRegisters = [], processorRegisters = []} = options
-		// 内置
-		stringCategory(this.categoryRegistry, this.processorRegistry)
-		loremCategory(this.categoryRegistry, this.processorRegistry)
-
-		registerStringProcessors(this.categoryRegistry, this.processorRegistry)
-		registerEncodingProcessors(this.categoryRegistry, this.processorRegistry)
+		const {categoryRegisters = [], processorRegisters = [], i18nRegisters = []} = options
+		// 内置方法
+		stringCategory(this.categoryRegistry)
+		loremCategory(this.categoryRegistry)
+		// 内置处理器
+		registerStringProcessors(this.processorRegistry)
+		registerEncodingProcessors(this.processorRegistry)
+		// 内置语言
+		registerZhCN(this.i18nRegistry)
+		registerEnUS(this.i18nRegistry)
 		// 自定义
-		this.plugins.push(...categoryRegisters, ...processorRegisters)
-		// 应用
+		this.categoryPlugins.push(...categoryRegisters)
+		this.processorPlugins.push(...processorRegisters)
+		this.i18nPlugin.push(...i18nRegisters)
+		// 应用插件
 		this._applyPlugins()
 	}
 
@@ -53,20 +68,16 @@ class MockService {
 	 * 应用所有插件
 	 */
 	private _applyPlugins() {
-		for (const plugin of this.plugins) {
-			plugin?.(this.categoryRegistry, this.processorRegistry)
+		for (const plugin of this.categoryPlugins) {
+			plugin?.(this.categoryRegistry)
+		}
+		for (const plugin of this.processorPlugins) {
+			plugin?.(this.processorRegistry)
+		}
+		for (const plugin of this.i18nPlugin) {
+			plugin?.(this.i18nRegistry)
 		}
 		this._resolveAllMethodProcessors()
-	}
-
-	/**
-	 * 使用插件
-	 */
-	usePlugin(pluginFn: Function) {
-		this.plugins.push(pluginFn)
-		pluginFn(this.categoryRegistry, this.processorRegistry)
-		this._resolveAllMethodProcessors()
-		return this
 	}
 
 	/**
@@ -86,11 +97,23 @@ class MockService {
 	private _resolveMethodProcessors(method: any) {
 		if (!Array.isArray(method.processorIds)) return
 		for (const CATEGORY_ID of method.processorIds) {
-			const PROCESSOR_CATEGORY = this.getProcessorCategory(CATEGORY_ID)
-			if (!PROCESSOR_CATEGORY) continue
-			for (const PROCESSOR of PROCESSOR_CATEGORY.methods.getAllProcessors()) {
+			const RAW_CATEGORY = this.processorRegistry.getCategory(CATEGORY_ID)
+			if (!RAW_CATEGORY) continue
+			for (const PROCESSOR of RAW_CATEGORY.methods.getAllProcessors()) {
 				method.registerProcessor(PROCESSOR)
 			}
+		}
+	}
+
+	/**
+	 * 翻译分类
+	 */
+	private _translateCategory(category: Category) {
+		return {
+			...category,
+			title: this.i18nRegistry.t(category.title),
+			description: this.i18nRegistry.t(category.description),
+			methods: category.methods
 		}
 	}
 
@@ -98,42 +121,97 @@ class MockService {
 	 * 获取所有分类
 	 */
 	getAllCategory() {
-		return this.categoryRegistry.getAllCategories()
+		return this.categoryRegistry
+			.getAllCategories()
+			.map((category) => this._translateCategory(category))
 	}
 
 	/**
 	 * 获取指定分类
 	 */
 	getCategory(id: string) {
-		return this.categoryRegistry.getCategory(id)
+		const CATEGORY = this.categoryRegistry.getCategory(id)
+		return CATEGORY ? this._translateCategory(CATEGORY) : null
+	}
+
+	/**
+	 * 翻译方法
+	 */
+	private _translateMethod(method: Method) {
+		return {
+			...method,
+			title: this.i18nRegistry.t(method.title),
+			description: this.i18nRegistry.t(method.description),
+			params: method.params?.map((param) => ({
+				...param,
+				title: this.i18nRegistry.t(param.title),
+				description: this.i18nRegistry.t(param.description)
+			}))
+		}
 	}
 
 	/**
 	 * 获取指定分类下的所有方法
 	 */
 	getAllMethods(categoryId: string) {
-		return this.getCategory(categoryId)?.methods.getAllMethods() ?? []
+		return this.getCategory(categoryId)
+			?.methods.getAllMethods()
+			?.map((method) => this._translateMethod(method)) ?? []
 	}
 
 	/**
 	 * 获取指定分类下的指定方法
 	 */
 	getMethod(categoryId: string, methodId: string) {
-		return this.getCategory(categoryId)?.methods.getMethod(methodId) ?? null
+		const CATEGORY = this.getCategory(categoryId)
+		if (!CATEGORY) return null
+		const METHOD = CATEGORY.methods.getMethod(methodId)
+		return METHOD ? this._translateMethod(METHOD) : null
+	}
+
+	/**
+	 * 翻译处理器分类
+	 */
+	private _translateProcessorCategory(category: ProcessorCategory) {
+		return {
+			...category,
+			title: this.i18nRegistry.t(category.title),
+			description: this.i18nRegistry.t(category.description),
+			methods: category.methods
+		}
 	}
 
 	/**
 	 * 获取所有处理器分类
 	 */
 	getAllProcessorCategory() {
-		return this.processorRegistry.getAllCategories()
+		return this.processorRegistry
+			.getAllCategories()
+			.map((category) => this._translateProcessorCategory(category))
 	}
 
 	/**
 	 * 获取指定处理器分类
 	 */
 	getProcessorCategory(categoryId: string) {
-		return this.processorRegistry.getCategory(categoryId)
+		const CATEGORY = this.processorRegistry.getCategory(categoryId)
+		return CATEGORY ? this._translateProcessorCategory(CATEGORY) : null
+	}
+
+	/**
+	 * 翻译处理器方法
+	 */
+	private _translateProcessorMethod(method: MethodProcessor) {
+		return {
+			...method,
+			title: this.i18nRegistry.t(method.title),
+			description: this.i18nRegistry.t(method.description),
+			params: method.params?.map((param: { title: string | undefined; description: string | undefined }) => ({
+				...param,
+				title: this.i18nRegistry.t(param.title),
+				description: this.i18nRegistry.t(param.description)
+			}))
+		}
 	}
 
 	/**
@@ -142,7 +220,9 @@ class MockService {
 	getMethodsAllProcessor(categoryId: string, methodId: string) {
 		const METHOD = this.getMethod(categoryId, methodId)
 		if (!METHOD) return []
-		return METHOD.getAllProcessors() ?? []
+		return METHOD
+			.getAllProcessors()
+			?.map((processor) => this._translateProcessorMethod(processor)) ?? []
 	}
 
 	/**
@@ -151,7 +231,7 @@ class MockService {
 	getMethodsProcessor(categoryId: string, methodId: string, processorId: string) {
 		const METHOD = this.getMethod(categoryId, methodId)
 		if (!METHOD) return null
-		return METHOD.getProcessor(processorId) ?? null
+		return this._translateProcessorMethod(<MethodProcessor>METHOD.getProcessor(processorId) ?? null)
 	}
 
 	/**
@@ -161,28 +241,46 @@ class MockService {
 		const METHOD = this.getMethod(categoryId, methodId)
 		if (!METHOD) return []
 		const RESULT: ProcessorGroup[] = []
-		for (const PROCESSOR_CATEGORY of this.processorRegistry.getAllCategories()) {
-			const processors: MethodProcessor[] = []
-			for (const PROCESSOR of PROCESSOR_CATEGORY.methods.getAllProcessors()) {
-				if (METHOD.getProcessor(PROCESSOR.id)) {
-					processors.push({
-						id: PROCESSOR.id,
-						title: PROCESSOR.title,
-						description: PROCESSOR.description,
-						params: PROCESSOR.params
-					})
+		for (const RAW_CATEGORY of this.processorRegistry.getAllCategories()) {
+			const CATEGORY = this._translateProcessorCategory(RAW_CATEGORY)
+			const METHODS: MethodProcessor[] = []
+			for (const RAW_PROCESSOR of RAW_CATEGORY.methods.getAllProcessors()) {
+				if (METHOD.getProcessor(RAW_PROCESSOR.id)) {
+					METHODS.push(this._translateProcessorMethod(RAW_PROCESSOR))
 				}
 			}
-			if (processors.length) {
+			if (METHODS.length) {
 				RESULT.push({
-					id: PROCESSOR_CATEGORY.id,
-					title: PROCESSOR_CATEGORY.title,
-					description: PROCESSOR_CATEGORY.description,
-					methods: processors
+					id: CATEGORY.id,
+					title: CATEGORY.title,
+					description: CATEGORY.description,
+					methods: METHODS
 				})
 			}
 		}
 		return RESULT
+	}
+
+	/**
+	 * 设置语言
+	 */
+	setLocale(locale: Locale, fallbackLocale: Locale) {
+		this.i18nRegistry.setLocale(locale)
+		if (fallbackLocale) this.i18nRegistry.setFallbackLocale(fallbackLocale)
+	}
+
+	/**
+	 * 设置回退语言
+	 */
+	setFallbackLocale(fallbackLocale: Locale) {
+		this.i18nRegistry.setFallbackLocale(fallbackLocale)
+	}
+
+	/**
+	 * 获取当前语言
+	 */
+	getLocale(): Locale {
+		return this.i18nRegistry.getLocale()
 	}
 
 	/**

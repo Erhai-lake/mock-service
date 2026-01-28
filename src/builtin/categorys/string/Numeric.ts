@@ -1,13 +1,13 @@
 export default function registerNumeric(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "numeric",
-		title: "数字字符串",
-		description: "生成一个由数字组成的字符串",
+		title: "category.string.numeric.title",
+		description: "category.string.numeric.description",
 		params: [
 			{
 				id: "min",
-				title: "最小长度",
-				description: "要生成的数字字符串的最小长度",
+				title: "category.string.numeric.params.min.title",
+				description: "category.string.numeric.params.min.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -15,8 +15,8 @@ export default function registerNumeric(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大长度",
-				description: "要生成的数字字符串的最大长度, 如果超出, 则会截取到最大长度",
+				title: "category.string.numeric.params.max.title",
+				description: "category.string.numeric.params.max.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -24,15 +24,15 @@ export default function registerNumeric(CATEGORY: any): void {
 			},
 			{
 				id: "allowLeadingZero",
-				title: "允许前导零",
-				description: "是否允许生成的数字字符串以零开头",
+				title: "category.string.numeric.params.allowLeadingZero.title",
+				description: "category.string.numeric.params.allowLeadingZero.description",
 				type: "boolean",
 				default: true
 			},
 			{
 				id: "exclude",
-				title: "排除字符",
-				description: "一个或多个要排除的数字字符, 用英文逗号分隔",
+				title: "category.string.numeric.params.exclude.title",
+				description: "category.string.numeric.params.exclude.description",
 				type: "string",
 				default: ""
 			}
@@ -61,8 +61,8 @@ export default function registerNumeric(CATEGORY: any): void {
 				let currentPool = pool
 				// 如果不允许首位为0, 且当前是第一个字符, 则移除0
 				if (!allowLeadingZero && i === 0) {
-					currentPool = currentPool.replace("0", "");
-					if (!currentPool) return "生成数字字符串失败: 首位无可用数字";
+					currentPool = currentPool.replace("0", "")
+					if (!currentPool) return "生成数字字符串失败: 首位无可用数字"
 				}
 				// 随机选一个字符
 				result += currentPool[Math.floor(Math.random() * currentPool.length)]

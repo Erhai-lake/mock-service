@@ -4,21 +4,21 @@ import {ZH_TEMPLATES} from "../constants/WordsZH"
 export default function registerParagraph(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "paragraph",
-		title: "生成一个段落",
-		description: "生成一个由多个句子组成的段落",
+		title: "category.lorem.paragraph.title",
+		description: "category.lorem.paragraph.description",
 		params: [
 			{
 				id: "language",
-				title: "语言",
-				description: "要生成的句子的语言",
+				title: "category.lorem.paragraph.params.language.title",
+				description: "category.lorem.paragraph.params.language.description",
 				type: "select",
 				default: "zh",
 				options: ["zh", "en"]
 			},
 			{
 				id: "min",
-				title: "最小句子数",
-				description: "要生成的最小句子数",
+				title: "category.lorem.paragraph.params.min.title",
+				description: "category.lorem.paragraph.params.min.description",
 				type: "number",
 				default: 2,
 				min: 1,
@@ -26,8 +26,8 @@ export default function registerParagraph(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大句子数",
-				description: "要生成的最大句子数",
+				title: "category.lorem.paragraph.params.max.title",
+				description: "category.lorem.paragraph.params.max.description",
 				type: "number",
 				default: 6,
 				min: 1,

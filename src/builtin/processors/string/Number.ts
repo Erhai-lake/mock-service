@@ -1,8 +1,8 @@
 export default function registerMD5(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
 		id: "number",
-		title: "字符串转换为数字",
-		description: "将输入的字符串转换为数字",
+		title: "processors.string.number.title",
+		description: "processors.string.number.description",
 		apply(value: string): number {
 			return Number(value)
 		}

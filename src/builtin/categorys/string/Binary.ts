@@ -1,20 +1,20 @@
 export default function registerBinary(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "binary",
-		title: "随机一个二进制字符串",
-		description: "返回一个随机的二进制字符串",
+		title: "category.string.binary.title",
+		description: "category.string.binary.description",
 		params: [
 			{
 				id: "prefix",
-				title: "前缀",
-				description: "生成的二进制字符串的前缀",
+				title: "category.string.binary.params.prefix.title",
+				description: "category.string.binary.params.prefix.description",
 				type: "string",
 				default: "0b"
 			},
 			{
 				id: "min",
-				title: "最小长度",
-				description: "要生成的字符串的最小长度",
+				title: "category.string.binary.params.min.title",
+				description: "category.string.binary.params.min.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -22,8 +22,8 @@ export default function registerBinary(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大长度",
-				description: "要生成的字符串的最大长度, 如果超出, 则会截取到最大长度(前缀不计算在内)",
+				title: "category.string.binary.params.max.title",
+				description: "category.string.binary.params.max.description",
 				type: "number",
 				default: 21,
 				min: 1,

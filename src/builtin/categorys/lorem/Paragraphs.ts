@@ -4,21 +4,21 @@ import {ZH_TEMPLATES} from "../constants/WordsZH"
 export default function registerParagraphs(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "paragraphs",
-		title: "生成多个段落",
-		description: "生成多个由多个句子组成的段落",
+		title: "category.lorem.paragraphs.title",
+		description: "category.lorem.paragraphs.description",
 		params: [
 			{
 				id: "language",
-				title: "语言",
-				description: "要生成的句子的语言",
+				title: "category.lorem.paragraphs.params.language.title",
+				description: "category.lorem.paragraphs.params.language.description",
 				type: "select",
 				default: "zh",
 				options: ["zh", "en"]
 			},
 			{
 				id: "min",
-				title: "最小段落数",
-				description: "要生成的最小段落数",
+				title: "category.lorem.paragraphs.params.min.title",
+				description: "category.lorem.paragraphs.params.min.description",
 				type: "number",
 				default: 3,
 				min: 1,
@@ -26,8 +26,8 @@ export default function registerParagraphs(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大段落数",
-				description: "要生成的最大段落数",
+				title: "category.lorem.paragraphs.params.max.title",
+				description: "category.lorem.paragraphs.params.max.description",
 				type: "number",
 				default: 3,
 				min: 1,
@@ -35,8 +35,8 @@ export default function registerParagraphs(CATEGORY: any): void {
 			},
 			{
 				id: "newlines",
-				title: "换行符数量",
-				description: "每个段落之间的换行符数量",
+				title: "category.lorem.paragraphs.params.newlines.title",
+				description: "category.lorem.paragraphs.params.newlines.description",
 				type: "number",
 				default: 2,
 				min: 1,

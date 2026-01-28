@@ -3,13 +3,13 @@ import {WORD_EN} from "../constants/WordEN"
 export default function registerSlug(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "slug",
-		title: "生成 slugified 文本",
-		description: "生成一个由多个单词组成的 slugified 文本",
+		title: "category.lorem.slug.title",
+		description: "category.lorem.slug.description",
 		params: [
 			{
 				id: "min",
-				title: "最小单词数",
-				description: "要生成的最小单词数",
+				title: "category.lorem.slug.params.min.title",
+				description: "category.lorem.slug.params.min.description",
 				type: "number",
 				default: 3,
 				min: 1,
@@ -17,8 +17,8 @@ export default function registerSlug(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大单词数",
-				description: "要生成的最大单词数",
+				title: "category.lorem.slug.params.max.title",
+				description: "category.lorem.slug.params.max.description",
 				type: "number",
 				default: 3,
 				min: 1,

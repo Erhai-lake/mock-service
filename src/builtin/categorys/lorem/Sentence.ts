@@ -4,21 +4,21 @@ import {ZH_TEMPLATES} from "../constants/WordsZH"
 export default function registerSentence(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "sentence",
-		title: "生成以句号结尾的句子",
-		description: "生成一个由随机词语组成的句子, 以句号结尾",
+		title: "category.lorem.sentence.title",
+		description: "category.lorem.sentence.description",
 		params: [
 			{
 				id: "language",
-				title: "语言",
-				description: "要生成的句子的语言",
+				title: "category.lorem.sentence.params.language.title",
+				description: "category.lorem.sentence.params.language.description",
 				type: "select",
 				default: "zh",
 				options: ["zh", "en"]
 			},
 			{
 				id: "min",
-				title: "最小单词数",
-				description: "要生成的最小词语数",
+				title: "category.lorem.sentence.params.min.title",
+				description: "category.lorem.sentence.params.min.description",
 				type: "number",
 				default: 3,
 				min: 1,
@@ -26,8 +26,8 @@ export default function registerSentence(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大单词数",
-				description: "要生成的最大词语数",
+				title: "category.lorem.sentence.params.max.title",
+				description: "category.lorem.sentence.params.max.description",
 				type: "number",
 				default: 10,
 				min: 1,

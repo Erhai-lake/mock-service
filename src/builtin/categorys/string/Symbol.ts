@@ -1,13 +1,13 @@
 export default function registerSymbol(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "symbol",
-		title: "随机符号字符串",
-		description: "生成一个由符号组成的字符串",
+		title: "category.string.symbol.title",
+		description: "category.string.symbol.description",
 		params: [
 			{
 				id: "min",
-				title: "最小长度",
-				description: "要生成的符号字符串的最小长度",
+				title: "category.string.symbol.params.min.title",
+				description: "category.string.symbol.params.min.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -15,8 +15,8 @@ export default function registerSymbol(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大长度",
-				description: "要生成的符号字符串的最大长度, 如果超出, 则会截取到最大长度",
+				title: "category.string.symbol.params.max.title",
+				description: "category.string.symbol.params.max.description",
 				type: "number",
 				default: 21,
 				min: 1,

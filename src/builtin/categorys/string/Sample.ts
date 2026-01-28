@@ -1,13 +1,13 @@
 export default function registerSample(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "sample",
-		title: "示例字符串",
-		description: "生成一个由字母, 数字, 符号组成的字符串",
+		title: "category.string.sample.title",
+		description: "category.string.sample.description",
 		params: [
 			{
 				id: "min",
-				title: "最小长度",
-				description: "要生成的字母和数字字符串的最小长度",
+				title: "category.string.sample.params.min.title",
+				description: "category.string.sample.params.min.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -15,8 +15,8 @@ export default function registerSample(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大长度",
-				description: "要生成的字母和数字字符串的最大长度, 如果超出, 则会截取到最大长度",
+				title: "category.string.sample.params.max.title",
+				description: "category.string.sample.params.max.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -24,23 +24,23 @@ export default function registerSample(CATEGORY: any): void {
 			},
 			{
 				id: "casing",
-				title: "大小写",
-				description: "字母大小写",
+				title: "category.string.sample.params.casing.title",
+				description: "category.string.sample.params.casing.description",
 				type: "select",
 				default: "mixed",
 				options: ["upper", "lower", "mixed"]
 			},
 			{
 				id: "allowLeadingZero",
-				title: "允许前导零",
-				description: "是否允许生成的数字字符串以零开头",
+				title: "category.string.sample.params.allowLeadingZero.title",
+				description: "category.string.sample.params.allowLeadingZero.description",
 				type: "boolean",
 				default: true
 			},
 			{
 				id: "exclude",
-				title: "排除字符",
-				description: "一个或多个要排除的字符, 用英文逗号分隔, 会同时排除大小写",
+				title: "category.string.sample.params.exclude.title",
+				description: "category.string.sample.params.exclude.description",
 				type: "string",
 				default: ""
 			}
@@ -84,15 +84,15 @@ export default function registerSample(CATEGORY: any): void {
 				)
 				pool = pool.split("").filter(ch => !EXCLUDE_SET.has(ch)).join("")
 			}
-			if (!pool) return "生成字符串失败: 字符池为空, 请检查设置"
+			if (!pool) return "pool is empty"
 			// 随机生成字符串
 			let result = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) {
 				let currentPool = pool
 				// 如果不允许首位为0, 且当前是第一个字符, 则移除0
 				if (!allowLeadingZero && i === 0) {
-					currentPool = currentPool.replace("0", "");
-					if (!currentPool) return "生成字符串失败: 首位无可用字符";
+					currentPool = currentPool.replace("0", "")
+					if (!currentPool) return "pool is empty after exclude"
 				}
 				// 随机选一个字符
 				result += currentPool[Math.floor(Math.random() * currentPool.length)]

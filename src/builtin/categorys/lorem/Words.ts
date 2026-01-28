@@ -4,21 +4,21 @@ import {WORD_ZH} from "../constants/WordZH"
 export default function registerWords(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "words",
-		title: "生成多个单词",
-		description: "生成多个随机单词",
+		title: "category.lorem.words.title",
+		description: "category.lorem.words.description",
 		params: [
 			{
 				id: "language",
-				title: "语言",
-				description: "要生成的句子的语言",
+				title: "category.lorem.words.params.language.title",
+				description: "category.lorem.words.params.language.description",
 				type: "select",
 				default: "zh",
 				options: ["zh", "en"]
 			},
 			{
 				id: "min",
-				title: "最小单词数",
-				description: "要生成的最小单词数",
+				title: "category.lorem.words.params.min.title",
+				description: "category.lorem.words.params.min.description",
 				type: "number",
 				default: 3,
 				min: 1,
@@ -26,8 +26,8 @@ export default function registerWords(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大单词数",
-				description: "要生成的最大单词数",
+				title: "category.lorem.words.params.max.title",
+				description: "category.lorem.words.params.max.description",
 				type: "number",
 				default: 3,
 				min: 1,
@@ -35,8 +35,8 @@ export default function registerWords(CATEGORY: any): void {
 			},
 			{
 				id: "separator",
-				title: "分隔符",
-				description: "要生成的单词之间的分隔符",
+				title: "category.lorem.words.params.separator.title",
+				description: "category.lorem.words.params.separator.description",
 				type: "string",
 				default: ""
 			}

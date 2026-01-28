@@ -4,21 +4,21 @@ import {ZH_TEMPLATES} from "../constants/WordsZH"
 export default function registerSentences(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "sentences",
-		title: "生成多个以句号结尾的句子",
-		description: "生成多个由随机词语组成的句子, 以句号结尾",
+		title: "category.lorem.sentences.title",
+		description: "category.lorem.sentences.description",
 		params: [
 			{
 				id: "language",
-				title: "语言",
-				description: "要生成的句子的语言",
+				title: "category.lorem.sentences.params.language.title",
+				description: "category.lorem.sentences.params.language.description",
 				type: "select",
 				default: "zh",
 				options: ["zh", "en"]
 			},
 			{
 				id: "sentenceMin",
-				title: "最小单词数",
-				description: "每个句子的最小词语数",
+				title: "category.lorem.sentences.params.sentenceMin.title",
+				description: "category.lorem.sentences.params.sentenceMin.description",
 				type: "number",
 				default: 3,
 				min: 1,
@@ -26,8 +26,8 @@ export default function registerSentences(CATEGORY: any): void {
 			},
 			{
 				id: "sentenceMax",
-				title: "最大单词数",
-				description: "每个句子的最大词语数",
+				title: "category.lorem.sentences.params.sentenceMax.title",
+				description: "category.lorem.sentences.params.sentenceMax.description",
 				type: "number",
 				default: 10,
 				min: 1,
@@ -35,8 +35,8 @@ export default function registerSentences(CATEGORY: any): void {
 			},
 			{
 				id: "min",
-				title: "最小句子数",
-				description: "要生成的最小句子数",
+				title: "category.lorem.sentences.params.min.title",
+				description: "category.lorem.sentences.params.min.description",
 				type: "number",
 				default: 2,
 				min: 1,
@@ -44,8 +44,8 @@ export default function registerSentences(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大句子数",
-				description: "要生成的最大句子数",
+				title: "category.lorem.sentences.params.max.title",
+				description: "category.lorem.sentences.params.max.description",
 				type: "number",
 				default: 6,
 				min: 1,
@@ -53,8 +53,8 @@ export default function registerSentences(CATEGORY: any): void {
 			},
 			{
 				id: "separator",
-				title: "分隔符",
-				description: "要生成的句子之间的分隔符",
+				title: "category.lorem.sentences.params.separator.title",
+				description: "category.lorem.sentences.params.separator.description",
 				type: "string",
 				default: ""
 			}

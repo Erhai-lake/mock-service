@@ -1,4 +1,4 @@
-import type {CategoryRegistry, ProcessorCategoryRegistry} from "../../../registries"
+import type {ProcessorCategoryRegistry} from "../../../registries"
 import registerLower from "./Lower"
 import registerUpper from "./Upper"
 import registerLength from "./Length"
@@ -9,11 +9,11 @@ import registerNumber from "./Number"
 import registerPadStart from "./PadStart"
 import registerPadEnd from "./PadEnd"
 
-export default function encodingDecoding(categoryRegistry: CategoryRegistry, processorRegistry: ProcessorCategoryRegistry) {
+export default function encodingDecoding(processorRegistry: ProcessorCategoryRegistry) {
 	const CATEGORY = processorRegistry.registerCategory({
 		id: "string",
-		title: "字符串相关",
-		description: "字符串相关的处理器"
+		title: "processors.string.title",
+		description: "processors.string.description"
 	})
 
 	registerLower(CATEGORY)

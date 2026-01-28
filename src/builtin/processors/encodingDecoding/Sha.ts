@@ -3,13 +3,13 @@ import CryptoJS from "crypto-js"
 export default function registerSha(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
 		id: "sha",
-		title: "SHA",
-		description: "对字符串进行 SHA 编码",
+		title: "processors.encodingDecoding.sha.title",
+		description: "processors.encodingDecoding.sha.description",
 		params: [
 			{
 				id: "algorithm",
-				title: "算法",
-				description: "SHA 算法",
+				title: "processors.encodingDecoding.sha.params.algorithm.title",
+				description: "processors.encodingDecoding.sha.params.algorithm.description",
 				type: "select",
 				default: "SHA256",
 				options: ["SHA1", "SHA224", "SHA256", "SHA384", "SHA512"]

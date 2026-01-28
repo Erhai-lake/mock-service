@@ -1,13 +1,13 @@
 export default function registerAlpha(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "alpha",
-		title: "字母字符串",
-		description: "生成一个由字母组成的字符串",
+		title: "category.string.alpha.title",
+		description: "category.string.alpha.description",
 		params: [
 			{
 				id: "min",
-				title: "最小长度",
-				description: "要生成的字母字符串的最小长度",
+				title: "category.string.alpha.params.min.title",
+				description: "category.string.alpha.params.min.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -15,8 +15,8 @@ export default function registerAlpha(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大长度",
-				description: "要生成的字母字符串的最大长度, 如果超出, 则会截取到最大长度",
+				title: "category.string.alpha.params.max.title",
+				description: "category.string.alpha.params.max.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -24,16 +24,16 @@ export default function registerAlpha(CATEGORY: any): void {
 			},
 			{
 				id: "casing",
-				title: "大小写",
-				description: "字母大小写",
+				title: "category.string.alpha.params.casing.title",
+				description: "category.string.alpha.params.casing.description",
 				type: "select",
 				default: "mixed",
 				options: ["upper", "lower", "mixed"]
 			},
 			{
 				id: "exclude",
-				title: "排除字符",
-				description: "一个或多个要排除的字符, 用英文逗号分隔, 会同时排除大小写",
+				title: "category.string.alpha.params.exclude.title",
+				description: "category.string.alpha.params.exclude.description",
 				type: "string",
 				default: ""
 			}

@@ -1,13 +1,13 @@
 export default function registerMD5(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
 		id: "padEnd",
-		title: "字符串右填充",
-		description: "将输入的字符串在右侧填充指定的字符串, 直到达到指定的长度",
+		title: "processors.string.padEnd.title",
+		description: "processors.string.padEnd.description",
 		params: [
 			{
 				id: "maxLength",
-				title: "最大长度",
-				description: "填充后的字符串最大长度",
+				title: "processors.string.padEnd.params.maxLength.title",
+				description: "processors.string.padEnd.params.maxLength.description",
 				type: "number",
 				default: 0,
 				min: 0,
@@ -15,8 +15,8 @@ export default function registerMD5(CATEGORY: any): void {
 			},
 			{
 				id: "fillString",
-				title: "填充字符串",
-				description: "用于填充的字符串",
+				title: "processors.string.padEnd.params.fillString.title",
+				description: "processors.string.padEnd.params.fillString.description",
 				type: "string",
 				default: ""
 			}

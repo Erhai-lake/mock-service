@@ -1,13 +1,13 @@
 export default function registerMD5(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
 		id: "substr",
-		title: "字符串截取",
-		description: "从输入字符串中截取指定范围的子字符串",
+		title: "processors.string.substr.title",
+		description: "processors.string.substr.description",
 		params: [
 			{
 				id: "start",
-				title: "截取开始位置",
-				description: "截取的开始位置",
+				title: "processors.string.substr.params.start.title",
+				description: "processors.string.substr.params.start.description",
 				type: "number",
 				default: 0,
 				min: 0,
@@ -15,8 +15,8 @@ export default function registerMD5(CATEGORY: any): void {
 			},
 			{
 				id: "length",
-				title: "截取长度",
-				description: "截取的长度",
+				title: "processors.string.substr.params.length.title",
+				description: "processors.string.substr.params.length.description",
 				type: "number",
 				default: 10,
 				min: 0,

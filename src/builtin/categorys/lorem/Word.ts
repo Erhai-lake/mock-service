@@ -4,13 +4,13 @@ import {WORD_ZH} from "../constants/WordZH"
 export default function registerWord(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "word",
-		title: "生成一个单词",
-		description: "生成一个随机单词",
+		title: "category.lorem.word.title",
+		description: "category.lorem.word.description",
 		params: [
 			{
 				id: "language",
-				title: "语言",
-				description: "要生成的句子的语言",
+				title: "category.lorem.word.params.language.title",
+				description: "category.lorem.word.params.language.description",
 				type: "select",
 				default: "zh",
 				options: ["zh", "en"]

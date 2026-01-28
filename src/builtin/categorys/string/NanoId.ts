@@ -3,13 +3,13 @@ import {nanoid} from "nanoid"
 export default function registerNanoId(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "nanoid",
-		title: "随机 Nano ID",
-		description: "生成一个随机且尽量唯一的 Nano ID",
+		title: "category.string.nanoId.title",
+		description: "category.string.nanoId.description",
 		params: [
 			{
 				id: "min",
-				title: "最小长度",
-				description: "Nano ID 最小长度",
+				title: "category.string.nanoId.params.min.title",
+				description: "category.string.nanoId.params.min.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -17,8 +17,8 @@ export default function registerNanoId(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大长度",
-				description: "Nano ID 最大长度",
+				title: "category.string.nanoId.params.max.title",
+				description: "category.string.nanoId.params.max.description",
 				type: "number",
 				default: 21,
 				min: 1,

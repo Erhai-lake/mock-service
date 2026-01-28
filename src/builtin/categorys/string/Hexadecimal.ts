@@ -1,28 +1,28 @@
 export default function registerHexadecimal(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "hexadecimal",
-		title: "随机一个十六进制字符串",
-		description: "返回一个随机的十六进制字符串.",
+		title: "category.string.hexadecimal.title",
+		description: "category.string.hexadecimal.description",
 		params: [
 			{
 				id: "prefix",
-				title: "前缀",
-				description: "生成的十六进制字符串的前缀.",
+				title: "category.string.hexadecimal.params.prefix.title",
+				description: "category.string.hexadecimal.params.prefix.description",
 				type: "string",
 				default: "0x"
 			},
 			{
 				id: "casing",
-				title: "大小写",
-				description: "字母大小写.",
+				title: "category.string.hexadecimal.params.casing.title",
+				description: "category.string.hexadecimal.params.casing.description",
 				type: "select",
 				default: "mixed",
 				options: ["upper", "lower", "mixed"]
 			},
 			{
 				id: "min",
-				title: "最小长度",
-				description: "要生成的字符串的最小长度.",
+				title: "category.string.hexadecimal.params.min.title",
+				description: "category.string.hexadecimal.params.min.description",
 				type: "number",
 				default: 21,
 				min: 1,
@@ -30,8 +30,8 @@ export default function registerHexadecimal(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "最大长度",
-				description: "要生成的字符串的最大长度, 如果超出, 则会截取到最大长度(前缀不计算在内).",
+				title: "category.string.hexadecimal.params.max.title",
+				description: "category.string.hexadecimal.params.max.description",
 				type: "number",
 				default: 21,
 				min: 1,
