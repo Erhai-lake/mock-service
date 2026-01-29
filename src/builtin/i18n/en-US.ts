@@ -348,6 +348,142 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						}
 					}
 				}
+			},
+			number: {
+				title: "Number",
+				description: "Methods related to numbers",
+				int: {
+					title: "Integer",
+					description: "Randomly generate an integer",
+					params: {
+						min: {
+							title: "Minimum integer",
+							description: "The smallest integer to generate"
+						},
+						max: {
+							title: "Maximum integer",
+							description: "The largest integer to generate"
+						},
+						multipleOf: {
+							title: "Multiple of",
+							description: "The integer must be a multiple of this number, 0 means no restriction"
+						}
+					}
+				},
+				positiveInt: {
+					title: "Positive Integer",
+					description: "Randomly generate a positive integer",
+					params: {
+						min: {
+							title: "Minimum positive integer",
+							description: "The smallest positive integer to generate"
+						},
+						max: {
+							title: "Maximum positive integer",
+							description: "The largest positive integer to generate"
+						},
+						multipleOf: {
+							title: "Multiple of",
+							description: "The positive integer must be a multiple of this number, 0 means no restriction"
+						}
+					}
+				},
+				negativeInt: {
+					title: "Negative Integer",
+					description: "Randomly generate a negative integer",
+					params: {
+						min: {
+							title: "Minimum negative integer",
+							description: "The smallest negative integer to generate"
+						},
+						max: {
+							title: "Maximum negative integer",
+							description: "The largest negative integer to generate"
+						},
+						multipleOf: {
+							title: "Multiple of",
+							description: "The negative integer must be a multiple of this number, 0 means no restriction"
+						}
+					}
+				},
+				bigInt: {
+					title: "Big Integer",
+					description: "Randomly generate a big integer",
+					params: {
+						min: {
+							title: "Minimum big integer",
+							description: "The smallest big integer to generate"
+						},
+						max: {
+							title: "Maximum big integer",
+							description: "The largest big integer to generate"
+						}
+					}
+				},
+				float: {
+					title: "Float",
+					description: "Randomly generate a floating-point number",
+					params: {
+						min: {
+							title: "Minimum float",
+							description: "The smallest float to generate"
+						},
+						max: {
+							title: "Maximum float",
+							description: "The largest float to generate"
+						},
+						fractionDigits: {
+							title: "Decimal places",
+							description: "The number of decimal places for the generated float"
+						},
+						multipleOf: {
+							title: "Multiple of",
+							description: "The float must be a multiple of this number, 0 means no restriction"
+						}
+					}
+				},
+				binary: {
+					title: "Binary",
+					description: "Randomly generate a binary number",
+					params: {
+						min: {
+							title: "Minimum binary number",
+							description: "The smallest binary number to generate"
+						},
+						max: {
+							title: "Maximum binary number",
+							description: "The largest binary number to generate"
+						}
+					}
+				},
+				octal: {
+					title: "Octal",
+					description: "Randomly generate an octal number",
+					params: {
+						min: {
+							title: "Minimum octal number",
+							description: "The smallest octal number to generate"
+						},
+						max: {
+							title: "Maximum octal number",
+							description: "The largest octal number to generate"
+						}
+					}
+				},
+				hexadecimal: {
+					title: "Hexadecimal",
+					description: "Randomly generate a hexadecimal number",
+					params: {
+						min: {
+							title: "Minimum hexadecimal number",
+							description: "The smallest hexadecimal number to generate"
+						},
+						max: {
+							title: "Maximum hexadecimal number",
+							description: "The largest hexadecimal number to generate"
+						}
+					}
+				}
 			}
 		},
 		processors: {

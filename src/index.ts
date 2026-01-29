@@ -7,6 +7,7 @@ import {ProcessorCategory} from "./registries/ProcessorCategoryRegistry"
 import {Locale} from "./registries/I18nRegistry"
 import stringCategory from "./builtin/categorys/string"
 import loremCategory from "./builtin/categorys/lorem"
+import numberCategory from "./builtin/categorys/number"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
 import registerZhCN from "./builtin/i18n/zh-CN"
@@ -50,6 +51,7 @@ class MockService {
 		// 内置方法
 		stringCategory(this.categoryRegistry)
 		loremCategory(this.categoryRegistry)
+		numberCategory(this.categoryRegistry)
 		// 内置处理器
 		registerStringProcessors(this.processorRegistry)
 		registerEncodingProcessors(this.processorRegistry)
@@ -281,6 +283,13 @@ class MockService {
 	 */
 	getLocale(): Locale {
 		return this.i18nRegistry.getLocale()
+	}
+
+	/**
+	 * 调用内部翻译
+	 */
+	translate(key: string): string {
+		return this.i18nRegistry.t(key)
 	}
 
 	/**

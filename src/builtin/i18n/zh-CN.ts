@@ -348,6 +348,142 @@ export default function registerZhCN(i18n: I18nRegistry) {
 						}
 					}
 				}
+			},
+			number: {
+				title: "数值",
+				description: "数值相关的方法",
+				int: {
+					title: "整数",
+					description: "随机生成一个整数",
+					params: {
+						min: {
+							title: "最小整数",
+							description: "要生成的最小整数"
+						},
+						max: {
+							title: "最大整数",
+							description: "要生成的最大整数"
+						},
+						multipleOf: {
+							title: "倍数",
+							description: "要生成的整数必须是这个数的倍数, 0 表示不限制"
+						}
+					}
+				},
+				positiveInt: {
+					title: "正整数",
+					description: "随机生成一个正整数",
+					params: {
+						min: {
+							title: "最小正整数",
+							description: "要生成的最小正整数"
+						},
+						max: {
+							title: "最大正整数",
+							description: "要生成的最大正整数"
+						},
+						multipleOf: {
+							title: "倍数",
+							description: "要生成的正整数必须是这个数的倍数, 0 表示不限制"
+						}
+					}
+				},
+				negativeInt: {
+					title: "负整数",
+					description: "随机生成一个负整数",
+					params: {
+						min: {
+							title: "最小负整数",
+							description: "要生成的最小负整数"
+						},
+						max: {
+							title: "最大负整数",
+							description: "要生成的最大负整数"
+						},
+						multipleOf: {
+							title: "倍数",
+							description: "要生成的负整数必须是这个数的倍数, 0 表示不限制"
+						}
+					}
+				},
+				bigInt: {
+					title: "大整数",
+					description: "随机生成一个大整数",
+					params: {
+						min: {
+							title: "最小大整数",
+							description: "要生成的最小大整数"
+						},
+						max: {
+							title: "最大大整数",
+							description: "要生成的最大大整数"
+						}
+					}
+				},
+				float: {
+					title: "浮点数",
+					description: "随机生成一个浮点数",
+					params: {
+						min: {
+							title: "最小浮点数",
+							description: "要生成的最小浮点数"
+						},
+						max: {
+							title: "最大浮点数",
+							description: "要生成的最大浮点数"
+						},
+						fractionDigits: {
+							title: "小数位数",
+							description: "要生成的浮点数的小数位数"
+						},
+						multipleOf: {
+							title: "倍数",
+							description: "要生成的浮点数必须是这个数的倍数, 0 表示不限制"
+						}
+					}
+				},
+				binary: {
+					title: "二进制",
+					description: "随机生成一个二进制数",
+					params: {
+						min: {
+							title: "最小二进制数",
+							description: "要生成的最小二进制数"
+						},
+						max: {
+							title: "最大二进制数",
+							description: "要生成的最大二进制数"
+						}
+					}
+				},
+				octal: {
+					title: "八进制",
+					description: "随机生成一个八进制数",
+					params: {
+						min: {
+							title: "最小八进制数",
+							description: "要生成的最小八进制数"
+						},
+						max: {
+							title: "最大八进制数",
+							description: "要生成的最大八进制数"
+						}
+					}
+				},
+				hexadecimal: {
+					title: "十六进制",
+					description: "随机生成一个十六进制数",
+					params: {
+						min: {
+							title: "最小十六进制数",
+							description: "要生成的最小十六进制数"
+						},
+						max: {
+							title: "最大十六进制数",
+							description: "要生成的最大十六进制数"
+						}
+					}
+				}
 			}
 		},
 		processors: {
