@@ -6,7 +6,7 @@ export default function registerMd5(CATEGORY: any): void {
 		title: "processors.encodingDecoding.md5.title",
 		description: "processors.encodingDecoding.md5.description",
 		apply(value: string): string {
-			return CryptoJS.MD5(String(value)).toString()
+			return String(CryptoJS.MD5(value))
 		}
 	})
 }

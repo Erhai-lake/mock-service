@@ -18,17 +18,17 @@ export default function registerSha(CATEGORY: any): void {
 		apply(value: string, algorithm = "SHA256"): string {
 			switch (algorithm) {
 				case "SHA1":
-					return CryptoJS.SHA1(String(value)).toString()
+					return String(CryptoJS.SHA1(value))
 				case "SHA224":
-					return CryptoJS.SHA224(String(value)).toString()
+					return String(CryptoJS.SHA224(value))
 				case "SHA256":
-					return CryptoJS.SHA256(String(value)).toString()
+					return String(CryptoJS.SHA256(value))
 				case "SHA384":
-					return CryptoJS.SHA384(String(value)).toString()
+					return String(CryptoJS.SHA384(value))
 				case "SHA512":
-					return CryptoJS.SHA512(String(value)).toString()
+					return String(CryptoJS.SHA512(value))
 				default:
-					return CryptoJS.SHA256(String(value)).toString()
+					return String(CryptoJS.SHA256(value))
 			}
 		}
 	})
