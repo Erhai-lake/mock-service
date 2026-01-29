@@ -46,6 +46,7 @@ export default function registerParagraphs(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {language: "zh", min: 3, max: 3, newlines: 2}): string {
 			const {language = "zh", min = 3, max = 3, newlines = 2} = params
+			if (max < min) return "max must be greater than or equal to min"
 			const PARAGRAPH_COUNT = Math.floor(Math.random() * (max - min + 1)) + min
 			const WORD_TEMPLATES = language === "zh" ? ZH_TEMPLATES : EN_TEMPLATES
 			const PARAGRAPHS: string[] = []

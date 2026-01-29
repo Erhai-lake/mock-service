@@ -26,6 +26,7 @@ export default function registerSymbol(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {min: 21, max: 21}): string {
 			const {min = 21, max = 21} = params
+			if (max < min) return "max must be greater than or equal to min"
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			// 定义可用符号集合
 			const SYMBOLS = "!@#$%^&*()_+-=[]{}|;:',.<>/?`~\"\\"

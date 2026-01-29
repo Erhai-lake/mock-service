@@ -33,6 +33,7 @@ export default function registerBinary(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {prefix: "0b", min: 21, max: 21}): string {
 			const {prefix = "0b", min = 21, max = 21} = params
+			if (max < min) return "max must be greater than or equal to min"
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			let bits = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) bits += Math.random() < 0.5 ? "0" : "1"

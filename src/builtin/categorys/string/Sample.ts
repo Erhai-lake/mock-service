@@ -48,6 +48,7 @@ export default function registerSample(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {min: 21, max: 21, casing: "mixed", allowLeadingZero: true, exclude: ""}): string {
 			const {min = 21, max = 21, casing = "mixed", allowLeadingZero = true, exclude = ""} = params
+			if (max < min) return "max must be greater than or equal to min"
 			// 随机确定最终长度
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			// 字母表

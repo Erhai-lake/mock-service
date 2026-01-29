@@ -28,6 +28,7 @@ export default function registerNanoId(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {min: 21, max: 21}): string {
 			const {min = 21, max = 21} = params
+			if (max < min) return "max must be greater than or equal to min"
 			return nanoid(Math.floor(Math.random() * (max - min + 1)) + min)
 		}
 	})
