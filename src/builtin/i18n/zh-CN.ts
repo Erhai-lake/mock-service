@@ -7,8 +7,26 @@ export default function registerZhCN(i18n: I18nRegistry) {
 				title: "字符串 / UUID 等",
 				description: "字符串相关的方法",
 				uuid: {
-					title: "生成 UUID",
-					description: "生成一个随机且唯一的 UUID v4"
+					title: "UUID",
+					description: "生成随机且唯一的 UUID(v1, v4, v7)基于命名空间和名称生成可复现的 UUID(v3, v5)",
+					params: {
+						version: {
+							title: "UUID 版本",
+							description: "要生成的 UUID 版本 (v3 使用 MD5, v5 使用 SHA-1)"
+						},
+						namespaceType: {
+							title: "命名空间类型",
+							description: "(v3, v5) 选择预定义的命名空间类型, 或使用自定义命名空间 UUID"
+						},
+						namespace: {
+							title: "自定义命名空间",
+							description: "(v3, v5) 当命名空间类型为 CUSTOM 时, 填写一个有效的 UUID 作为命名空间"
+						},
+						name: {
+							title: "名称",
+							description: "(v3, v5) 用于生成 UUID 的名称内容, 相同的名称和命名空间将生成相同的 UUID"
+						}
+					}
 				},
 				nanoId: {
 					title: "生成 NanoID",

@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"crypto-js": "^4.2.0",
-		"nanoid": "^5.1.6"
+		"nanoid": "^5.1.6",
+		"uuid": "^13.0.0"
 	}
 }

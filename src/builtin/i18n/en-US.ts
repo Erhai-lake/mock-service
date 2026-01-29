@@ -7,8 +7,26 @@ export default function registerEnUS(i18n: I18nRegistry) {
 				title: "Strings / UUID etc.",
 				description: "String-related utilities",
 				uuid: {
-					title: "Generate UUID",
-					description: "Generate a random and unique UUID v4"
+					title: "UUID",
+					description: "Generate random and unique UUIDs (v1, v4, v7), or generate reproducible UUIDs based on a namespace and name (v3, v5).",
+					params: {
+						version: {
+							title: "UUID Version",
+							description: "The UUID version to generate (v3 uses MD5, v5 uses SHA-1)."
+						},
+						namespaceType: {
+							title: "Namespace Type",
+							description: "(v3, v5) Select a predefined namespace type, or use a custom namespace UUID."
+						},
+						namespace: {
+							title: "Custom Namespace",
+							description: "(v3, v5) When the namespace type is CUSTOM, provide a valid UUID as the namespace."
+						},
+						name: {
+							title: "Name",
+							description: "(v3, v5) The name used to generate the UUID. The same name and namespace will always produce the same UUID."
+						}
+					}
 				},
 				nanoId: {
 					title: "Generate NanoID",
