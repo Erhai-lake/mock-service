@@ -33,7 +33,7 @@ export default function registerOctal(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {prefix: "0o", min: 21, max: 21}): string {
 			const {prefix = "0o", min = 21, max = 21} = params
-			if (max < min) return "max must be greater than or equal to min"
+			if (max < min) throw new Error("max must be greater than or equal to min")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			let bits = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) bits += Math.floor(Math.random() * 8).toString(8)

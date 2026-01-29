@@ -41,13 +41,10 @@ export default function registerAlpha(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {min: 21, max: 21, casing: "mixed", exclude: ""}): string {
 			const {min = 21, max = 21, casing = "mixed", exclude = ""} = params
-			if (max < min) return "max must be greater than or equal to min"
-			// 随机确定最终长度
+			if (max < min) throw new Error("max must be greater than or equal to min")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
-			// 字母表
 			const LETTERS = "abcdefghijklmnopqrstuvwxyz"
 			let pool = ""
-			// 根据 casing 处理字母表
 			switch (casing) {
 				case "upper":
 					pool = LETTERS.toUpperCase()
@@ -62,7 +59,6 @@ export default function registerAlpha(CATEGORY: any): void {
 					pool = LETTERS + LETTERS.toUpperCase()
 					break
 			}
-			// 处理排除字符
 			if (exclude) {
 				const EXCLUDE_SET = new Set(
 					exclude
@@ -74,8 +70,7 @@ export default function registerAlpha(CATEGORY: any): void {
 				)
 				pool = pool.split("").filter(ch => !EXCLUDE_SET.has(ch)).join("")
 			}
-			if (!pool) return "生成字母字符串失败: 字符池为空, 请检查设置"
-			// 随机生成字符串
+			if (!pool) throw new Error("pool is empty")
 			let result = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) {
 				result += pool[Math.floor(Math.random() * pool.length)]

@@ -33,11 +33,10 @@ export default function registerFromCharacters(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {characters: "a,b,c,abc,1,2,3,4,5,6,123,456", min: 21, max: 21}): string {
 			const {characters = "a,b,c,abc,1,2,3,4,5,6,123,456", min = 21, max = 21} = params
-			if (max < min) return "max must be greater than or equal to min"
+			if (max < min) throw new Error("max must be greater than or equal to min")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
-			// 字符池
 			const POOL = characters.split(",").map(s => s.trim()).filter(Boolean)
-			if (POOL.length === 0) return "pool is empty"
+			if (POOL.length) throw new Error("pool is empty")
 			let result = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) {
 				const INDEX = Math.floor(Math.random() * POOL.length)

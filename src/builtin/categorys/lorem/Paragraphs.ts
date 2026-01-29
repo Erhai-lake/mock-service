@@ -46,7 +46,7 @@ export default function registerParagraphs(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {language: "zh", min: 3, max: 3, newlines: 2}): string {
 			const {language = "zh", min = 3, max = 3, newlines = 2} = params
-			if (max < min) return "max must be greater than or equal to min"
+			if (max < min) throw new Error("max must be greater than or equal to min")
 			const PARAGRAPH_COUNT = Math.floor(Math.random() * (max - min + 1)) + min
 			const WORD_TEMPLATES = language === "zh" ? ZH_TEMPLATES : EN_TEMPLATES
 			const PARAGRAPHS: string[] = []
@@ -55,7 +55,7 @@ export default function registerParagraphs(CATEGORY: any): void {
 				const SENTENCES: string[] = []
 				for (let s = 0; s < sentenceCount; s++) {
 					const SENTENCE_BLOCKS: string[] = []
-					const BLOCK_COUNT = Math.floor(Math.random() * 4) + 2 // 每句 2-5 块
+					const BLOCK_COUNT = Math.floor(Math.random() * 4) + 2
 					for (let i = 0; i < BLOCK_COUNT; i++) {
 						const TEMPLATE = pick(WORD_TEMPLATES)
 						SENTENCE_BLOCKS.push(TEMPLATE())

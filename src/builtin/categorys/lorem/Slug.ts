@@ -28,7 +28,7 @@ export default function registerSlug(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {min: 3, max: 3}): string {
 			const {min = 3, max = 3} = params
-			if (max < min) return "max must be greater than or equal to min"
+			if (max < min) throw new Error("max must be greater than or equal to min")
 			const COUNT = Math.floor(Math.random() * (max - min + 1)) + min
 			const BLOCKS: string[] = []
 			for (let i = 0; i < COUNT; i++) {

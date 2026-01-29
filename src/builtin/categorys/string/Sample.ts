@@ -48,17 +48,12 @@ export default function registerSample(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding"],
 		generate(params = {min: 21, max: 21, casing: "mixed", allowLeadingZero: true, exclude: ""}): string {
 			const {min = 21, max = 21, casing = "mixed", allowLeadingZero = true, exclude = ""} = params
-			if (max < min) return "max must be greater than or equal to min"
-			// 随机确定最终长度
+			if (max < min) throw new Error("max must be greater than or equal to min")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
-			// 字母表
 			const LETTERS = "abcdefghijklmnopqrstuvwxyz"
-			// 数字表
 			const NUMBERS = "0123456789"
-			// 符号表
 			const SYMBOLS = "!@#$%^&*()_+-=[]{}|;:',.<>/?`~\"\\"
 			let pool = ""
-			// 根据 casing 处理字母表
 			switch (casing) {
 				case "upper":
 					pool = LETTERS.toUpperCase() + NUMBERS + SYMBOLS
@@ -73,7 +68,6 @@ export default function registerSample(CATEGORY: any): void {
 					pool = LETTERS + LETTERS.toUpperCase() + NUMBERS + SYMBOLS
 					break
 			}
-			// 处理排除字符
 			if (exclude) {
 				const EXCLUDE_SET = new Set(
 					exclude
@@ -85,17 +79,14 @@ export default function registerSample(CATEGORY: any): void {
 				)
 				pool = pool.split("").filter(ch => !EXCLUDE_SET.has(ch)).join("")
 			}
-			if (!pool) return "pool is empty"
-			// 随机生成字符串
+			if (!pool) throw new Error("pool is empty")
 			let result = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) {
 				let currentPool = pool
-				// 如果不允许首位为0, 且当前是第一个字符, 则移除0
 				if (!allowLeadingZero && i === 0) {
 					currentPool = currentPool.replace("0", "")
-					if (!currentPool) return "pool is empty after exclude"
+					if (!currentPool) throw new Error("pool is empty after exclude")
 				}
-				// 随机选一个字符
 				result += currentPool[Math.floor(Math.random() * currentPool.length)]
 			}
 			return result.slice(0, FINAL_LENGTH)
