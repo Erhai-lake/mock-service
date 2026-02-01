@@ -11,8 +11,14 @@ export default function registerSha(CATEGORY: any): void {
 				title: "processors.encodingDecoding.sha.params.algorithm.title",
 				description: "processors.encodingDecoding.sha.params.algorithm.description",
 				type: "select",
-				default: "SHA256",
-				options: ["SHA1", "SHA224", "SHA256", "SHA384", "SHA512"]
+				options: [
+					{key: "SHA1", label: "SHA-1"},
+					{key: "SHA224", label: "SHA-224"},
+					{key: "SHA256", label: "SHA-256"},
+					{key: "SHA384", label: "SHA-384"},
+					{key: "SHA512", label: "SHA-512"}
+				],
+				default: "SHA256"
 			}
 		],
 		apply(value: string, algorithm = "SHA256"): string {

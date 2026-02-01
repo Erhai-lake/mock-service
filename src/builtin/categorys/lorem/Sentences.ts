@@ -12,8 +12,11 @@ export default function registerSentences(CATEGORY: any): void {
 				title: "category.lorem.sentences.params.language.title",
 				description: "category.lorem.sentences.params.language.description",
 				type: "select",
-				default: "zh",
-				options: ["zh", "en"]
+				options: [
+					{key: "zh", label: "中文"},
+					{key: "en", label: "English"}
+				],
+				default: "zh"
 			},
 			{
 				id: "sentenceMin",

@@ -30,7 +30,15 @@ export default function registerUUID(CATEGORY: any): void {
 				title: "category.string.uuid.params.version.title",
 				description: "category.string.uuid.params.version.description",
 				type: "select",
-				options: ["NIL", "MAX", "v1", "v3", "v4", "v5", "v7"],
+				options: [
+					{key: "NIL", label: "NIL"},
+					{key: "MAX", label: "MAX"},
+					{key: "v1", label: "v1"},
+					{key: "v3", label: "v3"},
+					{key: "v4", label: "v4"},
+					{key: "v5", label: "v5"},
+					{key: "v7", label: "v7"}
+				],
 				default: "v4"
 			},
 			{
@@ -38,7 +46,13 @@ export default function registerUUID(CATEGORY: any): void {
 				title: "category.string.uuid.params.namespaceType.title",
 				description: "category.string.uuid.params.namespaceType.description",
 				type: "select",
-				options: ["URL", "DNS", "OID", "X500", "CUSTOM"],
+				options: [
+					{key: "URL", label: "URL"},
+					{key: "DNS", label: "DNS"},
+					{key: "OID", label: "OID"},
+					{key: "X500", label: "X500"},
+					{key: "CUSTOM", label: "CUSTOM"}
+				],
 				default: "URL"
 			},
 			{

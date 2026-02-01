@@ -16,8 +16,12 @@ export default function registerHexadecimal(CATEGORY: any): void {
 				title: "category.string.hexadecimal.params.casing.title",
 				description: "category.string.hexadecimal.params.casing.description",
 				type: "select",
-				default: "mixed",
-				options: ["upper", "lower", "mixed"]
+				options: [
+					{key: "upper", label: "upper"},
+					{key: "lower", label: "lower"},
+					{key: "mixed", label: "mixed"}
+				],
+				default: "mixed"
 			},
 			{
 				id: "min",

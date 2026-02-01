@@ -27,8 +27,12 @@ export default function registerAlphanumeric(CATEGORY: any): void {
 				title: "category.string.alphanumeric.params.casing.title",
 				description: "category.string.alphanumeric.params.casing.description",
 				type: "select",
-				default: "mixed",
-				options: ["upper", "lower", "mixed"]
+				options: [
+					{key: "upper", label: "upper"},
+					{key: "lower", label: "lower"},
+					{key: "mixed", label: "mixed"}
+				],
+				default: "mixed"
 			},
 			{
 				id: "allowLeadingZero",

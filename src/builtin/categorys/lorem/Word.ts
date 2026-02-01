@@ -12,8 +12,11 @@ export default function registerWord(CATEGORY: any): void {
 				title: "category.lorem.word.params.language.title",
 				description: "category.lorem.word.params.language.description",
 				type: "select",
-				default: "zh",
-				options: ["zh", "en"]
+				options: [
+					{key: "zh", label: "中文"},
+					{key: "en", label: "English"}
+				],
+				default: "zh"
 			}
 		],
 		processors: ["string", "encodingDecoding"],

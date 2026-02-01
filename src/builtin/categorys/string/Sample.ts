@@ -27,8 +27,12 @@ export default function registerSample(CATEGORY: any): void {
 				title: "category.string.sample.params.casing.title",
 				description: "category.string.sample.params.casing.description",
 				type: "select",
-				default: "mixed",
-				options: ["upper", "lower", "mixed"]
+				options: [
+					{key: "upper", label: "upper"},
+					{key: "lower", label: "lower"},
+					{key: "mixed", label: "mixed"}
+				],
+				default: "mixed"
 			},
 			{
 				id: "allowLeadingZero",
