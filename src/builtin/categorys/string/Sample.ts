@@ -3,7 +3,7 @@ import {ExcludePools} from "../../public/ExcludePools"
 interface Params {
 	min: number
 	max: number
-	casing: string
+	casing: "upper" | "lower" | "mixed"
 	allowLeadingZero: boolean
 	exclude: string
 }

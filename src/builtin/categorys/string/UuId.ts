@@ -20,7 +20,7 @@ const resolveNamespace = (type: NamespaceType, custom?: string): string => {
 }
 
 interface Params {
-	version: string
+	version: "NIL" | "MAX" | "v1" | "v3" | "v4" | "v5" | "v7"
 	namespaceType: NamespaceType
 	namespace: string
 	name: string

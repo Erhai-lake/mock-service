@@ -3,7 +3,7 @@ import {EN_TEMPLATES} from "../constants/WordsEN"
 import {ZH_TEMPLATES} from "../constants/WordsZH"
 
 interface Params {
-	language: string
+	language: "zh" | "en"
 	sentenceMin: number
 	sentenceMax: number
 	min: number

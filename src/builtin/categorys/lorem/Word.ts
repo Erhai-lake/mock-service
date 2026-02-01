@@ -2,7 +2,7 @@ import {WORD_EN} from "../constants/WordEN"
 import {WORD_ZH} from "../constants/WordZH"
 
 interface Params {
-	language: string
+	language: "zh" | "en"
 }
 
 const PARAMS: Params = {
