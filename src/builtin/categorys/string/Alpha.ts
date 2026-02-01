@@ -1,3 +1,5 @@
+import {ExcludePools} from "../../public/ExcludePools"
+
 interface Params {
 	min: number
 	max: number
@@ -77,17 +79,7 @@ export default function registerAlpha(CATEGORY: any): void {
 					pool = LETTERS + LETTERS.toUpperCase()
 					break
 			}
-			if (exclude) {
-				const EXCLUDE_SET = new Set(
-					exclude
-						.split(",")
-						.map(ch => ch.trim())
-						.filter(Boolean)
-						.map(ch => [ch.toLowerCase(), ch.toUpperCase()])
-						.flat()
-				)
-				pool = pool.split("").filter(ch => !EXCLUDE_SET.has(ch)).join("")
-			}
+			pool = ExcludePools(pool, exclude)
 			if (!pool) throw new Error("pool is empty")
 			let result = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) {

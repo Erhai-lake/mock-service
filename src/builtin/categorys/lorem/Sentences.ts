@@ -1,3 +1,4 @@
+import {WordsPick} from "../../public/WordsPick"
 import {EN_TEMPLATES} from "../constants/WordsEN"
 import {ZH_TEMPLATES} from "../constants/WordsZH"
 
@@ -92,7 +93,7 @@ export default function registerSentences(CATEGORY: any): void {
 				const BLOCK_COUNT = Math.max(1, Math.floor(WORD_COUNT / 2))
 				const BLOCKS: string[] = []
 				for (let i = 0; i < BLOCK_COUNT; i++) {
-					const TEMPLATE = pick(WORD_TEMPLATES)
+					const TEMPLATE = WordsPick(WORD_TEMPLATES)
 					BLOCKS.push(TEMPLATE())
 				}
 				if (language === "en" && BLOCKS.length > 0) BLOCKS[0] = BLOCKS[0][0].toUpperCase() + BLOCKS[0].slice(1)
@@ -104,5 +105,3 @@ export default function registerSentences(CATEGORY: any): void {
 		}
 	})
 }
-
-const pick = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]

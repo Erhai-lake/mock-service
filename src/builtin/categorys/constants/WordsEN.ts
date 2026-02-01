@@ -1,3 +1,5 @@
+import {WordsPick} from "../../public/WordsPick"
+
 export const WORDS_EN = {
 	// 名词
 	noun: {
@@ -83,63 +85,60 @@ export const WORDS_EN = {
 export const EN_TEMPLATES = [
 	// 技术行为
 	() => {
-		const ADJ = pick(WORDS_EN.adj.quality)
-		const SUBJECT = pick(WORDS_EN.noun.entity)
-		const VERB = pick(WORDS_EN.verb.operate)
-		const OBJECT = pick(WORDS_EN.noun.data)
+		const ADJ = WordsPick(WORDS_EN.adj.quality)
+		const SUBJECT = WordsPick(WORDS_EN.noun.entity)
+		const VERB = WordsPick(WORDS_EN.verb.operate)
+		const OBJECT = WordsPick(WORDS_EN.noun.data)
 		return `The ${ADJ} ${SUBJECT} ${VERB}s the ${OBJECT}`
 	},
 	// 场景 + 过程
 	() => {
-		const SCENE = pick(WORDS_EN.noun.scene)
-		const PROCESS = pick(WORDS_EN.noun.abstract)
-		const SUBJECT = pick(WORDS_EN.noun.entity)
-		const VERB = pick(WORDS_EN.verb.operate)
+		const SCENE = WordsPick(WORDS_EN.noun.scene)
+		const PROCESS = WordsPick(WORDS_EN.noun.abstract)
+		const SUBJECT = WordsPick(WORDS_EN.noun.entity)
+		const VERB = WordsPick(WORDS_EN.verb.operate)
 		return Math.random() < 0.2 ? `${SUBJECT} ${VERB}s data based on the ${PROCESS}` : `In the ${SCENE}, the ${SUBJECT} ${VERB}s data based on the ${PROCESS}`
 	},
 	// 用户视角
 	() => {
-		const USER = pick(WORDS_EN.noun.user)
-		const VERB = pick(WORDS_EN.verb.operate)
-		const OBJECT = pick(WORDS_EN.noun.entity)
+		const USER = WordsPick(WORDS_EN.noun.user)
+		const VERB = WordsPick(WORDS_EN.verb.operate)
+		const OBJECT = WordsPick(WORDS_EN.noun.entity)
 		return `The ${USER} can ${VERB} the ${OBJECT} through configuration`
 	},
 	// 模块关系
 	() => {
-		const SUBJECT = pick(WORDS_EN.noun.entity)
-		const VERB = pick(WORDS_EN.verb.connect)
-		const OBJECT = pick(WORDS_EN.noun.tech)
+		const SUBJECT = WordsPick(WORDS_EN.noun.entity)
+		const VERB = WordsPick(WORDS_EN.verb.connect)
+		const OBJECT = WordsPick(WORDS_EN.noun.tech)
 		return `The ${SUBJECT} ${VERB}s the ${OBJECT}`
 	},
 	// 范围 + 状态
 	() => {
-		const SCOPE = pick(WORDS_EN.adj.scope)
-		const SUBJECT = pick(WORDS_EN.noun.data)
-		const VERB = pick(WORDS_EN.verb.state)
+		const SCOPE = WordsPick(WORDS_EN.adj.scope)
+		const SUBJECT = WordsPick(WORDS_EN.noun.data)
+		const VERB = WordsPick(WORDS_EN.verb.state)
 		return `The ${SCOPE} ${SUBJECT} ${VERB}s`
 	},
 	// 抽象影响
 	() => {
-		const ABSTRACT = pick(WORDS_EN.noun.abstract)
-		const VERB = pick(WORDS_EN.verb.affect)
-		const TARGET = pick(WORDS_EN.noun.entity)
+		const ABSTRACT = WordsPick(WORDS_EN.noun.abstract)
+		const VERB = WordsPick(WORDS_EN.verb.affect)
+		const TARGET = WordsPick(WORDS_EN.noun.entity)
 		return `The ${ABSTRACT} ${VERB}s the overall behavior of the ${TARGET}`
 	},
 	// 描述 / 文档语气
 	() => {
-		const SUBJECT = pick(WORDS_EN.noun.abstract)
-		const VERB = pick(WORDS_EN.verb.express)
-		const OBJECT = pick(WORDS_EN.noun.entity)
+		const SUBJECT = WordsPick(WORDS_EN.noun.abstract)
+		const VERB = WordsPick(WORDS_EN.verb.express)
+		const OBJECT = WordsPick(WORDS_EN.noun.entity)
 		return `This ${SUBJECT} ${VERB}s the design goal of the ${OBJECT}`
 	},
 	// 状态 + 程度
 	() => {
-		const SUBJECT = pick(WORDS_EN.noun.entity)
-		const VERB = pick(WORDS_EN.verb.state)
-		const DEGREE = pick(WORDS_EN.adj.degree)
+		const SUBJECT = WordsPick(WORDS_EN.noun.entity)
+		const VERB = WordsPick(WORDS_EN.verb.state)
+		const DEGREE = WordsPick(WORDS_EN.adj.degree)
 		return `The ${SUBJECT} ${VERB}s ${DEGREE}`
 	}
 ]
-
-
-const pick = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
