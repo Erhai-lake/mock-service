@@ -2,8 +2,7 @@
 
 ## Introduction / 简介
 
-mock-service is a JavaScript library for generating mock data. It provides a rich set of categories and methods, along
-with corresponding processors, to help developers quickly generate mock data that meets specific requirements.
+mock-service is a JavaScript library for generating mock data. It provides a rich set of categories and methods, along with corresponding processors, to help developers quickly generate mock data that meets specific requirements.
 
 mock-service 是一个用于生成模拟数据的 JavaScript 库. 它提供了丰富的类别和方法, 以及对应的处理器, 可以帮助开发人员快速生成符合要求的模拟数据.
 
