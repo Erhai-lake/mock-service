@@ -8,6 +8,7 @@ import {Locale} from "./registries/I18nRegistry"
 import stringCategory from "./builtin/categorys/string"
 import loremCategory from "./builtin/categorys/lorem"
 import numberCategory from "./builtin/categorys/number"
+import dateCategory from "./builtin/categorys/date"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
 import registerZhCN from "./builtin/i18n/zh-CN"
@@ -52,6 +53,7 @@ class MockService {
 		stringCategory(this.categoryRegistry)
 		loremCategory(this.categoryRegistry)
 		numberCategory(this.categoryRegistry)
+		dateCategory(this.categoryRegistry)
 		// 内置处理器
 		registerStringProcessors(this.processorRegistry)
 		registerEncodingProcessors(this.processorRegistry)

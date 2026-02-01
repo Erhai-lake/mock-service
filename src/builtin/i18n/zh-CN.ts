@@ -502,6 +502,146 @@ export default function registerZhCN(i18n: I18nRegistry) {
 						}
 					}
 				}
+			},
+			date: {
+				title: "日期 / 时间",
+				description: "日期时间相关的方法",
+				isoTimestamp: {
+					title: "ISO 时间戳",
+					description: "返回符合 ISO 8601 标准的时间戳",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						},
+						excludeMilliseconds: {
+							title: "是否排除毫秒",
+							description: "是否排除时间戳中的毫秒部分"
+						},
+						formattingStyle: {
+							title: "格式化样式",
+							description: "格式化样式, 例如: (basic, extended)"
+						},
+						representation: {
+							title: "表示形式",
+							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
+						},
+						timezoneSuffix: {
+							title: "时区后缀",
+							description: "时区后缀, 例如: (无标识, UTC, 偏移量)"
+						}
+					}
+				},
+				timestamp: {
+					title: "Unix时间戳 (秒)",
+					description: "Unix 时间戳, 单位: 秒",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						}
+					}
+				},
+				millisecondsTimestamp: {
+					title: "Unix时间戳 (毫秒)",
+					description: "Unix 时间戳, 单位: 毫秒",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						}
+					}
+				},
+				now: {
+					title: "当前时间",
+					description: "当前时间(支持偏移)",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						}
+					}
+				},
+				anytime: {
+					title: "任意时间",
+					description: "随机一个任意时间",
+					params: {
+						refDate: {
+							title: "参考时间",
+							description: "在参考时间前后的时间范围内取值, 例如: (xxxx-xx-xx xx:xx:xx)"
+						},
+						scope: {
+							title: "时间范围",
+							description: "在参考时间前后的时间范围, 单位: 月"
+						},
+						representation: {
+							title: "表示形式",
+							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
+						}
+					}
+				},
+				future: {
+					title: "未来时间",
+					description: "随机一个未来时间",
+					params: {
+						refDate: {
+							title: "参考时间",
+							description: "在参考时间后的时间范围内取值, 例如: (xxxx-xx-xx xx:xx:xx)"
+						},
+						scope: {
+							title: "时间范围",
+							description: "在参考时间后的时间范围, 单位: 月"
+						},
+						representation: {
+							title: "表示形式",
+							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
+						}
+					}
+				},
+				past: {
+					title: "过去时间",
+					description: "随机一个过去时间",
+					params: {
+						refDate: {
+							title: "参考时间",
+							description: "在参考时间前的时间范围内取值, 例如: (xxxx-xx-xx xx:xx:xx)"
+						},
+						scope: {
+							title: "时间范围",
+							description: "在参考时间前的时间范围, 单位: 月"
+						},
+						representation: {
+							title: "表示形式",
+							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
+						}
+					}
+				},
+				birthdate: {
+					title: "出生日期",
+					description: "随机取值后, 通过参考时间反推出生日",
+					params: {
+						min: {
+							title: "最小年龄",
+							description: "要生成的最小年龄"
+						},
+						max: {
+							title: "最大年龄",
+							description: "要生成的最大年龄"
+						},
+						refDate: {
+							title: "参考时间",
+							description: "用参考时间作为基准计算出生日期, 例如: (xxxx-xx-xx)"
+						},
+						representation: {
+							title: "表示形式",
+							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
+						}
+					}
+				},
+				timeZone: {
+					title: "时区",
+					description: "随机一个时区"
+				}
 			}
 		},
 		processors: {
@@ -600,10 +740,7 @@ export default function registerZhCN(i18n: I18nRegistry) {
 					params: {
 						algorithm: {
 							title: "算法",
-							description: "SHA 算法",
-							type: "select",
-							default: "SHA256",
-							options: ["SHA1", "SHA224", "SHA256", "SHA384", "SHA512"]
+							description: "SHA 算法"
 						}
 					}
 				},

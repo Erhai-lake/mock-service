@@ -502,6 +502,146 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						}
 					}
 				}
+			},
+			date: {
+				title: "Date / Time",
+				description: "Date and time related methods",
+				isoTimestamp: {
+					title: "ISO Timestamp",
+					description: "Returns a timestamp that conforms to the ISO 8601 standard",
+					params: {
+						timezone: {
+							title: "Time Zone",
+							description: "Time zone, for example: (Asia/Shanghai)"
+						},
+						excludeMilliseconds: {
+							title: "Exclude Milliseconds",
+							description: "Whether to exclude the milliseconds part of the timestamp"
+						},
+						formattingStyle: {
+							title: "Formatting Style",
+							description: "Formatting style, for example: (basic, extended)"
+						},
+						representation: {
+							title: "Representation",
+							description: "Time representation, which parts to format: date, time, or both (full)"
+						},
+						timezoneSuffix: {
+							title: "Time Zone Suffix",
+							description: "Time zone suffix, for example: (none, UTC, offset)"
+						}
+					}
+				},
+				timestamp: {
+					title: "Unix Timestamp (Seconds)",
+					description: "Unix timestamp, unit: seconds",
+					params: {
+						timezone: {
+							title: "Time Zone",
+							description: "Time zone, for example: (Asia/Shanghai)"
+						}
+					}
+				},
+				millisecondsTimestamp: {
+					title: "Unix Timestamp (Milliseconds)",
+					description: "Unix timestamp, unit: milliseconds",
+					params: {
+						timezone: {
+							title: "Time Zone",
+							description: "Time zone, for example: (Asia/Shanghai)"
+						}
+					}
+				},
+				now: {
+					title: "Current Time",
+					description: "Current time (supports offset)",
+					params: {
+						timezone: {
+							title: "Time Zone",
+							description: "Time zone, for example: (Asia/Shanghai)"
+						}
+					}
+				},
+				anytime: {
+					title: "Any Time",
+					description: "Randomly generates a time",
+					params: {
+						refDate: {
+							title: "Reference Date",
+							description: "Select a time within a range before or after the reference date, for example: (xxxx-xx-xx xx:xx:xx)"
+						},
+						scope: {
+							title: "Time Range",
+							description: "Time range before and after the reference date, unit: months"
+						},
+						representation: {
+							title: "Representation",
+							description: "Time representation, which parts to format: date, time, or both (full)"
+						}
+					}
+				},
+				future: {
+					title: "Future Time",
+					description: "Randomly generates a future time",
+					params: {
+						refDate: {
+							title: "Reference Date",
+							description: "Select a time within a range after the reference date, for example: (xxxx-xx-xx xx:xx:xx)"
+						},
+						scope: {
+							title: "Time Range",
+							description: "Time range after the reference date, unit: months"
+						},
+						representation: {
+							title: "Representation",
+							description: "Time representation, which parts to format: date, time, or both (full)"
+						}
+					}
+				},
+				past: {
+					title: "Past Time",
+					description: "Randomly generates a past time",
+					params: {
+						refDate: {
+							title: "Reference Date",
+							description: "Select a time within a range before the reference date, for example: (xxxx-xx-xx xx:xx:xx)"
+						},
+						scope: {
+							title: "Time Range",
+							description: "Time range before the reference date, unit: months"
+						},
+						representation: {
+							title: "Representation",
+							description: "Time representation, which parts to format: date, time, or both (full)"
+						}
+					}
+				},
+				birthdate: {
+					title: "Birth Date",
+					description: "Randomly generates a date and derives a birth date based on the reference date",
+					params: {
+						min: {
+							title: "Minimum Age",
+							description: "Minimum age to generate"
+						},
+						max: {
+							title: "Maximum Age",
+							description: "Maximum age to generate"
+						},
+						refDate: {
+							title: "Reference Date",
+							description: "Use the reference date as the basis to calculate the birth date, for example: (xxxx-xx-xx)"
+						},
+						representation: {
+							title: "Representation",
+							description: "Time representation, which parts to format: date, time, or both (full)"
+						}
+					}
+				},
+				timeZone: {
+					title: "Time Zone",
+					description: "Randomly generates a time zone"
+				}
 			}
 		},
 		processors: {
@@ -600,10 +740,7 @@ export default function registerEnUS(i18n: I18nRegistry) {
 					params: {
 						algorithm: {
 							title: "Algorithm",
-							description: "SHA algorithm",
-							type: "select",
-							default: "SHA256",
-							options: ["SHA1", "SHA224", "SHA256", "SHA384", "SHA512"]
+							description: "SHA algorithm"
 						}
 					}
 				},
