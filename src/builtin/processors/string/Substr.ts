@@ -1,3 +1,13 @@
+interface Params {
+	start: number
+	length: number
+}
+
+const PARAMS: Params = {
+	start: 0,
+	length: 10
+}
+
 export default function registerMD5(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
 		id: "substr",
@@ -9,7 +19,7 @@ export default function registerMD5(CATEGORY: any): void {
 				title: "processors.string.substr.params.start.title",
 				description: "processors.string.substr.params.start.description",
 				type: "number",
-				default: 0,
+				default: PARAMS.start,
 				min: 0,
 				step: 1
 			},
@@ -18,14 +28,14 @@ export default function registerMD5(CATEGORY: any): void {
 				title: "processors.string.substr.params.length.title",
 				description: "processors.string.substr.params.length.description",
 				type: "number",
-				default: 10,
+				default: PARAMS.length,
 				min: 0,
 				step: 1
 			}
 
 		],
-		apply(value: string, params = {start: 0, length: 10}): string {
-			const {start = 0, length = 10} = params
+		apply(value: string, params: Partial<Params> = {}): string {
+			const {start = 0, length = 10} = {...PARAMS, ...params}
 			return String(value).substring(start, start + length)
 		}
 	})

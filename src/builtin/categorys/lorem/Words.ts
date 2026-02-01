@@ -1,6 +1,20 @@
 import {WORD_EN} from "../constants/WordEN"
 import {WORD_ZH} from "../constants/WordZH"
 
+interface Params {
+	language: string
+	min: number
+	max: number
+	separator: string
+}
+
+const PARAMS: Params = {
+	language: "zh",
+	min: 3,
+	max: 3,
+	separator: ""
+}
+
 export default function registerWords(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "words",
@@ -16,14 +30,14 @@ export default function registerWords(CATEGORY: any): void {
 					{key: "zh", label: "中文"},
 					{key: "en", label: "English"}
 				],
-				default: "zh"
+				default: PARAMS.language
 			},
 			{
 				id: "min",
 				title: "category.lorem.words.params.min.title",
 				description: "category.lorem.words.params.min.description",
 				type: "number",
-				default: 3,
+				default: PARAMS.min,
 				min: 1,
 				step: 1
 			},
@@ -32,7 +46,7 @@ export default function registerWords(CATEGORY: any): void {
 				title: "category.lorem.words.params.max.title",
 				description: "category.lorem.words.params.max.description",
 				type: "number",
-				default: 3,
+				default: PARAMS.max,
 				min: 1,
 				step: 1
 			},
@@ -41,12 +55,12 @@ export default function registerWords(CATEGORY: any): void {
 				title: "category.lorem.words.params.separator.title",
 				description: "category.lorem.words.params.separator.description",
 				type: "string",
-				default: ""
+				default: PARAMS.separator
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {language: "zh", min: 3, max: 3, separator: ""}): string {
-			const {language = "zh", min = 3, max = 3, separator = ""} = params
+		generate(params: Partial<Params> = {}): string {
+			const {language, min, max, separator} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
 			const WORD = language === "zh" ? WORD_ZH : WORD_EN
 			const COUNT = Math.floor(Math.random() * (max - min + 1)) + min

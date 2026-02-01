@@ -1,3 +1,13 @@
+interface Params {
+	min: string
+	max: string
+}
+
+const PARAMS: Params = {
+	min: "0",
+	max: "999999999999999"
+}
+
 export default function registerBigInt(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "bigInt",
@@ -9,21 +19,21 @@ export default function registerBigInt(CATEGORY: any): void {
 				title: "category.number.bigInt.params.min.title",
 				description: "category.number.bigInt.params.min.description",
 				type: "string",
-				default: "0"
+				default: PARAMS.min
 			},
 			{
 				id: "max",
 				title: "category.number.bigInt.params.max.title",
 				description: "category.number.bigInt.params.max.description",
 				type: "string",
-				default: "999999999999999"
+				default: PARAMS.max
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {min: "0", max: "999999999999999"}): bigint {
-			const {min = "0", max = "999999999999999"} = params
+		generate(params: Partial<Params> = {}): bigint {
+			const {min, max} = {...PARAMS, ...params}
 			const MIN_BIGINT = BigInt(min)
-			const MAX_BIGINT =  BigInt(max)
+			const MAX_BIGINT = BigInt(max)
 			if (MAX_BIGINT < MIN_BIGINT) throw new Error("max must be greater than or equal to min")
 			const RANGE = MAX_BIGINT - MIN_BIGINT + 1n
 			const randBigInt = () => {

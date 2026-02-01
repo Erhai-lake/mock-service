@@ -1,3 +1,17 @@
+interface Params {
+	min: number
+	max: number
+	allowLeadingZero: boolean
+	exclude: string
+}
+
+const PARAMS: Params = {
+	min: 21,
+	max: 21,
+	allowLeadingZero: true,
+	exclude: ""
+}
+
 export default function registerNumeric(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "numeric",
@@ -9,7 +23,7 @@ export default function registerNumeric(CATEGORY: any): void {
 				title: "category.string.numeric.params.min.title",
 				description: "category.string.numeric.params.min.description",
 				type: "number",
-				default: 21,
+				default: PARAMS.min,
 				min: 1,
 				step: 1
 			},
@@ -18,7 +32,7 @@ export default function registerNumeric(CATEGORY: any): void {
 				title: "category.string.numeric.params.max.title",
 				description: "category.string.numeric.params.max.description",
 				type: "number",
-				default: 21,
+				default: PARAMS.max,
 				min: 1,
 				step: 1
 			},
@@ -27,19 +41,19 @@ export default function registerNumeric(CATEGORY: any): void {
 				title: "category.string.numeric.params.allowLeadingZero.title",
 				description: "category.string.numeric.params.allowLeadingZero.description",
 				type: "boolean",
-				default: true
+				default: PARAMS.allowLeadingZero
 			},
 			{
 				id: "exclude",
 				title: "category.string.numeric.params.exclude.title",
 				description: "category.string.numeric.params.exclude.description",
 				type: "string",
-				default: ""
+				default: PARAMS.exclude
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {min: 21, max: 21, allowLeadingZero: true, exclude: ""}): string {
-			const {min = 21, max = 21, allowLeadingZero = true, exclude = ""} = params
+		generate(params: Partial<Params> = {}): string {
+			const {min, max, allowLeadingZero, exclude} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			let pool = "0123456789"

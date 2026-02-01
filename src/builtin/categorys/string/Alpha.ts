@@ -1,3 +1,17 @@
+interface Params {
+	min: number
+	max: number
+	casing: "upper" | "lower" | "mixed"
+	exclude: string
+}
+
+const PARAMS: Params = {
+	min: 21,
+	max: 21,
+	casing: "mixed",
+	exclude: ""
+}
+
 export default function registerAlpha(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "alpha",
@@ -9,7 +23,7 @@ export default function registerAlpha(CATEGORY: any): void {
 				title: "category.string.alpha.params.min.title",
 				description: "category.string.alpha.params.min.description",
 				type: "number",
-				default: 21,
+				default: PARAMS.min,
 				min: 1,
 				step: 1
 			},
@@ -18,7 +32,7 @@ export default function registerAlpha(CATEGORY: any): void {
 				title: "category.string.alpha.params.max.title",
 				description: "category.string.alpha.params.max.description",
 				type: "number",
-				default: 21,
+				default: PARAMS.max,
 				min: 1,
 				step: 1
 			},
@@ -32,19 +46,19 @@ export default function registerAlpha(CATEGORY: any): void {
 					{key: "lower", label: "lower"},
 					{key: "mixed", label: "mixed"}
 				],
-				default: "mixed"
+				default: PARAMS.casing
 			},
 			{
 				id: "exclude",
 				title: "category.string.alpha.params.exclude.title",
 				description: "category.string.alpha.params.exclude.description",
 				type: "string",
-				default: ""
+				default: PARAMS.exclude
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {min: 21, max: 21, casing: "mixed", exclude: ""}): string {
-			const {min = 21, max = 21, casing = "mixed", exclude = ""} = params
+		generate(params: Partial<Params> = {}): string {
+			const {min, max, casing, exclude} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			const LETTERS = "abcdefghijklmnopqrstuvwxyz"

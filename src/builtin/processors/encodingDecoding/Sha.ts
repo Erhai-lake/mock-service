@@ -1,5 +1,13 @@
 import CryptoJS from "crypto-js"
 
+interface Params {
+	algorithm: "SHA1" | "SHA224" | "SHA256" | "SHA384" | "SHA512"
+}
+
+const PARAMS: Params = {
+	algorithm: "SHA256"
+}
+
 export default function registerSha(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
 		id: "sha",
@@ -18,10 +26,11 @@ export default function registerSha(CATEGORY: any): void {
 					{key: "SHA384", label: "SHA-384"},
 					{key: "SHA512", label: "SHA-512"}
 				],
-				default: "SHA256"
+				default: PARAMS.algorithm
 			}
 		],
-		apply(value: string, algorithm = "SHA256"): string {
+		apply(value: string, params: Partial<Params> = {}): string {
+			const {algorithm} = {...PARAMS, ...params}
 			switch (algorithm) {
 				case "SHA1":
 					return String(CryptoJS.SHA1(value))

@@ -1,6 +1,18 @@
 import {EN_TEMPLATES} from "../constants/WordsEN"
 import {ZH_TEMPLATES} from "../constants/WordsZH"
 
+interface Params {
+	language: string
+	min: number
+	max: number
+}
+
+const PARAMS: Params = {
+	language: "zh",
+	min: 3,
+	max: 10
+}
+
 export default function registerSentence(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "sentence",
@@ -16,14 +28,14 @@ export default function registerSentence(CATEGORY: any): void {
 					{key: "zh", label: "中文"},
 					{key: "en", label: "English"}
 				],
-				default: "zh"
+				default: PARAMS.language
 			},
 			{
 				id: "min",
 				title: "category.lorem.sentence.params.min.title",
 				description: "category.lorem.sentence.params.min.description",
 				type: "number",
-				default: 3,
+				default: PARAMS.min,
 				min: 1,
 				step: 1
 			},
@@ -32,14 +44,14 @@ export default function registerSentence(CATEGORY: any): void {
 				title: "category.lorem.sentence.params.max.title",
 				description: "category.lorem.sentence.params.max.description",
 				type: "number",
-				default: 10,
+				default: PARAMS.max,
 				min: 1,
 				step: 1
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {language: "zh", min: 3, max: 10}): string {
-			const {language = "zh", min = 3, max = 10} = params
+		generate(params: Partial<Params> = {}): string {
+			const {language, min, max} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
 			const WORD_COUNT = Math.floor(Math.random() * (max - min + 1)) + min
 			const BLOCK_COUNT = Math.max(1, Math.floor(WORD_COUNT / 2))

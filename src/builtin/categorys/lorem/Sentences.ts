@@ -1,6 +1,24 @@
 import {EN_TEMPLATES} from "../constants/WordsEN"
 import {ZH_TEMPLATES} from "../constants/WordsZH"
 
+interface Params {
+	language: string
+	sentenceMin: number
+	sentenceMax: number
+	min: number
+	max: number
+	separator: string
+}
+
+const PARAMS: Params = {
+	language: "zh",
+	sentenceMin: 3,
+	sentenceMax: 10,
+	min: 2,
+	max: 6,
+	separator: ""
+}
+
 export default function registerSentences(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "sentences",
@@ -16,14 +34,14 @@ export default function registerSentences(CATEGORY: any): void {
 					{key: "zh", label: "中文"},
 					{key: "en", label: "English"}
 				],
-				default: "zh"
+				default: PARAMS.language
 			},
 			{
 				id: "sentenceMin",
 				title: "category.lorem.sentences.params.sentenceMin.title",
 				description: "category.lorem.sentences.params.sentenceMin.description",
 				type: "number",
-				default: 3,
+				default: PARAMS.sentenceMin,
 				min: 1,
 				step: 1
 			},
@@ -32,7 +50,7 @@ export default function registerSentences(CATEGORY: any): void {
 				title: "category.lorem.sentences.params.sentenceMax.title",
 				description: "category.lorem.sentences.params.sentenceMax.description",
 				type: "number",
-				default: 10,
+				default: PARAMS.sentenceMax,
 				min: 1,
 				step: 1
 			},
@@ -41,7 +59,7 @@ export default function registerSentences(CATEGORY: any): void {
 				title: "category.lorem.sentences.params.min.title",
 				description: "category.lorem.sentences.params.min.description",
 				type: "number",
-				default: 2,
+				default: PARAMS.min,
 				min: 1,
 				step: 1
 			},
@@ -50,7 +68,7 @@ export default function registerSentences(CATEGORY: any): void {
 				title: "category.lorem.sentences.params.max.title",
 				description: "category.lorem.sentences.params.max.description",
 				type: "number",
-				default: 6,
+				default: PARAMS.max,
 				min: 1,
 				step: 1
 			},
@@ -59,12 +77,12 @@ export default function registerSentences(CATEGORY: any): void {
 				title: "category.lorem.sentences.params.separator.title",
 				description: "category.lorem.sentences.params.separator.description",
 				type: "string",
-				default: ""
+				default: PARAMS.separator
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {language: "zh", sentenceMin: 3, sentenceMax: 10, min: 2, max: 6, separator: ""}): string {
-			const {language = "zh", sentenceMin = 3, sentenceMax = 10, min = 2, max = 6, separator = ""} = params
+		generate(params: Partial<Params> = {}): string {
+			const {language, sentenceMin, sentenceMax, min, max, separator} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
 			const SENTENCE_COUNT = Math.floor(Math.random() * (max - min + 1)) + min
 			const WORD_TEMPLATES = language === "zh" ? ZH_TEMPLATES : EN_TEMPLATES

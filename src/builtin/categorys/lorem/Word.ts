@@ -1,6 +1,14 @@
 import {WORD_EN} from "../constants/WordEN"
 import {WORD_ZH} from "../constants/WordZH"
 
+interface Params {
+	language: string
+}
+
+const PARAMS: Params = {
+	language: "zh"
+}
+
 export default function registerWord(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "word",
@@ -16,12 +24,12 @@ export default function registerWord(CATEGORY: any): void {
 					{key: "zh", label: "中文"},
 					{key: "en", label: "English"}
 				],
-				default: "zh"
+				default: PARAMS.language
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {language: "zh"}): string {
-			const {language = "zh"} = params
+		generate(params: Partial<Params> = {}): string {
+			const {language} = {...PARAMS, ...params}
 			const WORD = language === "zh" ? WORD_ZH : WORD_EN
 			return WORD[Math.floor(Math.random() * WORD.length)]
 		}

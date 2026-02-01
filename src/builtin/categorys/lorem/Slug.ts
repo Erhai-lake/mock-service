@@ -1,5 +1,15 @@
 import {WORD_EN} from "../constants/WordEN"
 
+interface Params {
+	min: number
+	max: number
+}
+
+const PARAMS: Params = {
+	min: 3,
+	max: 3
+}
+
 export default function registerSlug(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "slug",
@@ -11,7 +21,7 @@ export default function registerSlug(CATEGORY: any): void {
 				title: "category.lorem.slug.params.min.title",
 				description: "category.lorem.slug.params.min.description",
 				type: "number",
-				default: 3,
+				default: PARAMS.min,
 				min: 1,
 				step: 1
 			},
@@ -20,14 +30,14 @@ export default function registerSlug(CATEGORY: any): void {
 				title: "category.lorem.slug.params.max.title",
 				description: "category.lorem.slug.params.max.description",
 				type: "number",
-				default: 3,
+				default: PARAMS.max,
 				min: 1,
 				step: 1
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {min: 3, max: 3}): string {
-			const {min = 3, max = 3} = params
+		generate(params: Partial<Params> = {}): string {
+			const {min, max} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
 			const COUNT = Math.floor(Math.random() * (max - min + 1)) + min
 			const BLOCKS: string[] = []

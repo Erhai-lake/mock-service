@@ -1,3 +1,17 @@
+interface Params {
+	prefix: string
+	casing: "upper" | "lower" | "mixed"
+	min: number
+	max: number
+}
+
+const PARAMS: Params = {
+	prefix: "0x",
+	casing: "mixed",
+	min: 21,
+	max: 21
+}
+
 export default function registerHexadecimal(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "hexadecimal",
@@ -9,7 +23,7 @@ export default function registerHexadecimal(CATEGORY: any): void {
 				title: "category.string.hexadecimal.params.prefix.title",
 				description: "category.string.hexadecimal.params.prefix.description",
 				type: "string",
-				default: "0x"
+				default: PARAMS.prefix
 			},
 			{
 				id: "casing",
@@ -21,14 +35,14 @@ export default function registerHexadecimal(CATEGORY: any): void {
 					{key: "lower", label: "lower"},
 					{key: "mixed", label: "mixed"}
 				],
-				default: "mixed"
+				default: PARAMS.casing
 			},
 			{
 				id: "min",
 				title: "category.string.hexadecimal.params.min.title",
 				description: "category.string.hexadecimal.params.min.description",
 				type: "number",
-				default: 21,
+				default: PARAMS.min,
 				min: 1,
 				step: 1
 			},
@@ -37,14 +51,14 @@ export default function registerHexadecimal(CATEGORY: any): void {
 				title: "category.string.hexadecimal.params.max.title",
 				description: "category.string.hexadecimal.params.max.description",
 				type: "number",
-				default: 21,
+				default: PARAMS.max,
 				min: 1,
 				step: 1
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {prefix: "0x", casing: "mixed", min: 21, max: 21}): string {
-			const {prefix = "0x", casing = "mixed", min = 21, max = 21} = params
+		generate(params: Partial<Params> = {}): string {
+			const {prefix, casing, min, max} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			let bits = ""

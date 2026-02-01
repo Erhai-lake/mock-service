@@ -1,3 +1,19 @@
+interface Params {
+	min: number
+	max: number
+	casing: "upper" | "lower" | "mixed"
+	allowLeadingZero: boolean
+	exclude: string
+}
+
+const PARAMS: Params = {
+	min: 21,
+	max: 21,
+	casing: "mixed",
+	allowLeadingZero: true,
+	exclude: ""
+}
+
 export default function registerAlphanumeric(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "alphanumeric",
@@ -9,7 +25,7 @@ export default function registerAlphanumeric(CATEGORY: any): void {
 				title: "category.string.alphanumeric.params.min.title",
 				description: "category.string.alphanumeric.params.min.description",
 				type: "number",
-				default: 21,
+				default: PARAMS.min,
 				min: 1,
 				step: 1
 			},
@@ -18,7 +34,7 @@ export default function registerAlphanumeric(CATEGORY: any): void {
 				title: "category.string.alphanumeric.params.max.title",
 				description: "category.string.alphanumeric.params.max.description",
 				type: "number",
-				default: 21,
+				default: PARAMS.max,
 				min: 1,
 				step: 1
 			},
@@ -32,26 +48,26 @@ export default function registerAlphanumeric(CATEGORY: any): void {
 					{key: "lower", label: "lower"},
 					{key: "mixed", label: "mixed"}
 				],
-				default: "mixed"
+				default: PARAMS.casing
 			},
 			{
 				id: "allowLeadingZero",
 				title: "category.string.alphanumeric.params.allowLeadingZero.title",
 				description: "category.string.alphanumeric.params.allowLeadingZero.description",
 				type: "boolean",
-				default: true
+				default: PARAMS.allowLeadingZero
 			},
 			{
 				id: "exclude",
 				title: "category.string.alphanumeric.params.exclude.title",
 				description: "category.string.alphanumeric.params.exclude.description",
 				type: "string",
-				default: ""
+				default: PARAMS.exclude
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {min: 21, max: 21, casing: "mixed", allowLeadingZero: true, exclude: ""}): string {
-			const {min = 21, max = 21, casing = "mixed", allowLeadingZero = true, exclude = ""} = params
+		generate(params: Partial<Params> = {}): string {
+			const {min, max, casing, allowLeadingZero, exclude} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			const LETTERS = "abcdefghijklmnopqrstuvwxyz"

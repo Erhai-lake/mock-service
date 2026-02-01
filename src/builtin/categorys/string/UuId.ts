@@ -19,6 +19,20 @@ const resolveNamespace = (type: NamespaceType, custom?: string): string => {
 	return NAMESPACE
 }
 
+interface Params {
+	version: string
+	namespaceType: NamespaceType
+	namespace: string
+	name: string
+}
+
+const PARAMS: Params = {
+	version: "v4",
+	namespaceType: "URL",
+	namespace: "",
+	name: ""
+}
+
 export default function registerUUID(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
 		id: "uuid",
@@ -39,7 +53,7 @@ export default function registerUUID(CATEGORY: any): void {
 					{key: "v5", label: "v5"},
 					{key: "v7", label: "v7"}
 				],
-				default: "v4"
+				default: PARAMS.version
 			},
 			{
 				id: "namespaceType",
@@ -53,26 +67,26 @@ export default function registerUUID(CATEGORY: any): void {
 					{key: "X500", label: "X500"},
 					{key: "CUSTOM", label: "CUSTOM"}
 				],
-				default: "URL"
+				default: PARAMS.namespaceType
 			},
 			{
 				id: "namespace",
 				title: "category.string.uuid.params.namespace.title",
 				description: "category.string.uuid.params.namespace.description",
 				type: "string",
-				default: ""
+				default: PARAMS.namespace
 			},
 			{
 				id: "name",
 				title: "category.string.uuid.params.name.title",
 				description: "category.string.uuid.params.name.description",
 				type: "string",
-				default: ""
+				default: PARAMS.name
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(params = {version: "v4", namespaceType: "URL", namespace: "", name: ""}): string {
-			const {version = "v4", namespaceType = "URL", namespace = "", name = ""} = params
+		generate(params: Partial<Params> = {}): string {
+			const {version, namespaceType, namespace, name} = {...PARAMS, ...params}
 			switch (version) {
 				case "NIL":
 					return NIL

@@ -1,3 +1,13 @@
+interface Params {
+	maxLength: number
+	fillString: string
+}
+
+const PARAMS: Params = {
+	maxLength: 0,
+	fillString: ""
+}
+
 export default function registerMD5(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
 		id: "padEnd",
@@ -9,7 +19,7 @@ export default function registerMD5(CATEGORY: any): void {
 				title: "processors.string.padEnd.params.maxLength.title",
 				description: "processors.string.padEnd.params.maxLength.description",
 				type: "number",
-				default: 0,
+				default: PARAMS.maxLength,
 				min: 0,
 				step: 1
 			},
@@ -18,11 +28,11 @@ export default function registerMD5(CATEGORY: any): void {
 				title: "processors.string.padEnd.params.fillString.title",
 				description: "processors.string.padEnd.params.fillString.description",
 				type: "string",
-				default: ""
+				default: PARAMS.fillString
 			}
 		],
-		apply(value: string, params = {maxLength: 0, fillString: ""}): string {
-			const {maxLength = 0, fillString = ""} = params
+		apply(value: string, params: Partial<Params> = {}): string {
+			const {maxLength = 0, fillString = ""} = {...PARAMS, ...params}
 			return String(value).padEnd(maxLength, fillString)
 		}
 	})
