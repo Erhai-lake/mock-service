@@ -1,5 +1,5 @@
 import {TIMEZONE_OPTIONS} from "../constants/Timezones"
-import {GetZonedNowMs} from "../../public/GetZonedNowMs"
+import {DateTime} from "luxon"
 
 interface Params {
 	timezone: string
@@ -24,10 +24,10 @@ export default function registerTimestamp(CATEGORY: any): void {
 				default: PARAMS.timezone
 			}
 		],
-		processors: ["string", "encodingDecoding"],
-		generate(params: Partial<Params>): string {
-			const {timezone} = {...PARAMS, ...params}
-			return Math.floor(GetZonedNowMs(timezone) / 1000).toString()
+		processors: ["string", "encodingDecoding", "date"],
+		generate(timezone: string = PARAMS.timezone): string {
+			const SECONDS = DateTime.now().setZone(timezone).toSeconds()
+			return String(Math.floor(SECONDS))
 		}
 	})
 }

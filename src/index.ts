@@ -11,6 +11,7 @@ import numberCategory from "./builtin/categorys/number"
 import dateCategory from "./builtin/categorys/date"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
+import registerDateProcessors from "./builtin/processors/date"
 import registerZhCN from "./builtin/i18n/zh-CN"
 import registerEnUS from "./builtin/i18n/en-US"
 
@@ -57,6 +58,7 @@ class MockService {
 		// 内置处理器
 		registerStringProcessors(this.processorRegistry)
 		registerEncodingProcessors(this.processorRegistry)
+		registerDateProcessors(this.processorRegistry)
 		// 内置语言
 		registerZhCN(this.i18nRegistry)
 		registerEnUS(this.i18nRegistry)

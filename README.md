@@ -34,6 +34,14 @@ A fully extensible mock data generation library with categories, methods, and pr
 	* word
 	* words
 	* slug
+* date
+	* isoTimestamp
+	* timestamp
+	* millisecondsTimestamp
+    * now
+    * anytime
+    * birthdate
+    * timeZone
 
 ### Currently Available Processors / 目前有的处理器
 
@@ -54,8 +62,31 @@ A fully extensible mock data generation library with categories, methods, and pr
 	* unbase64
 	* encodeURIComponent
 	* decodeURIComponent
+* date
+	* format
+    * formatISO8601
+    * formatISO9075
+    * formatRFC3339
+    * formatRFC7231
+    * startOfDay
+    * timestamp
+    * millisecondsTimestamp
+    * adjustDays
+    * adjustWeeks
+    * adjustMonths
+    * adjustQuarters
+    * adjustYears
+    * adjustISOWeekYears
+    * adjustHours
+    * adjustMinutes
+    * adjustSeconds
+    * adjustMilliseconds
+    * adjustWorkday
+    * adjustHoliday
 
 ## Installation / 安装
+
+Not yet.
 
 ### Using npm / 使用 npm
 

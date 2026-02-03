@@ -1,4 +1,5 @@
-import {TIMEZONE_OPTIONS} from "../constants/Timezones"
+import {TIMEZONE_OPTIONS} from "../../categorys/constants/Timezones"
+import {ParseToDateTime} from "../../public/ParseToDateTime"
 import {DateTime} from "luxon"
 
 interface Params {
@@ -15,31 +16,31 @@ const PARAMS: Params = {
 	timezoneSuffix: "offset"
 }
 
-export default function registerIsoTimestamp(CATEGORY: any): void {
-	CATEGORY.methods.registerMethod({
-		id: "isoTimestamp",
-		title: "category.date.isoTimestamp.title",
-		description: "category.date.isoTimestamp.description",
+export default function registerFormatISO8601(CATEGORY: any): void {
+	CATEGORY.methods.registerProcessor({
+		id: "formatISO8601",
+		title: "processors.date.formatISO8601.title",
+		description: "processors.date.formatISO8601.description",
 		params: [
 			{
 				id: "timezone",
-				title: "category.date.isoTimestamp.params.timezone.title",
-				description: "category.date.isoTimestamp.params.timezone.description",
+				title: "processors.date.formatISO8601.params.timezone.title",
+				description: "processors.date.formatISO8601.params.timezone.description",
 				type: "select",
 				options: TIMEZONE_OPTIONS,
 				default: PARAMS.timezone
 			},
 			{
 				id: "excludeMilliseconds",
-				title: "category.date.isoTimestamp.params.excludeMilliseconds.title",
-				description: "category.date.isoTimestamp.params.excludeMilliseconds.description",
+				title: "processors.date.formatISO8601.params.excludeMilliseconds.title",
+				description: "processors.date.formatISO8601.params.excludeMilliseconds.description",
 				type: "boolean",
 				default: PARAMS.excludeMilliseconds
 			},
 			{
 				id: "representation",
-				title: "category.date.isoTimestamp.params.representation.title",
-				description: "category.date.isoTimestamp.params.representation.description",
+				title: "processors.date.formatISO8601.params.representation.title",
+				description: "processors.date.formatISO8601.params.representation.description",
 				type: "select",
 				options: [
 					{key: "date", label: "date"},
@@ -50,8 +51,8 @@ export default function registerIsoTimestamp(CATEGORY: any): void {
 			},
 			{
 				id: "timezoneSuffix",
-				title: "category.date.isoTimestamp.params.timezoneSuffix.title",
-				description: "category.date.isoTimestamp.params.timezoneSuffix.description",
+				title: "processors.date.formatISO8601.params.timezoneSuffix.title",
+				description: "processors.date.formatISO8601.params.timezoneSuffix.description",
 				type: "select",
 				options: [
 					{key: "none", label: "none"},
@@ -61,10 +62,9 @@ export default function registerIsoTimestamp(CATEGORY: any): void {
 				default: PARAMS.timezoneSuffix
 			}
 		],
-		processors: ["string", "encodingDecoding", "date"],
-		generate(params: Partial<Params>): string {
+		apply(value: string, params: Partial<Params> = {}): string {
 			const {timezone, excludeMilliseconds, representation, timezoneSuffix} = {...PARAMS, ...params}
-			let date = DateTime.now().setZone(timezone)
+			let date = ParseToDateTime(value, DateTime.now(), timezone).date
 			if (excludeMilliseconds) date = date.set({millisecond: 0})
 			if (representation === "date") return String(date.toISODate())
 			if (representation === "time") {

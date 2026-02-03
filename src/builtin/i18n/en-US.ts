@@ -127,7 +127,7 @@ export default function registerEnUS(i18n: I18nRegistry) {
 					}
 				},
 				sample: {
-					title: "Sample string",
+					title: "Random string (mixed)",
 					description: "Generate a string consisting of letters, numbers, and symbols",
 					params: {
 						min: {
@@ -152,8 +152,8 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						}
 					}
 				},
-				fromCharacters: {
-					title: "Random from characters",
+				characters: {
+					title: "Character set",
 					description: "Randomly select a specified number of characters from the given set",
 					params: {
 						characters: {
@@ -384,7 +384,7 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						},
 						multipleOf: {
 							title: "Multiple of",
-							description: "The integer must be a multiple of this number, 0 means no restriction"
+							description: "The integer must be a multiple of this number. Set to 0 for no restriction"
 						}
 					}
 				},
@@ -402,7 +402,7 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						},
 						multipleOf: {
 							title: "Multiple of",
-							description: "The positive integer must be a multiple of this number, 0 means no restriction"
+							description: "The integer must be a multiple of this number. Set to 0 for no restriction"
 						}
 					}
 				},
@@ -420,7 +420,7 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						},
 						multipleOf: {
 							title: "Multiple of",
-							description: "The negative integer must be a multiple of this number, 0 means no restriction"
+							description: "The integer must be a multiple of this number. Set to 0 for no restriction"
 						}
 					}
 				},
@@ -456,7 +456,7 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						},
 						multipleOf: {
 							title: "Multiple of",
-							description: "The float must be a multiple of this number, 0 means no restriction"
+							description: "The integer must be a multiple of this number. Set to 0 for no restriction"
 						}
 					}
 				},
@@ -507,8 +507,8 @@ export default function registerEnUS(i18n: I18nRegistry) {
 				title: "Date / Time",
 				description: "Date and time related methods",
 				isoTimestamp: {
-					title: "ISO Timestamp",
-					description: "Returns a timestamp that conforms to the ISO 8601 standard",
+					title: "ISO Time String",
+					description: "Returns a time string that conforms to the ISO 8601 standard",
 					params: {
 						timezone: {
 							title: "Time Zone",
@@ -517,10 +517,6 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						excludeMilliseconds: {
 							title: "Exclude Milliseconds",
 							description: "Whether to exclude the milliseconds part of the timestamp"
-						},
-						formattingStyle: {
-							title: "Formatting Style",
-							description: "Formatting style, for example: (basic, extended)"
 						},
 						representation: {
 							title: "Representation",
@@ -564,61 +560,33 @@ export default function registerEnUS(i18n: I18nRegistry) {
 				},
 				anytime: {
 					title: "Any Time",
-					description: "Randomly generates a time",
+					description: "Generate a random arbitrary time",
 					params: {
+						timezone: {
+							title: "Time Zone",
+							description: "Time zone, for example: (Asia/Shanghai)"
+						},
 						refDate: {
 							title: "Reference Date",
-							description: "Select a time within a range before or after the reference date, for example: (xxxx-xx-xx xx:xx:xx)"
+							description: "Generate a time within a range before or after the reference date, for example: (xxxx-xx-xx xx:xx:xx)"
 						},
 						scope: {
 							title: "Time Range",
-							description: "Time range before and after the reference date, unit: months"
+							description: "The range before and after the reference date, in months"
 						},
 						representation: {
 							title: "Representation",
-							description: "Time representation, which parts to format: date, time, or both (full)"
-						}
-					}
-				},
-				future: {
-					title: "Future Time",
-					description: "Randomly generates a future time",
-					params: {
-						refDate: {
-							title: "Reference Date",
-							description: "Select a time within a range after the reference date, for example: (xxxx-xx-xx xx:xx:xx)"
+							description: "Time representation format: which parts to format — date, time, or both (full)"
 						},
-						scope: {
-							title: "Time Range",
-							description: "Time range after the reference date, unit: months"
-						},
-						representation: {
-							title: "Representation",
-							description: "Time representation, which parts to format: date, time, or both (full)"
-						}
-					}
-				},
-				past: {
-					title: "Past Time",
-					description: "Randomly generates a past time",
-					params: {
-						refDate: {
-							title: "Reference Date",
-							description: "Select a time within a range before the reference date, for example: (xxxx-xx-xx xx:xx:xx)"
-						},
-						scope: {
-							title: "Time Range",
-							description: "Time range before the reference date, unit: months"
-						},
-						representation: {
-							title: "Representation",
-							description: "Time representation, which parts to format: date, time, or both (full)"
+						direction: {
+							title: "Time direction",
+							description: "Time direction, possible values: Past and future or all"
 						}
 					}
 				},
 				birthdate: {
 					title: "Birth Date",
-					description: "Randomly generates a date and derives a birth date based on the reference date",
+					description: "Randomly generates a date and calculates a birth date based on the reference date",
 					params: {
 						min: {
 							title: "Minimum Age",
@@ -749,7 +717,7 @@ export default function registerEnUS(i18n: I18nRegistry) {
 					description: "Encode a string using Base64"
 				},
 				unbase64: {
-					title: "Base64 decode",
+					title: "Base64 Decode",
 					description: "Decode a Base64 encoded string"
 				},
 				encodeURIComponent: {
@@ -759,6 +727,276 @@ export default function registerEnUS(i18n: I18nRegistry) {
 				decodeURIComponent: {
 					title: "URI decode",
 					description: "Decode a URI encoded string"
+				}
+			},
+			date: {
+				title: "Date and Time Related",
+				description: "Handlers for date and time operations",
+				format: {
+					title: "Format",
+					description: "Format date and time into a specified string",
+					params: {
+						timezone: {
+							title: "Timezone",
+							description: "Timezone, e.g., (Asia/Shanghai)"
+						},
+						formatString: {
+							title: "Format String",
+							description: "The pattern string used for formatting"
+						}
+					}
+				},
+				formatISO8601: {
+					title: "Format ISO 8601",
+					description: "Format date and time as an ISO 8601 string",
+					params: {
+						timezone: {
+							title: "Timezone",
+							description: "Timezone, e.g., (Asia/Shanghai)"
+						},
+						excludeMilliseconds: {
+							title: "Exclude Milliseconds",
+							description: "Whether to exclude milliseconds from the output"
+						},
+						representation: {
+							title: "Representation",
+							description: "Which parts to format: date, time, or both (complete)"
+						},
+						timezoneSuffix: {
+							title: "Timezone Suffix",
+							description: "The timezone suffix to append"
+						}
+					}
+				},
+				formatISO9075: {
+					title: "Format ISO 9075",
+					description: "Format date and time as an ISO 9075 string",
+					params: {
+						timezone: {
+							title: "Timezone",
+							description: "Timezone, e.g., (Asia/Shanghai)"
+						},
+						excludeMilliseconds: {
+							title: "Exclude Milliseconds",
+							description: "Whether to exclude milliseconds"
+						}
+					}
+				},
+				formatRFC3339: {
+					title: "Format RFC 3339",
+					description: "Format date and time as an RFC 3339 string",
+					params: {
+						timezone: {
+							title: "Timezone",
+							description: "Timezone, e.g., (Asia/Shanghai)"
+						},
+						excludeMilliseconds: {
+							title: "Exclude Milliseconds",
+							description: "Whether to exclude milliseconds"
+						},
+						timezoneSuffix: {
+							title: "Timezone Suffix",
+							description: "The timezone suffix to append"
+						}
+					}
+				},
+				formatRFC7231: {
+					title: "Format RFC 7231",
+					description: "Format date and time as an RFC 7231 string",
+					params: {
+						timezone: {
+							title: "Timezone",
+							description: "Timezone, e.g., (Asia/Shanghai)"
+						}
+					}
+				},
+				startOfDay: {
+					title: "Start of Day",
+					description: "Set the date and time to the beginning of the day: 00:00:00"
+				},
+				timestamp: {
+					title: "Unix Timestamp (Seconds)",
+					description: "Convert date and time to a Unix timestamp in seconds"
+				},
+				millisecondsTimestamp: {
+					title: "Timestamp (Milliseconds)",
+					description: "Convert date and time to a timestamp in milliseconds"
+				},
+				adjustDays: {
+					title: "Adjust Days",
+					description: "Adjust the date and time by a specified number of days",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of days to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract days"
+						}
+					}
+				},
+				adjustWeeks: {
+					title: "Adjust Weeks",
+					description: "Adjust the date and time by a specified number of weeks",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of weeks to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract weeks"
+						}
+					}
+				},
+				adjustMonths: {
+					title: "Adjust Months",
+					description: "Adjust the date and time by a specified number of months",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of months to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract months"
+						}
+					}
+				},
+				adjustQuarters: {
+					title: "Adjust Quarters",
+					description: "Adjust the date and time by a specified number of quarters",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of quarters to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract quarters"
+						}
+					}
+				},
+				adjustYears: {
+					title: "Adjust Years",
+					description: "Adjust the date and time by a specified number of years",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of years to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract years"
+						}
+					}
+				},
+				adjustISOWeekYears: {
+					title: "Adjust ISO Week-Years",
+					description: "Adjust the date and time by a specified number of ISO week-years",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of ISO week-years to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract ISO week-years"
+						}
+					}
+				},
+				adjustHours: {
+					title: "Adjust Hours",
+					description: "Adjust the date and time by a specified number of hours",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of hours to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract hours"
+						}
+					}
+				},
+				adjustMinutes: {
+					title: "Adjust Minutes",
+					description: "Adjust the date and time by a specified number of minutes",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of minutes to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract minutes"
+						}
+					}
+				},
+				adjustSeconds: {
+					title: "Adjust Seconds",
+					description: "Adjust the date and time by a specified number of seconds",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of seconds to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract seconds"
+						}
+					}
+				},
+				adjustMilliseconds: {
+					title: "Adjust Milliseconds",
+					description: "Adjust the date and time by a specified number of milliseconds",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of milliseconds to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract milliseconds"
+						}
+					}
+				},
+				adjustWorkday: {
+					title: "Adjust Workdays",
+					description: "Adjust the date by a specified number of workdays",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of workdays to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract workdays"
+						},
+						workdaysList: {
+							title: "Workdays List",
+							description: "List of workdays where 1 is Monday and 7 is Sunday, separated by commas"
+						}
+					}
+				},
+				adjustHoliday: {
+					title: "Adjust non-working days",
+					description: "Adjust the date by a specified number of non-working days",
+					params: {
+						amount: {
+							title: "Amount",
+							description: "Number of holidays to adjust"
+						},
+						increase: {
+							title: "Increase/Decrease",
+							description: "Whether to add or subtract holidays"
+						},
+						holidaysList: {
+							title: "Holidays List",
+							description: "List of rest days where 1 is Monday and 7 is Sunday, separated by commas"
+						}
+					}
 				}
 			}
 		}

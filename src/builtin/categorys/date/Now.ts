@@ -1,6 +1,5 @@
 import {TIMEZONE_OPTIONS} from "../constants/Timezones"
-import {FormatDateTime} from "../../public/FormatDateTime"
-import {GetZonedNow} from "../../public/GetZonedNow"
+import {DateTime} from "luxon"
 
 interface Params {
 	timezone: string
@@ -25,10 +24,9 @@ export default function registerNow(CATEGORY: any): void {
 				default: PARAMS.timezone
 			}
 		],
-		processors: ["string", "encodingDecoding"],
-		generate(params: Partial<Params>): string {
-			const {timezone} = {...PARAMS, ...params}
-			return FormatDateTime(GetZonedNow(timezone))
+		processors: ["string", "encodingDecoding", "date"],
+		generate(timezone: string = PARAMS.timezone): string {
+			return DateTime.now().setZone(timezone).toFormat("yyyy-MM-dd HH:mm:ss")
 		}
 	})
 }

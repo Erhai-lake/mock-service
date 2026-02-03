@@ -1,4 +1,4 @@
-import {FormatDateTime} from "../../public/FormatDateTime"
+import {DateTime} from "luxon"
 
 interface Params {
 	min: number
@@ -60,23 +60,20 @@ export default function registerBirthdate(CATEGORY: any): void {
 				default: PARAMS.representation
 			}
 		],
-		processors: ["string", "encodingDecoding"],
+		processors: ["string", "encodingDecoding", "date"],
 		generate(params: Partial<Params> = {}): string {
 			const {min, max, refDate, representation} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
-			const BASE = refDate ? new Date(refDate) : new Date()
-			const SAFE_BASE = isNaN(BASE.getTime()) ? new Date() : BASE
+			const BASE = refDate ? DateTime.fromISO(refDate) : DateTime.now()
+			const SAFE_BASE = BASE.isValid ? BASE : DateTime.now()
 			const AGE = Math.floor(Math.random() * (max - min + 1)) + min
-			const END = new Date(SAFE_BASE)
-			END.setFullYear(END.getFullYear() - AGE)
-			const START = new Date(END)
-			START.setFullYear(START.getFullYear() - 1)
-			const RANDOM_TIME = START.getTime() + Math.random() * (END.getTime() - START.getTime())
-			const DATE = new Date(RANDOM_TIME)
-			const FULL = FormatDateTime(DATE)
-			if (representation === "date") return FULL.split(" ")[0]
-			if (representation === "time") return FULL.split(" ")[1]
-			return FULL
+			const END = SAFE_BASE.minus({years: AGE})
+			const START = END.minus({years: 1})
+			const RANDOM_MILLIS = START.toMillis() + Math.random() * (END.toMillis() - START.toMillis())
+			const BIRTH = DateTime.fromMillis(RANDOM_MILLIS)
+			if (representation === "date") return BIRTH.toISODate() ?? ""
+			if (representation === "time") return BIRTH.toFormat("HH:mm:ss")
+			return BIRTH.toFormat("yyyy-MM-dd HH:mm:ss")
 		}
 	})
 }

@@ -1,6 +1,6 @@
 {
 	"name": "@erhai_lake/mock-service",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"type": "module",
 	"main": "./dist/index.cjs.js",
 	"module": "./dist/index.esm.js",
@@ -20,11 +20,13 @@
 	],
 	"devDependencies": {
 		"@types/crypto-js": "^4.2.2",
+		"@types/luxon": "^3.7.1",
 		"tsup": "^8.5.1",
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
 		"crypto-js": "^4.2.0",
+		"luxon": "^3.7.2",
 		"nanoid": "^5.1.6",
 		"uuid": "^13.0.0"
 	}

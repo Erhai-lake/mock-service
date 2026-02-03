@@ -113,7 +113,7 @@ export default function registerZhCN(i18n: I18nRegistry) {
 					}
 				},
 				symbol: {
-					title: "符号字符串",
+					title: "随机符号字符串 (混合)",
 					description: "生成一个由符号组成的字符串",
 					params: {
 						min: {
@@ -152,7 +152,7 @@ export default function registerZhCN(i18n: I18nRegistry) {
 						}
 					}
 				},
-				fromCharacters: {
+				characters: {
 					title: "从字符中随机选择",
 					description: "从给定的字符中随机选择指定数量的字符",
 					params: {
@@ -507,8 +507,8 @@ export default function registerZhCN(i18n: I18nRegistry) {
 				title: "日期 / 时间",
 				description: "日期时间相关的方法",
 				isoTimestamp: {
-					title: "ISO 时间戳",
-					description: "返回符合 ISO 8601 标准的时间戳",
+					title: "ISO 时间字符串",
+					description: "返回符合 ISO 8601 标准的时间字符串",
 					params: {
 						timezone: {
 							title: "时区",
@@ -517,10 +517,6 @@ export default function registerZhCN(i18n: I18nRegistry) {
 						excludeMilliseconds: {
 							title: "是否排除毫秒",
 							description: "是否排除时间戳中的毫秒部分"
-						},
-						formattingStyle: {
-							title: "格式化样式",
-							description: "格式化样式, 例如: (basic, extended)"
 						},
 						representation: {
 							title: "表示形式",
@@ -566,6 +562,10 @@ export default function registerZhCN(i18n: I18nRegistry) {
 					title: "任意时间",
 					description: "随机一个任意时间",
 					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						},
 						refDate: {
 							title: "参考时间",
 							description: "在参考时间前后的时间范围内取值, 例如: (xxxx-xx-xx xx:xx:xx)"
@@ -577,48 +577,16 @@ export default function registerZhCN(i18n: I18nRegistry) {
 						representation: {
 							title: "表示形式",
 							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
-						}
-					}
-				},
-				future: {
-					title: "未来时间",
-					description: "随机一个未来时间",
-					params: {
-						refDate: {
-							title: "参考时间",
-							description: "在参考时间后的时间范围内取值, 例如: (xxxx-xx-xx xx:xx:xx)"
 						},
-						scope: {
-							title: "时间范围",
-							description: "在参考时间后的时间范围, 单位: 月"
-						},
-						representation: {
-							title: "表示形式",
-							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
-						}
-					}
-				},
-				past: {
-					title: "过去时间",
-					description: "随机一个过去时间",
-					params: {
-						refDate: {
-							title: "参考时间",
-							description: "在参考时间前的时间范围内取值, 例如: (xxxx-xx-xx xx:xx:xx)"
-						},
-						scope: {
-							title: "时间范围",
-							description: "在参考时间前的时间范围, 单位: 月"
-						},
-						representation: {
-							title: "表示形式",
-							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
+						direction: {
+							title: "时间方向",
+							description: "时间方向, 取值范围, 前后, 未来, 过去"
 						}
 					}
 				},
 				birthdate: {
 					title: "出生日期",
-					description: "随机取值后, 通过参考时间反推出生日",
+					description: "随机取值后, 通过参考时间反推出出生日期",
 					params: {
 						min: {
 							title: "最小年龄",
@@ -759,6 +727,276 @@ export default function registerZhCN(i18n: I18nRegistry) {
 				decodeURIComponent: {
 					title: "URI 解码",
 					description: "对 URI 编码的字符串进行解码"
+				}
+			},
+			date: {
+				title: "日期时间相关",
+				description: "日期时间相关的处理器",
+				format: {
+					title: "格式化",
+					description: "将日期时间格式化为指定的字符串",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						},
+						formatString: {
+							title: "格式化字符串",
+							description: "格式化字符串"
+						}
+					}
+				},
+				formatISO8601: {
+					title: "格式化 ISO 8601",
+					description: "将日期时间格式化为 ISO 8601 字符串",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						},
+						excludeMilliseconds: {
+							title: "是否排除毫秒",
+							description: "是否排除毫秒"
+						},
+						representation: {
+							title: "表示形式",
+							description: "时间表示形式, 格式化哪些部分: 日期, 时间或两者(完整)"
+						},
+						timezoneSuffix: {
+							title: "时区后缀",
+							description: "时区后缀"
+						}
+					}
+				},
+				formatISO9075: {
+					title: "格式化 ISO 9075",
+					description: "将日期时间格式化为 ISO 9075 字符串",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						},
+						excludeMilliseconds: {
+							title: "是否排除毫秒",
+							description: "是否排除毫秒"
+						}
+					}
+				},
+				formatRFC3339: {
+					title: "格式化 RFC 3339",
+					description: "将日期时间格式化为 RFC 3339 字符串",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						},
+						excludeMilliseconds: {
+							title: "是否排除毫秒",
+							description: "是否排除毫秒"
+						},
+						timezoneSuffix: {
+							title: "时区后缀",
+							description: "时区后缀"
+						}
+					}
+				},
+				formatRFC7231: {
+					title: "格式化 RFC 7231",
+					description: "将日期时间格式化为 RFC 7231 字符串",
+					params: {
+						timezone: {
+							title: "时区",
+							description: "时区, 例如: (Asia/Shanghai)"
+						}
+					}
+				},
+				startOfDay: {
+					title: "一天的起点",
+					description: "将日期时间设置为当天的开始时间: 00:00:00"
+				},
+				timestamp: {
+					title: "秒级时间戳",
+					description: "将日期时间转换为秒级时间戳"
+				},
+				millisecondsTimestamp: {
+					title: "毫秒级时间戳",
+					description: "将日期时间转换为毫秒级时间戳"
+				},
+				adjustDays: {
+					title: "调整天数",
+					description: "将日期时间调整指定的天数",
+					params: {
+						amount: {
+							title: "天数",
+							description: "要调整的天数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少天数"
+						}
+					}
+				},
+				adjustWeeks: {
+					title: "调整周数",
+					description: "将日期时间调整指定的周数",
+					params: {
+						amount: {
+							title: "周数",
+							description: "要调整的周数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少周数"
+						}
+					}
+				},
+				adjustMonths: {
+					title: "调整月数",
+					description: "将日期时间调整指定的月数",
+					params: {
+						amount: {
+							title: "月数",
+							description: "要调整的月数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少月数"
+						}
+					}
+				},
+				adjustQuarters: {
+					title: "调整季度数",
+					description: "将日期时间调整指定的季度数",
+					params: {
+						amount: {
+							title: "季度数",
+							description: "要调整的季度数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少季度数"
+						}
+					}
+				},
+				adjustYears: {
+					title: "调整年份数",
+					description: "将日期时间调整指定的年份数",
+					params: {
+						amount: {
+							title: "年份数",
+							description: "要调整的年份数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少年份数"
+						}
+					}
+				},
+				adjustISOWeekYears: {
+					title: "调整 ISO 周年份数",
+					description: "将日期时间调整指定的 ISO 周年份数",
+					params: {
+						amount: {
+							title: "ISO 周年份数",
+							description: "要调整的 ISO 周年份数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少 ISO 周年份数"
+						}
+					}
+				},
+				adjustHours: {
+					title: "调整小时数",
+					description: "将日期时间调整指定的小时数",
+					params: {
+						amount: {
+							title: "小时数",
+							description: "要调整的小时数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少小时数"
+						}
+					}
+				},
+				adjustMinutes: {
+					title: "调整分钟数",
+					description: "将日期时间调整指定的分钟数",
+					params: {
+						amount: {
+							title: "分钟数",
+							description: "要调整的分钟数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少分钟数"
+						}
+					}
+				},
+				adjustSeconds: {
+					title: "调整秒数",
+					description: "将日期时间调整指定的秒数",
+					params: {
+						amount: {
+							title: "秒数",
+							description: "要调整的秒数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少秒数"
+						}
+					}
+				},
+				adjustMilliseconds: {
+					title: "调整毫秒数",
+					description: "将日期时间调整指定的毫秒数",
+					params: {
+						amount: {
+							title: "毫秒数",
+							description: "要调整的毫秒数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少毫秒数"
+						}
+					}
+				},
+				adjustWorkday: {
+					title: "调整工作日",
+					description: "将日期时间调整指定的工作日数",
+					params: {
+						amount: {
+							title: "工作日数",
+							description: "要调整的工作日数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少工作日数"
+						},
+						workdaysList: {
+							title: "工作日列表",
+							description: "工作日列表, 1代表周一, 7代表周日, 英文,号分割"
+						}
+					}
+				},
+				adjustHoliday: {
+					title: "调整非工作日",
+					description: "将日期时间调整指定的非工作日数",
+					params: {
+						amount: {
+							title: "休息日数",
+							description: "要调整的休息日数"
+						},
+						increase: {
+							title: "增加/减少",
+							description: "增加或减少休息日数"
+						},
+						holidaysList: {
+							title: "休息日列表",
+							description: "休息日列表, 1代表周一, 7代表周日, 英文,号分割"
+						}
+					}
 				}
 			}
 		}

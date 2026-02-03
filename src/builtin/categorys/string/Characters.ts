@@ -10,23 +10,23 @@ const PARAMS: Params = {
 	max: 21
 }
 
-export default function registerFromCharacters(CATEGORY: any): void {
+export default function registerCharacters(CATEGORY: any): void {
 	CATEGORY.methods.registerMethod({
-		id: "fromCharacters",
-		title: "category.string.fromCharacters.title",
-		description: "category.string.fromCharacters.description",
+		id: "characters",
+		title: "category.string.characters.title",
+		description: "category.string.characters.description",
 		params: [
 			{
 				id: "characters",
-				title: "category.string.fromCharacters.params.characters.title",
-				description: "category.string.fromCharacters.params.characters.description",
+				title: "category.string.characters.params.characters.title",
+				description: "category.string.characters.params.characters.description",
 				type: "string",
 				default: PARAMS.characters
 			},
 			{
 				id: "min",
-				title: "category.string.fromCharacters.params.min.title",
-				description: "category.string.fromCharacters.params.min.description",
+				title: "category.string.characters.params.min.title",
+				description: "category.string.characters.params.min.description",
 				type: "number",
 				default: PARAMS.min,
 				min: 1,
@@ -34,8 +34,8 @@ export default function registerFromCharacters(CATEGORY: any): void {
 			},
 			{
 				id: "max",
-				title: "category.string.fromCharacters.params.max.title",
-				description: "category.string.fromCharacters.params.max.description",
+				title: "category.string.characters.params.max.title",
+				description: "category.string.characters.params.max.description",
 				type: "number",
 				default: PARAMS.max,
 				min: 1,

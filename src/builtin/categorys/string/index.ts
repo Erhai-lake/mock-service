@@ -6,7 +6,7 @@ import registerNumeric from "./Numeric"
 import registerAlphanumeric from "./Alphanumeric"
 import registerSymbol from "./Symbol"
 import registerSample from "./Sample"
-import registerFromCharacters from "./FromCharacters"
+import registerCharacters from "./Characters"
 import registerBinary from "./Binary"
 import registerOctal from "./Octal"
 import registerHexadecimal from "./Hexadecimal"
@@ -25,7 +25,7 @@ export default function stringCategory(categoryRegistry: CategoryRegistry) {
 	registerAlphanumeric(CATEGORY)
 	registerSymbol(CATEGORY)
 	registerSample(CATEGORY)
-	registerFromCharacters(CATEGORY)
+	registerCharacters(CATEGORY)
 	registerBinary(CATEGORY)
 	registerOctal(CATEGORY)
 	registerHexadecimal(CATEGORY)
