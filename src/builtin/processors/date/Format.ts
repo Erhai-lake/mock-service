@@ -32,9 +32,11 @@ export default function registerEncodeURIComponent(CATEGORY: any): void {
 				description: "processors.date.format.params.formatString.description",
 				type: "select",
 				options: [
+					{key: "yyyy-MM-dd HH:mm:ss.SSS", label: "yyyy-MM-dd HH:mm:ss.SSS"},
 					{key: "yyyy-MM-dd HH:mm:ss", label: "yyyy-MM-dd HH:mm:ss"},
 					{key: "yyyy-MM-dd HH:mm", label: "yyyy-MM-dd HH:mm"},
 					{key: "yyyy-MM-dd", label: "yyyy-MM-dd"},
+					{key: "HH:mm:ss.SSS", label: "HH:mm:ss.SSS"},
 					{key: "HH:mm:ss", label: "HH:mm:ss"},
 					{key: "HH:mm", label: "HH:mm"},
 					{key: "yyyy-MM-dd'T'HH:mm:ss", label: "yyyy-MM-dd'T'HH:mm:ss"},
@@ -44,6 +46,7 @@ export default function registerEncodeURIComponent(CATEGORY: any): void {
 					{key: "yyyyMMdd", label: "yyyyMMdd"},
 					{key: "yyyyMMddHHmmss", label: "yyyyMMddHHmmss"},
 					{key: "yyyyMMddHHmmssSSS", label: "yyyyMMddHHmmssSSS"},
+					{key: "yyyy/MM/dd HH:mm:ss.SSS", label: "yyyy/MM/dd HH:mm:ss.SSS"},
 					{key: "yyyy/MM/dd HH:mm:ss", label: "yyyy/MM/dd HH:mm:ss"},
 					{key: "yyyy/MM/dd", label: "yyyy/MM/dd"}
 				],

@@ -5,6 +5,8 @@ import registerMillisecondsTimestamp from "./MillisecondsTimestamp"
 import registerNow from "./Now"
 import registerAnytime from "./Anytime"
 import registerBirthdate from "./Birthdate"
+import registerMonth from "./Month"
+import registerWeekday from "./Weekday"
 import registerTimeZone from "./TimeZone"
 
 export default function dateCategory(categoryRegistry: CategoryRegistry) {
@@ -20,5 +22,7 @@ export default function dateCategory(categoryRegistry: CategoryRegistry) {
 	registerNow(CATEGORY)
 	registerAnytime(CATEGORY)
 	registerBirthdate(CATEGORY)
+	registerMonth(CATEGORY)
+	registerWeekday(CATEGORY)
 	registerTimeZone(CATEGORY)
 }

@@ -1,3 +1,5 @@
+import {MONTHS_ABBREVIATED_EN} from "../../categorys/constants/MonthsEN"
+import {WEEKDAYS_ABBREVIATED_EN} from "../../categorys/constants/WeekdaysEN"
 import {TIMEZONE_OPTIONS} from "../../categorys/constants/Timezones"
 import {ParseToDateTime} from "../../public/ParseToDateTime"
 import {DateTime} from "luxon"
@@ -9,9 +11,6 @@ interface Params {
 const PARAMS: Params = {
 	timezone: "Asia/Shanghai"
 }
-
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 export default function registerFormatRFC7231(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
@@ -30,9 +29,9 @@ export default function registerFormatRFC7231(CATEGORY: any): void {
 		],
 		apply(value: string, timezone: string = PARAMS.timezone): string {
 			const DATE = ParseToDateTime(value, DateTime.now(), timezone).date
-			const WEEKDAY = WEEKDAYS[DATE.weekday % 7]
+			const WEEKDAY = WEEKDAYS_ABBREVIATED_EN[DATE.weekday % 7]
 			const DAY = String(DATE.day).padStart(2, "0")
-			const MONTH = MONTHS[DATE.month - 1]
+			const MONTH = MONTHS_ABBREVIATED_EN[DATE.month - 1]
 			const YEAR = DATE.year
 			const HOUR = String(DATE.hour).padStart(2, "0")
 			const MINUTE = String(DATE.minute).padStart(2, "0")

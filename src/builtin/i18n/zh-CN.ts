@@ -606,6 +606,34 @@ export default function registerZhCN(i18n: I18nRegistry) {
 						}
 					}
 				},
+				month: {
+					title: "月份",
+					description: "随机一个月份",
+					params: {
+						language: {
+							title: "语言",
+							description: "月份的语言"
+						},
+						abbreviated: {
+							title: "是否缩写",
+							description: "是否缩写月份"
+						}
+					}
+				},
+				weekday: {
+					title: "星期",
+					description: "随机一个星期",
+					params: {
+						language: {
+							title: "语言",
+							description: "星期的语言"
+						},
+						abbreviated: {
+							title: "是否缩写",
+							description: "是否缩写星期"
+						}
+					}
+				},
 				timeZone: {
 					title: "时区",
 					description: "随机一个时区"

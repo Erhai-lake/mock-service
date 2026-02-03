@@ -20,6 +20,7 @@ const DATE_TIME_FORMATS = [
 	"yyyy/MM/dd",
 	"yyyyMMddHHmmss",
 	"yyyyMMdd",
+	"HH:mm:ss.SSS",
 	"HH:mm:ss",
 	"HH:mm"
 ]

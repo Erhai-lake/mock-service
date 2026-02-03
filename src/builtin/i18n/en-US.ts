@@ -606,6 +606,34 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						}
 					}
 				},
+				month: {
+					title: "Month",
+					description: "Randomly generate a month",
+					params: {
+						language: {
+							title: "Language",
+							description: "The language of the month"
+						},
+						abbreviated: {
+							title: "Abbreviated",
+							description: "Whether to abbreviate the month"
+						}
+					}
+				},
+				weekday: {
+					title: "Weekday",
+					description: "Randomly generate a weekday",
+					params: {
+						language: {
+							title: "Language",
+							description: "The language of the weekday"
+						},
+						abbreviated: {
+							title: "Abbreviated",
+							description: "Whether to abbreviate the weekday"
+						}
+					}
+				},
 				timeZone: {
 					title: "Time Zone",
 					description: "Randomly generates a time zone"
