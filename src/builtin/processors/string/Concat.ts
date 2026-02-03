@@ -1,3 +1,11 @@
+interface Params {
+	endString: string
+}
+
+const PARAMS: Params = {
+	endString: ""
+}
+
 export default function registerMD5(CATEGORY: any): void {
 	CATEGORY.methods.registerProcessor({
 		id: "concat",
@@ -9,10 +17,10 @@ export default function registerMD5(CATEGORY: any): void {
 				title: "processors.string.concat.params.endString.title",
 				description: "processors.string.concat.params.endString.description",
 				type: "string",
-				default: ""
+				default: PARAMS.endString
 			}
 		],
-		apply(value: string, endString = ""): string {
+		apply(value: string, endString: string = PARAMS.endString): string {
 			return String(value).concat(endString)
 		}
 	})

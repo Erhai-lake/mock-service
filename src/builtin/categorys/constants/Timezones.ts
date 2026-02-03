@@ -4,45 +4,35 @@
  * 版本: 1.7.1
  */
 import timezones from "./timezones.json"
+import {DateTime} from "luxon"
 
 /**
- * 格式化时区偏移量为字符串
+ * 把分钟 offset 转成 +08:00 / -05:30
  */
-const formatOffset = (offset: number): string => {
-	const SIGN = offset >= 0 ? "+" : "-"
-	const ABS = Math.abs(offset)
-	const HOURS = String(Math.floor(ABS)).padStart(2, "0")
-	const MINUTES = String(Math.round((ABS % 1) * 60)).padStart(2, "0")
-	return `UTC${SIGN}${HOURS}:${MINUTES}`
+const formatOffset = (offsetMinutes: number) => {
+	const SIGN = offsetMinutes >= 0 ? "+" : "-"
+	const ABS = Math.abs(offsetMinutes)
+	const HOURS = String(Math.floor(ABS / 60)).padStart(2, "0")
+	const MINUTES = String(ABS % 60).padStart(2, "0")
+	return `${SIGN}${HOURS}:${MINUTES}`
+}
+
+/**
+ * 时区标签缓存
+ */
+const TIMEZONE_LABEL_CACHE = new Map()
+
+for (const zone of timezones) {
+	const DATE = DateTime.now().setZone(zone);
+	if (!DATE.isValid) continue
+	const OFFSET = formatOffset(DATE.offset)
+	TIMEZONE_LABEL_CACHE.set(zone, `(${OFFSET}) ${zone}`)
 }
 
 /**
  * 选择器用的时区列表
  */
-export const TIMEZONE_OPTIONS = timezones.flatMap(zone => {
-	const OFFSET_LABEL = `(${formatOffset(zone.offset)})`
-	return zone.utc.map(utc => ({
-		key: utc,
-		label: `${OFFSET_LABEL} ${utc}`
-	}))
-})
-
-/**
- * 时区偏移量映射表
- */
-const UTC_OFFSET_MAP: Record<string, number> = timezones.reduce(
-	(map, zone) => {
-		zone.utc.forEach(utc => {
-			map[utc] = zone.offset
-		})
-		return map
-	},
-	{} as Record<string, number>
-)
-
-/**
- * 获取时区偏移量
- */
-export function getTimezoneOffset(utc: string): number | undefined {
-	return UTC_OFFSET_MAP[utc]
-}
+export const TIMEZONE_OPTIONS = timezones.map(zone => ({
+	key: zone,
+	label: TIMEZONE_LABEL_CACHE.get(zone) ?? zone
+}))
