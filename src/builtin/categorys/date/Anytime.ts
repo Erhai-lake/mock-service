@@ -1,4 +1,5 @@
 import {TIMEZONE_OPTIONS} from "../constants/Timezones"
+import {ParseToDateTime} from "../../public/ParseToDateTime"
 import {DateTime} from "luxon"
 
 interface Params {
@@ -11,7 +12,7 @@ interface Params {
 
 const PARAMS: Params = {
 	timezone: "Asia/Shanghai",
-	refDate: "",
+	refDate: String(DateTime.now()),
 	scope: 3,
 	representation: "complete",
 	direction: "around"
@@ -76,7 +77,8 @@ export default function registerAnytime(CATEGORY: any): void {
 		processors: ["string", "encodingDecoding", "date"],
 		generate(params: Partial<Params>): string {
 			const {timezone, refDate, scope, representation, direction} = {...PARAMS, ...params}
-			let base = refDate ? DateTime.fromISO(refDate, {zone: timezone}) : DateTime.now().setZone(timezone)
+			const REF_DATETIME = ParseToDateTime(refDate).date
+			let base = refDate ? DateTime.fromISO(String(REF_DATETIME), {zone: timezone}) : DateTime.now().setZone(timezone)
 			if (!base.isValid) base = DateTime.now().setZone(timezone)
 			let start: DateTime
 			let end: DateTime

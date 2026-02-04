@@ -1,3 +1,4 @@
+import {ParseToDateTime} from "../../public/ParseToDateTime"
 import {DateTime} from "luxon"
 
 interface Params {
@@ -10,7 +11,7 @@ interface Params {
 const PARAMS: Params = {
 	min: 18,
 	max: 80,
-	refDate: "",
+	refDate: String(DateTime.now()),
 	representation: "complete"
 }
 
@@ -64,7 +65,8 @@ export default function registerBirthdate(CATEGORY: any): void {
 		generate(params: Partial<Params> = {}): string {
 			const {min, max, refDate, representation} = {...PARAMS, ...params}
 			if (max < min) throw new Error("max must be greater than or equal to min")
-			const BASE = refDate ? DateTime.fromISO(refDate) : DateTime.now()
+			const REF_DATETIME = ParseToDateTime(refDate).date
+			const BASE = refDate ? DateTime.fromISO(String(REF_DATETIME)) : DateTime.now()
 			const SAFE_BASE = BASE.isValid ? BASE : DateTime.now()
 			const AGE = Math.floor(Math.random() * (max - min + 1)) + min
 			const END = SAFE_BASE.minus({years: AGE})

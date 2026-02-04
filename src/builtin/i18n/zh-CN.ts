@@ -568,7 +568,7 @@ export default function registerZhCN(i18n: I18nRegistry) {
 						},
 						refDate: {
 							title: "参考时间",
-							description: "在参考时间前后的时间范围内取值, 例如: (xxxx-xx-xx xx:xx:xx)"
+							description: "在参考时间前后的时间范围内取值, 例如: (xxxx-xx-xx)"
 						},
 						scope: {
 							title: "时间范围",
@@ -631,6 +631,20 @@ export default function registerZhCN(i18n: I18nRegistry) {
 						abbreviated: {
 							title: "是否缩写",
 							description: "是否缩写星期"
+						}
+					}
+				},
+				between: {
+					title: "时间范围",
+					description: "随机取值后, 在指定时间范围内取值",
+					params: {
+						from: {
+							title: "开始时间",
+							description: "开始时间, 例如: (xxxx-xx-xx)"
+						},
+						to: {
+							title: "结束时间",
+							description: "结束时间, 例如: (xxxx-xx-xx)"
 						}
 					}
 				},

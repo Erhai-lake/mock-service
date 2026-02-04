@@ -568,7 +568,7 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						},
 						refDate: {
 							title: "Reference Date",
-							description: "Generate a time within a range before or after the reference date, for example: (xxxx-xx-xx xx:xx:xx)"
+							description: "Generate a time within a range before or after the reference date, for example: (xxxx-xx-xx)"
 						},
 						scope: {
 							title: "Time Range",
@@ -631,6 +631,20 @@ export default function registerEnUS(i18n: I18nRegistry) {
 						abbreviated: {
 							title: "Abbreviated",
 							description: "Whether to abbreviate the weekday"
+						}
+					}
+				},
+				between: {
+					title: "Time Range",
+					description: "Pick a random value within the specified time range",
+					params: {
+						from: {
+							title: "Start Time",
+							description: "The starting time, for example: (xxxx-xx-xx)"
+						},
+						to: {
+							title: "End Time",
+							description: "The ending time, for example: (xxxx-xx-xx)"
 						}
 					}
 				},
