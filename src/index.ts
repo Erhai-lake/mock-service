@@ -9,6 +9,7 @@ import stringCategory from "./builtin/categorys/string"
 import loremCategory from "./builtin/categorys/lorem"
 import numberCategory from "./builtin/categorys/number"
 import dateCategory from "./builtin/categorys/date"
+import personCategory from "./builtin/categorys/person"
 import registerStringProcessors from "./builtin/processors/string"
 import registerEncodingProcessors from "./builtin/processors/encodingDecoding"
 import registerDateProcessors from "./builtin/processors/date"
@@ -55,6 +56,7 @@ class MockService {
 		loremCategory(this.categoryRegistry)
 		numberCategory(this.categoryRegistry)
 		dateCategory(this.categoryRegistry)
+		personCategory(this.categoryRegistry)
 		// 内置处理器
 		registerStringProcessors(this.processorRegistry)
 		registerEncodingProcessors(this.processorRegistry)

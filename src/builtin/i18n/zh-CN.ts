@@ -652,6 +652,54 @@ export default function registerZhCN(i18n: I18nRegistry) {
 					title: "时区",
 					description: "随机一个时区"
 				}
+			},
+			person: {
+				title: "姓名 / 性别 / 职业等",
+				description: "个人资料",
+				fullName: {
+					title: "姓名",
+					description: "随机一个姓名",
+					params: {
+						sex: {
+							title: "性别",
+							description: "性别, 只有男女"
+						}
+					}
+				},
+				lastName: {
+					title: "姓氏",
+					description: "随机一个姓氏"
+				},
+				firstName: {
+					title: "名字",
+					description: "随机一个名字",
+					params: {
+						sex: {
+							title: "性别",
+							description: "性别, 只有男女"
+						}
+					}
+				},
+				fullNameEn: {
+					title: "姓名(英文)",
+					description: "随机一个英文姓名",
+					params: {
+						sex: {
+							title: "性别",
+							description: "性别, 只有男女"
+						}
+					}
+				},
+				sex: {
+					title: "性别",
+					description: "随机一个性别",
+					params: {
+						language: {
+							title: "语言",
+							description: "性别的语言"
+						}
+					}
+				}
 			}
 		},
 		processors: {

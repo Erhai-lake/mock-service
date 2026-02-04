@@ -652,6 +652,54 @@ export default function registerEnUS(i18n: I18nRegistry) {
 					title: "Time Zone",
 					description: "Randomly generates a time zone"
 				}
+			},
+			person: {
+				title: "Name / Gender / Occupation etc.",
+				description: "Personal Profile",
+				fullName: {
+					title: "Full Name",
+					description: "Randomly generate a full name",
+					params: {
+						sex: {
+							title: "Gender",
+							description: "Gender, limited to male or female"
+						}
+					}
+				},
+				lastName: {
+					title: "Last Name",
+					description: "Randomly generate a last name"
+				},
+				firstName: {
+					title: "First Name",
+					description: "Randomly generate a first name",
+					params: {
+						sex: {
+							title: "Gender",
+							description: "Gender, limited to male or female"
+						}
+					}
+				},
+				fullNameEn: {
+					title: "Full Name (English)",
+					description: "Randomly generate an English full name",
+					params: {
+						sex: {
+							title: "Gender",
+							description: "Gender, limited to male or female"
+						}
+					}
+				},
+				sex: {
+					title: "Gender",
+					description: "Randomly generate a gender",
+					params: {
+						language: {
+							title: "Language",
+							description: "The language of the gender"
+						}
+					}
+				}
 			}
 		},
 		processors: {
