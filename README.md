@@ -2,91 +2,21 @@
 
 ## Introduction / 简介
 
-mock-service is a JavaScript library for generating mock data. It provides a rich set of categories and methods, along with corresponding processors, to help developers quickly generate mock data that meets specific requirements.
+mock-service is a JavaScript library for generating mock data.
 
-mock-service 是一个用于生成模拟数据的 JavaScript 库. 它提供了丰富的类别和方法, 以及对应的处理器, 可以帮助开发人员快速生成符合要求的模拟数据.
+mock-service 是一个用于生成模拟数据的 JavaScript 库.
+
+It provides a wealth of generators, as well as the corresponding processor, can help developers quickly generate simulation data that meet the requirements.
+
+它提供了丰富的生成器, 以及对应的处理器, 可以帮助开发人员快速生成符合要求的模拟数据.
 
 A fully extensible mock data generation library with categories, methods, and processors.
 
-一个完全可扩展的模拟数据生成库, 包含类别, 方法和处理器.
+一个可扩展的模拟数据生成库, 包含分类, 方法和处理器.
 
-## Contents / 内容
+[Documentation / 文档](https://docs.elake.top/project/mock_service/)
 
-### Currently Available Methods / 目前有的方法
-
-* string
-	* uuid
-	* nanoid
-	* alpha
-	* numeric
-	* alphaNumeric
-	* symbol
-	* sample
-	* fromCharacters
-	* binary
-	* octal
-	* hexadecimal
-* lorem
-	* sentence
-	* sentences
-	* paragraph
-	* paragraphs
-	* word
-	* words
-	* slug
-* date
-	* isoTimestamp
-	* timestamp
-	* millisecondsTimestamp
-    * now
-    * anytime
-    * birthdate
-    * timeZone
-
-### Currently Available Processors / 目前有的处理器
-
-* string
-	* lower
-	* upper
-	* length
-	* substr
-	* concat
-	* lconcat
-	* number
-	* padStart
-	* padEnd
-* encodingDecoding
-	* md5
-	* sha
-	* base64
-	* unbase64
-	* encodeURIComponent
-	* decodeURIComponent
-* date
-	* format
-    * formatISO8601
-    * formatISO9075
-    * formatRFC3339
-    * formatRFC7231
-    * startOfDay
-    * timestamp
-    * millisecondsTimestamp
-    * adjustDays
-    * adjustWeeks
-    * adjustMonths
-    * adjustQuarters
-    * adjustYears
-    * adjustISOWeekYears
-    * adjustHours
-    * adjustMinutes
-    * adjustSeconds
-    * adjustMilliseconds
-    * adjustWorkday
-    * adjustHoliday
-
-## Installation / 安装
-
-Not yet.
+## Import / 导入
 
 ### Using npm / 使用 npm
 
@@ -108,154 +38,39 @@ pnpm add @erhai_lake/mock-service
 
 ## Basic Usage / 基本用法
 
-```js
+```javascript
 import mock from "@erhai_lake/mock-service"
 
-// Set the language and fallback language to en-US, the default is zh-CN
-mock.setLocale("en-US")
-mock.setFallbackLocale("en-US")
+// 获取所有分类信息
+console.log(mock.getAllGeneratorCategoryInfo())
+// 根据分类ID和生成器ID获取信息
+console.log(mock.getGeneratorInfo("string", "uuid"))
 
-// You can also set the fallback language
-// mock.setLocale("en-US", "en-US")
+// 获取处理器分类信息
+console.log(mock.getAllProcessorsInfo("encodingDecoding"))
+// 根据分类ID和生成器ID获取信息
+console.log(mock.getProcessorInfo("encodingDecoding", "sha"))
 
-console.log(mock.getLocale()) // "en-US"
+// 生成器使用
+const UUIDV4 = mock.generateData("string", "uuid")
+console.log(UUIDV4)
+// 参数
+const UUIDV7 = mock.generateData("string", "uuid", {version: "v7"})
+console.log(UUIDV7)
 
-console.log("Get all categories")
-console.log(mock.getAllCategory())
+// 处理器使用
+console.log(mock.applyProcessor("encodingDecoding", "sha", UUIDV7))
+console.log(mock.applyProcessor("encodingDecoding", "sha", UUIDV7, "SHA512"))
 
-console.log("Get method by category id and method id")
-console.log(mock.getMethod("string", "uuid"))
+// 通过模板调用
+console.log(mock.templateGenerateData("{{$string.uuid}}"))
+console.log(mock.templateGenerateData("{{$string.uuid|sha}}"))
+console.log(mock.templateGenerateData('{{$string.uuid(version="v7")|sha("SHA512")}}'))
 
-console.log("Get processor by category, method, and processor ID")
-console.log(mock.getMethod("string", "uuid").getProcessor("md5"))
-console.log(mock.getMethod("string", "uuid").getProcessor("sha"))
-
-console.log("Generate data from a method")
-const UUID = mock.getMethod("string", "uuid").generate()
-console.log(UUID)
-
-console.log("Apply a processor to a method's output")
-console.log(mock.getMethod("string", "uuid").getProcessor("md5").apply(UUID))
-console.log(mock.getMethod("string", "uuid").getProcessor("sha").apply(UUID, "SHA512"))
-
-console.log("Generate template: supports parameters, processors, and processor parameters. This method does not support nesting, but you can directly embed templates.")
-const TEMPLATE = {
-	category: "string",
-	method: "alpha",
-	params: {
-		min: 100,
-		max: 200
-	},
-	processors: [
-		{
-			id: "sha",
-			params: {
-				algorithm: "SHA512"
-			}
-		},
-		{
-			id: "lconcat",
-			params: {
-				startString: "{{$string.uuid}}"
-			}
-		}
-	]
-}
-console.log(mock.generateTemplate(TEMPLATE))
-
-console.log("Get data using the template")
-console.log(mock.generateData("{{$string.uuid}}"))
-
-console.log("Use processors in the template")
-console.log(mock.generateData("{{$string.uuid|md5}}"))
-
-console.log("You can also nest and combine") // Just look, I don't think you really can set so many
-console.log(mock.generateData('{{$string.uuid|concat("😮{{$string.uuid|concat("阿{{$string.uuid}}")}}")|concat("{{$string.uuid|concat("😮{{$string.uuid|concat("阿{{$string.uuid}}")}}")|concat("喵{{$string.uuid}}")}}")}}'))
-
-console.log("Extract templates from a string")
-console.log(mock.extractTemplates("Hello there, your username is {{$string.nanoid}}, and your UUID is {{$string.uuid}}"))
-
-console.log("Parse and replace templates in a string")
+// 无限嵌套(我不觉得你会套这么多)
+console.log(mock.templateGenerateData('{{$string.uuid|concat("😮{{$string.uuid|concat("阿{{$string.uuid}}")}}")|concat("{{$string.uuid|concat("😮{{$string.uuid|concat("阿{{$string.uuid}}")}}")|concat("喵{{$string.uuid}}")}}")}}'))
+// 字符串调用
 console.log(mock.resolveTemplate("Hello there, your username is {{$string.nanoid}}, and your UUID is {{$string.uuid}}"))
-```
-
-If you still need custom categories, methods, processor categories, processor methods
-
-如果你还需要自定义分类, 方法, 处理器分类, 处理器方法~ (真是小馋猫呢, 什么都想要~)
-
-```js
-import {createMockService} from "@erhai_lake/mock-service"
-
-const userCategory = (categoryRegistry) => {
-	const CATEGORY = categoryRegistry.registerCategory({
-		id: "test",
-		title: "User Related",
-		description: "User information generation"
-	})
-
-	CATEGORY.methods.registerMethod({
-		id: "name",
-		title: "Username",
-		description: "Random username",
-		generate() {
-			return "user_" + Math.random().toString(36).slice(2, 8)
-		}
-	})
-
-	CATEGORY.methods.registerMethod({
-		id: "age",
-		title: "Age",
-		description: "Random age",
-		generate() {
-			return Math.floor(Math.random() * 60) + 18
-		}
-	})
-}
-
-const mock = createMockService({
-	categoryRegisters: [userCategory],
-	processorRegisters: []
-})
-
-console.log(mock.getCategory("test"))
-```
-
-```ts
-import type {CategoryRegistry} from "@erhai_lake/mock-service"
-import {createMockService} from "@erhai_lake/mock-service"
-
-const userCategory = (categoryRegistry: CategoryRegistry) => {
-	const CATEGORY = categoryRegistry.registerCategory({
-		id: "test",
-		title: "User Related",
-		description: "User information generation"
-	})
-
-	CATEGORY.methods.registerMethod({
-		id: "name",
-		title: "Username",
-		description: "Random username",
-		generate() {
-			return "user_" + Math.random().toString(36).slice(2, 8)
-		}
-	})
-
-	CATEGORY.methods.registerMethod({
-		id: "age",
-		title: "Age",
-		description: "Random age",
-		generate() {
-			return Math.floor(Math.random() * 60) + 18
-		}
-	})
-}
-
-const mock = createMockService({
-	categoryRegisters: [userCategory],
-	processorRegisters: []
-})
-
-console.log(mock.getCategory("test"))
 ```
 
 ## License / 许可证

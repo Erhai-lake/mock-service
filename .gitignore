@@ -1,5 +1,5 @@
 /dist
-/test.js
+/test
 
 /node_modules
 /pnpm-lock.yaml

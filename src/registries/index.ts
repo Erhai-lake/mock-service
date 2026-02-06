@@ -1,17 +1,17 @@
-import {CategoryRegistry} from "./CategoryRegistry"
-import {ProcessorCategoryRegistry} from "./ProcessorCategoryRegistry"
-import {I18nRegistry} from "./I18nRegistry"
+import {generatorCategoryRegistry} from "./generatorCategoryRegistry"
+import {processorCategoryRegistry} from "./processorCategoryRegistry"
+import {i18nRegistry} from "./i18nRegistry"
 
-export type {CategoryRegistry, ProcessorCategoryRegistry, I18nRegistry}
+export type {generatorCategoryRegistry, processorCategoryRegistry, i18nRegistry}
 
-export function createCategoryRegistry() {
-	return new CategoryRegistry()
+export const createCategoryRegistry = () => {
+	return new generatorCategoryRegistry()
 }
 
-export function createProcessorCategoryRegistry() {
-	return new ProcessorCategoryRegistry()
+export const createProcessorCategoryRegistry = () => {
+	return new processorCategoryRegistry()
 }
 
-export function createI18nRegistry() {
-	return new I18nRegistry()
+export const createI18nRegistry = () => {
+	return new i18nRegistry()
 }

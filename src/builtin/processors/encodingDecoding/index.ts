@@ -1,12 +1,12 @@
-import type {ProcessorCategoryRegistry} from "../../../registries"
-import registerMd5 from "./Md5"
-import registerSha from "./Sha"
-import registerBase64 from "./Base64"
-import registerUnBase64 from "./UnBase64"
-import registerEncodeURIComponent from "./EncodeURIComponent"
-import registerDecodeURIComponent from "./DecodeURIComponent"
+import type {processorCategoryRegistry} from "../../../registries"
+import {registerMd5} from "./registerMd5"
+import {registerSha} from "./registerSha"
+import {registerBase64} from "./registerBase64"
+import {registerUnBase64} from "./registerUnBase64"
+import {registerEncodeURIComponent} from "./registerEncodeURIComponent"
+import {registerDecodeURIComponent} from "./registerDecodeURIComponent"
 
-export default function encodingDecoding(processorRegistry: ProcessorCategoryRegistry) {
+export const processorEncodingDecodingCategory = (processorRegistry: processorCategoryRegistry) => {
 	const CATEGORY = processorRegistry.registerCategory({
 		id: "encodingDecoding",
 		title: "processors.encodingDecoding.title",

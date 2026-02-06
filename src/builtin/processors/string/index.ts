@@ -1,15 +1,15 @@
-import type {ProcessorCategoryRegistry} from "../../../registries"
-import registerLower from "./Lower"
-import registerUpper from "./Upper"
-import registerLength from "./Length"
-import registerSubstr from "./Substr"
-import registerConcat from "./Concat"
-import registerLConcat from "./LConcat"
-import registerNumber from "./Number"
-import registerPadStart from "./PadStart"
-import registerPadEnd from "./PadEnd"
+import type {processorCategoryRegistry} from "../../../registries"
+import {registerLower} from "./registerLower"
+import {registerUpper} from "./registerUpper"
+import {registerLength} from "./registerLength"
+import {registerSubstr} from "./registerSubstr"
+import {registerConcat} from "./registerConcat"
+import {registerLConcat} from "./registerLConcat"
+import {registerNumber} from "./registerNumber"
+import {registerPadStart} from "./registerPadStart"
+import {registerPadEnd} from "./registerPadEnd"
 
-export default function encodingDecoding(processorRegistry: ProcessorCategoryRegistry) {
+export const processorStringCategory = (processorRegistry: processorCategoryRegistry) => {
 	const CATEGORY = processorRegistry.registerCategory({
 		id: "string",
 		title: "processors.string.title",
