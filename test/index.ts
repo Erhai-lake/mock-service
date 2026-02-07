@@ -1,7 +1,5 @@
 import {createMockService} from "../dist/index"
 import type {mockServiceOptions} from "../dist/index"
-// import {createMockService} from "@erhai_lake/mock-service"
-// import type {generatorCategoryRegistry} from "@erhai_lake/mock-service"
 import {generatorTestCategory} from "./generator"
 import {processorTestCategory} from "./processor"
 import {i18nZhCN} from "./i18n/registerZhCN"
@@ -15,6 +13,8 @@ const MOCK_SERVICE_OPTIONS: mockServiceOptions = {
 const mock = createMockService(MOCK_SERVICE_OPTIONS)
 
 mock.reload()
+
+console.log(mock.extractTemplates("{{$string.uuid}}"))
 
 console.log(mock.templateGenerateData('{{$string.uuid}}'))
 

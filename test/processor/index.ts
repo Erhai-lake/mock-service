@@ -1,5 +1,4 @@
 import type {processorCategoryRegistry, processorCategory} from "../../dist/index"
-// import type {generatorCategoryRegistry, generatorCategory} from "@erhai_lake/mock-service"
 import {registerTestFn1} from "./registerTestFn1"
 import {registerTestFn2} from "./registerTestFn2"
 import {registerTestFn3} from "./registerTestFn3"
