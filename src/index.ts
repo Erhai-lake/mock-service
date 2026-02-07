@@ -67,38 +67,59 @@ export interface mockServiceOptions {
 }
 
 class mockService {
-	// 生成器注册器
+	// 注册器
 	private generatorRegistry = createCategoryRegistry()
-	// 处理器注册器
 	private processorRegistry = createProcessorCategoryRegistry()
-	// 语言注册器
 	private i18nRegistry = createI18nRegistry()
-	// 自定义插件
+	// 内置
+	private readonly BUILTIN_GENERATORS = [
+		generatorStringCategory, generatorLoremCategory, generatorNumberCategory,
+		generatorDateCategory, generatorPersonCategory
+	]
+	private readonly BUILTIN_PROCESSORS = [
+		processorStringCategory, processorEncodingDecodingCategory, processorDateCategory
+	]
+	private readonly BUILTIN_I18N = [i18nZhCN, i18nEnUS]
+	// 插件
 	private generatorPlugins: Function[] = []
 	private processorPlugins: Function[] = []
 	private i18nPlugin: Function[] = []
 
 	constructor(options: mockServiceOptions = {}) {
-		const {generatorRegisters = [], processorRegisters = [], i18nRegisters = []} = options
-		this.generatorPlugins.push(...generatorRegisters)
-		this.processorPlugins.push(...processorRegisters)
-		this.i18nPlugin.push(...i18nRegisters)
-		this._applyPlugins()
+		this.reload(options)
 	}
 
 	/**
-	 * 应用所有插件
+	 * 重新加载 Mock Service
+	 * 会清空所有注册表并根据当前存储的插件列表重新初始化
 	 */
-	private _applyPlugins() {
-		for (const plugin of this.generatorPlugins) {
-			plugin?.(this.generatorRegistry)
+	reload(options: mockServiceOptions = {}) {
+		const PREV_LOCALE = this.i18nRegistry?.getLocale()
+		const PREV_FALLBACK = this.i18nRegistry?.getFallbackLocale()
+		if (options) {
+			const {generatorRegisters, processorRegisters, i18nRegisters} = options
+			if (generatorRegisters !== undefined) this.generatorPlugins = [...generatorRegisters]
+			if (processorRegisters !== undefined) this.processorPlugins = [...processorRegisters]
+			if (i18nRegisters !== undefined) this.i18nPlugin = [...i18nRegisters]
 		}
-		for (const plugin of this.processorPlugins) {
-			plugin?.(this.processorRegistry)
-		}
-		for (const plugin of this.i18nPlugin) {
-			plugin?.(this.i18nRegistry)
-		}
+		this.generatorRegistry = createCategoryRegistry()
+		this.processorRegistry = createProcessorCategoryRegistry()
+		this.i18nRegistry = createI18nRegistry()
+		this._applyAll()
+		if (PREV_LOCALE) this.i18nRegistry.setLocale(PREV_LOCALE)
+		if (PREV_FALLBACK) this.i18nRegistry.setFallbackLocale(PREV_FALLBACK)
+	}
+
+	/**
+	 * 应用所有
+	 */
+	private _applyAll() {
+		const GENERATORS = [...this.BUILTIN_GENERATORS, ...this.generatorPlugins]
+		GENERATORS.forEach(p => p?.(this.generatorRegistry))
+		const PROCESSORS = [...this.BUILTIN_PROCESSORS, ...this.processorPlugins]
+		PROCESSORS.forEach(p => p?.(this.processorRegistry))
+		const I18N = [...this.BUILTIN_I18N, ...this.i18nPlugin]
+		I18N.forEach(p => p?.(this.i18nRegistry))
 		this._resolveAllGeneratorProcessors()
 	}
 
@@ -118,12 +139,60 @@ class mockService {
 	 */
 	private _resolveGeneratorProcessors(generator: any) {
 		if (!Array.isArray(generator.processorIds)) return
+		generator.clearProcessors()
 		for (const CATEGORY_ID of generator.processorIds) {
 			const RAW_CATEGORY = this.processorRegistry.getCategory(CATEGORY_ID)
 			if (!RAW_CATEGORY) continue
 			for (const PROCESSOR of RAW_CATEGORY.processors.getAllProcessors()) {
 				generator.registerProcessor(PROCESSOR)
 			}
+		}
+	}
+
+	/**
+	 * 为某生成器分类下的所有生成器, 批量添加处理器分类
+	 */
+	addProcessorCategoryToGeneratorCategory(generatorCategoryId: string, processorCategoryId: string) {
+		const CATEGORY = this.getGeneratorCategory(generatorCategoryId)
+		CATEGORY.generators.addProcessorIdToAll(processorCategoryId)
+		for (const GENERATOR of CATEGORY.generators.getAllGenerator()) {
+			GENERATOR.clearProcessors()
+			this._resolveGeneratorProcessors(GENERATOR)
+		}
+	}
+
+	/**
+	 * 为某生成器分类下的所有生成器, 批量移除处理器分类
+	 */
+	removeProcessorCategoryFromGeneratorCategory(generatorCategoryId: string, processorCategoryId: string) {
+		const CATEGORY = this.getGeneratorCategory(generatorCategoryId)
+		CATEGORY.generators.removeProcessorIdFromAll(processorCategoryId)
+		for (const GENERATOR of CATEGORY.generators.getAllGenerator()) {
+			this._resolveGeneratorProcessors(GENERATOR)
+		}
+	}
+
+	/**
+	 * 为指定的生成器添加处理器分类
+	 */
+	addProcessorCategoryToGenerator(generatorCategoryId: string, generatorId: string, processorCategoryId: string) {
+		const GENERATOR = this.getGenerator(generatorCategoryId, generatorId)
+		if (!GENERATOR.processorIds) GENERATOR.processorIds = []
+		if (!GENERATOR.processorIds.includes(processorCategoryId)) {
+			GENERATOR.processorIds.push(processorCategoryId)
+			this._resolveGeneratorProcessors(GENERATOR)
+		}
+	}
+
+	/**
+	 * 为指定的生成器移除处理器分类
+	 */
+	removeProcessorCategoryFromGenerator(generatorCategoryId: string, generatorId: string, processorCategoryId: string) {
+		const GENERATOR = this.getGenerator(generatorCategoryId, generatorId)
+		if (GENERATOR.processorIds) {
+			GENERATOR.processorIds = GENERATOR.processorIds.filter(id => id !== processorCategoryId)
+			GENERATOR.clearProcessors()
+			this._resolveGeneratorProcessors(GENERATOR)
 		}
 	}
 
@@ -136,7 +205,7 @@ class mockService {
 	}
 
 	/**
-	 * 设置回退语言
+	 * 单独设置回退语言
 	 */
 	setFallbackLocale(fallbackLocale: string) {
 		this.i18nRegistry.setFallbackLocale(fallbackLocale)
@@ -147,6 +216,13 @@ class mockService {
 	 */
 	getLocale(): string {
 		return this.i18nRegistry.getLocale()
+	}
+
+	/**
+	 * 获取当前回退语言
+	 */
+	getFallbackLocale(): string {
+		return this.i18nRegistry.getFallbackLocale()
 	}
 
 	/**
@@ -176,16 +252,16 @@ class mockService {
 	/**
 	 * 获取某生成器分类
 	 */
-	getGeneratorCategory(generatorId: string): generatorCategory {
-		const CATEGORY: generatorCategory = this.generatorRegistry.getCategory(generatorId)
+	getGeneratorCategory(generatorCategoryId: string): generatorCategory {
+		const CATEGORY: generatorCategory = this.generatorRegistry.getCategory(generatorCategoryId)
 		return mockTranslate.generatorCategory(CATEGORY, this.i18nRegistry)
 	}
 
 	/**
 	 * 获取某生成器分类下的所有生成器
 	 */
-	getAllGenerators(generatorId: string): generator[] {
-		const CATEGORY: generatorCategory = this.getGeneratorCategory(generatorId)
+	getAllGenerators(generatorCategoryId: string): generator[] {
+		const CATEGORY: generatorCategory = this.getGeneratorCategory(generatorCategoryId)
 		const GENERATORS: generator[] = CATEGORY.generators.getAllGenerator()
 		return GENERATORS.map((generator: generator) => {
 			return mockTranslate.generator(generator, this.i18nRegistry)
@@ -195,8 +271,8 @@ class mockService {
 	/**
 	 * 获取某生成器
 	 */
-	getGenerator(categoryId: string, generatorId: string): generator {
-		const CATEGORY: generatorCategory = this.getGeneratorCategory(categoryId)
+	getGenerator(generatorCategoryId: string, generatorId: string): generator {
+		const CATEGORY: generatorCategory = this.getGeneratorCategory(generatorCategoryId)
 		const GENERATOR: generator = CATEGORY.generators.getGenerator(generatorId)
 		return mockTranslate.generator(GENERATOR, this.i18nRegistry)
 	}
@@ -214,16 +290,16 @@ class mockService {
 	/**
 	 * 获取某处理器分类
 	 */
-	getProcessorCategory(generatorId: string): processorCategory {
-		const CATEGORY: processorCategory = this.processorRegistry.getCategory(generatorId)
+	getProcessorCategory(processorCategoryId: string): processorCategory {
+		const CATEGORY: processorCategory = this.processorRegistry.getCategory(processorCategoryId)
 		return mockTranslate.processorCategory(CATEGORY, this.i18nRegistry)
 	}
 
 	/**
 	 * 获取某处理器分类下的所有处理器
 	 */
-	getAllProcessors(categoryId: string): processor[] {
-		const CATEGORY: processorCategory = this.getProcessorCategory(categoryId)
+	getAllProcessors(processorCategoryId: string): processor[] {
+		const CATEGORY: processorCategory = this.getProcessorCategory(processorCategoryId)
 		const ALL_PROCESSORS: processor[] = CATEGORY.processors.getAllProcessors()
 		return ALL_PROCESSORS.map((processor: processor) => {
 			return mockTranslate.processor(processor, this.i18nRegistry)
@@ -233,8 +309,8 @@ class mockService {
 	/**
 	 * 获某处理器
 	 */
-	getProcessor(categoryId: string, processorId: string): processor {
-		const CATEGORY: processorCategory = this.getProcessorCategory(categoryId)
+	getProcessor(processorCategoryId: string, processorId: string): processor {
+		const CATEGORY: processorCategory = this.getProcessorCategory(processorCategoryId)
 		const PROCESSOR: processor = CATEGORY.processors.getProcessor(processorId)
 		return mockTranslate.processor(PROCESSOR, this.i18nRegistry)
 	}
@@ -242,8 +318,8 @@ class mockService {
 	/**
 	 * 获取某生成器下的所有处理器
 	 */
-	getGeneratorAllProcessor(categoryId: string, generatorId: string): processor[] {
-		const GENERATOR: generator = this.getGenerator(categoryId, generatorId)
+	getGeneratorAllProcessor(generatorCategoryId: string, generatorId: string): processor[] {
+		const GENERATOR: generator = this.getGenerator(generatorCategoryId, generatorId)
 		const ALL_PROCESSORS: processor[] = GENERATOR.getAllProcessors()
 		return ALL_PROCESSORS.map((processor: processor) => {
 			return mockTranslate.processor(processor, this.i18nRegistry)
@@ -253,8 +329,8 @@ class mockService {
 	/**
 	 * 获取某生成器下的某处理器
 	 */
-	getGeneratorProcessor(categoryId: string, generatorId: string, processorId: string): processor {
-		const GENERATOR: generator = this.getGenerator(categoryId, generatorId)
+	getGeneratorProcessor(generatorCategoryId: string, generatorId: string, processorId: string): processor {
+		const GENERATOR: generator = this.getGenerator(generatorCategoryId, generatorId)
 		const PROCESSOR: processor = GENERATOR.getProcessor(processorId)
 		return mockTranslate.processor(PROCESSOR, this.i18nRegistry)
 	}
@@ -272,16 +348,16 @@ class mockService {
 	/**
 	 * 获取某生成器分类信息
 	 */
-	getGeneratorCategoryInfo(categoryId: string): generatorCategoryInfo {
-		const CATEGORY: generatorCategory = this.getGeneratorCategory(categoryId)
+	getGeneratorCategoryInfo(generatorCategoryId: string): generatorCategoryInfo {
+		const CATEGORY: generatorCategory = this.getGeneratorCategory(generatorCategoryId)
 		return stripToInfo(CATEGORY, ["generators"])
 	}
 
 	/**
 	 * 获取某生成器分类下的所有生成器信息
 	 */
-	getAllGeneratorsInfo(categoryId: string): generatorInfo[] {
-		const GENERATORS: generator[] = this.getAllGenerators(categoryId)
+	getAllGeneratorsInfo(generatorCategoryId: string): generatorInfo[] {
+		const GENERATORS: generator[] = this.getAllGenerators(generatorCategoryId)
 		return GENERATORS.map((generator: generator) => {
 			return stripToInfo(generator, ["generate", "processors", "registerProcessor", "getProcessor", "getAllProcessors"])
 		})
@@ -290,8 +366,8 @@ class mockService {
 	/**
 	 * 获取某生成器信息
 	 */
-	getGeneratorInfo(categoryId: string, generatorId: string): generatorInfo {
-		const GENERATOR: generator = this.getGenerator(categoryId, generatorId)
+	getGeneratorInfo(generatorCategoryId: string, generatorId: string): generatorInfo {
+		const GENERATOR: generator = this.getGenerator(generatorCategoryId, generatorId)
 		return stripToInfo(GENERATOR, ["generate", "processors", "registerProcessor", "getProcessor", "getAllProcessors"])
 	}
 
@@ -328,16 +404,16 @@ class mockService {
 	/**
 	 * 获取某处理器分类信息
 	 */
-	getProcessorCategoryInfo(categoryId: string): processorCategoryInfo {
-		const CATEGORY: processorCategory = this.getProcessorCategory(categoryId)
+	getProcessorCategoryInfo(processorCategoryId: string): processorCategoryInfo {
+		const CATEGORY: processorCategory = this.getProcessorCategory(processorCategoryId)
 		return stripToInfo(CATEGORY, ["processors"])
 	}
 
 	/**
 	 * 获取某处理器分类下的所有处理器信息
 	 */
-	getAllProcessorsInfo(categoryId: string): processorInfo[] {
-		const ALL_PROCESSORS: processor[] = this.getAllProcessors(categoryId)
+	getAllProcessorsInfo(processorCategoryId: string): processorInfo[] {
+		const ALL_PROCESSORS: processor[] = this.getAllProcessors(processorCategoryId)
 		return ALL_PROCESSORS.map((processor: processor) => {
 			return stripToInfo(processor, ["apply"])
 		})
@@ -346,16 +422,16 @@ class mockService {
 	/**
 	 * 获某处理器信息
 	 */
-	getProcessorInfo(categoryId: string, processorId: string): processorInfo {
-		const PROCESSOR: processor = this.getProcessor(categoryId, processorId)
+	getProcessorInfo(processorCategoryId: string, processorId: string): processorInfo {
+		const PROCESSOR: processor = this.getProcessor(processorCategoryId, processorId)
 		return stripToInfo(PROCESSOR, ["apply"])
 	}
 
 	/**
 	 * 获取某生成器下的所有处理器信息
 	 */
-	getGeneratorAllProcessorInfo(categoryId: string, generatorId: string): processorInfo[] {
-		const ALL_PROCESSORS: processor[] = this.getGeneratorAllProcessor(categoryId, generatorId)
+	getGeneratorAllProcessorInfo(generatorCategoryId: string, generatorId: string): processorInfo[] {
+		const ALL_PROCESSORS: processor[] = this.getGeneratorAllProcessor(generatorCategoryId, generatorId)
 		return ALL_PROCESSORS.map((processor: processor) => {
 			return stripToInfo(processor, ["apply"])
 		})
@@ -364,8 +440,8 @@ class mockService {
 	/**
 	 * 获取某生成器下的某处理器信息
 	 */
-	getGeneratorProcessorInfo(categoryId: string, generatorId: string, processorId: string): processorInfo {
-		const PROCESSOR: processor = this.getGeneratorProcessor(categoryId, generatorId, processorId)
+	getGeneratorProcessorInfo(generatorCategoryId: string, generatorId: string, processorId: string): processorInfo {
+		const PROCESSOR: processor = this.getGeneratorProcessor(generatorCategoryId, generatorId, processorId)
 		return stripToInfo(PROCESSOR, ["apply"])
 	}
 
@@ -392,8 +468,8 @@ class mockService {
 	/**
 	 * 获取某生成器的处理器信息组
 	 */
-	getGeneratorProcessorGroups(categoryId: string, generatorId: string): processorGroup[] {
-		const CATEGORY: generatorInfo = this.getGeneratorInfo(categoryId, generatorId)
+	getGeneratorProcessorGroups(generatorCategoryId: string, generatorId: string): processorGroup[] {
+		const CATEGORY: generatorInfo = this.getGeneratorInfo(generatorCategoryId, generatorId)
 		const RESULT: processorGroup[] = []
 		CATEGORY?.processorIds?.forEach(processorId => {
 			const PROCESSOR: processorCategoryInfo = this.getProcessorCategoryInfo(processorId)
@@ -410,8 +486,8 @@ class mockService {
 	/**
 	 * 调用生成器生成
 	 */
-	generateData(categoryId: string, generatorId: string, params?: any): any {
-		const GENERATOR: generator = this.getGenerator(categoryId, generatorId)
+	generateData(generatorCategoryId: string, generatorId: string, params?: any): any {
+		const GENERATOR: generator = this.getGenerator(generatorCategoryId, generatorId)
 		const FINAL_PARAMS = normalizeCallParams(GENERATOR.params, params)
 		return FINAL_PARAMS === undefined ? GENERATOR.generate() : GENERATOR.generate(FINAL_PARAMS)
 	}
@@ -419,8 +495,8 @@ class mockService {
 	/**
 	 * 应用处理器
 	 */
-	applyProcessor(categoryId: string, processorId: string, value: any, params?: any): any {
-		const PROCESSOR = this.getProcessor(categoryId, processorId)
+	applyProcessor(processorCategoryId: string, processorId: string, value: any, params?: any): any {
+		const PROCESSOR = this.getProcessor(processorCategoryId, processorId)
 		const FINAL_PARAMS = normalizeCallParams(PROCESSOR.params, params)
 		return FINAL_PARAMS === undefined ? PROCESSOR.apply(value) : PROCESSOR.apply(value, FINAL_PARAMS)
 	}
@@ -429,8 +505,8 @@ class mockService {
 	 * 应用处理器
 	 * 使用生成器允许的处理器, 防止异常调用
 	 */
-	applyProcessor2(categoryId: string, generatorId: string, processorId: string, value: any, params?: any): any {
-		const GENERATOR = this.getGenerator(categoryId, generatorId)
+	applyProcessor2(generatorCategoryId: string, generatorId: string, processorId: string, value: any, params?: any): any {
+		const GENERATOR = this.getGenerator(generatorCategoryId, generatorId)
 		const PROCESSOR = GENERATOR.getProcessor(processorId)
 		const FINAL_PARAMS = normalizeCallParams(PROCESSOR.params, params)
 		return FINAL_PARAMS === undefined ? PROCESSOR.apply(value) : PROCESSOR.apply(value, FINAL_PARAMS)
@@ -532,18 +608,7 @@ class mockService {
 
 
 export const createMockService = (options: mockServiceOptions = {}) => {
-	const {generatorRegisters = [], processorRegisters = [], i18nRegisters = []} = options
-	return new mockService({
-		generatorRegisters: [
-			generatorStringCategory, generatorLoremCategory, generatorNumberCategory, generatorDateCategory,
-			generatorPersonCategory, ...generatorRegisters
-		],
-		processorRegisters: [
-			processorStringCategory, processorEncodingDecodingCategory, processorDateCategory,
-			...processorRegisters
-		],
-		i18nRegisters: [i18nZhCN, i18nEnUS, ...i18nRegisters]
-	})
+	return new mockService(options)
 }
 
 export default createMockService()

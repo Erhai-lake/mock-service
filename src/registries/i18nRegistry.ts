@@ -21,6 +21,10 @@ export class i18nRegistry {
 		return this.currentLocale
 	}
 
+	getFallbackLocale(): string {
+		return this.fallbackLocale
+	}
+
 	t(key?: string): string {
 		if (!key) return ""
 		const CURRENT = this.messages.get(this.currentLocale)

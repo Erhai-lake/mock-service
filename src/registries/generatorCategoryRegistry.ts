@@ -40,4 +40,8 @@ export class generatorCategoryRegistry {
 	getAllCategories(): generatorCategory[] {
 		return Array.from(this.categories.values())
 	}
+
+	clear() {
+		this.categories.clear()
+	}
 }

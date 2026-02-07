@@ -24,6 +24,8 @@ export interface generator {
 	getProcessor(id: string): processor
 
 	getAllProcessors(): processor[]
+
+	clearProcessors(): void
 }
 
 export interface registerGeneratorOptions {
@@ -68,6 +70,9 @@ export class generatorRegistry {
 			},
 			getAllProcessors() {
 				return Array.from(this.processors.values())
+			},
+			clearProcessors() {
+				this.processors.clear()
 			}
 		}
 		this.generators.set(id, GENERATOR)
@@ -82,5 +87,27 @@ export class generatorRegistry {
 
 	getAllGenerator(): generator[] {
 		return Array.from(this.generators.values())
+	}
+
+	removeGenerator(id: string): boolean {
+		return this.generators.delete(id)
+	}
+
+	addProcessorIdToAll(processorCategoryId: string) {
+		for (const GENERATOR of this.generators.values()) {
+			if (!GENERATOR.processorIds) GENERATOR.processorIds = []
+			if (!GENERATOR.processorIds.includes(processorCategoryId)) {
+				GENERATOR.processorIds.push(processorCategoryId)
+			}
+		}
+	}
+
+	removeProcessorIdFromAll(processorCategoryId: string) {
+		for (const GENERATOR of this.generators.values()) {
+			if (GENERATOR.processorIds) {
+				GENERATOR.processorIds = GENERATOR.processorIds.filter(id => id !== processorCategoryId)
+				GENERATOR.clearProcessors()
+			}
+		}
 	}
 }
