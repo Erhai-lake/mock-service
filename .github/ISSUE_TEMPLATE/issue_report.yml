@@ -7,19 +7,19 @@ body:
         attributes:
             label: 描述错误 / Describe the bug
             description: 对错误的简洁明了的描述. A clear and concise description of what the bug is.
-            validations:
-                required: true
+        validations:
+            required: true
     -   type: textarea
         id: repro-steps
         attributes:
             label: 重现步骤 / To Reproduce
             description: 重现问题的步骤. Steps to reproduce the behavior.
-            validations:
-                required: true
+        validations:
+            required: true
     -   type: textarea
         id: logs
         attributes:
             label: 日志 / Logs
             description: 截图通常比原始日志更容易阅读. Screenshots are typically easier to read than raw logs.
-            validations:
-                required: true
+        validations:
+            required: true
