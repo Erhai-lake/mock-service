@@ -405,7 +405,7 @@ export class mockService {
 	}
 
 	/**
-	 * 应用处理器
+	 * 应用处理器2
 	 * 使用生成器允许的处理器, 防止异常调用
 	 */
 	applyProcessor2(generatorCategoryId: string, generatorId: string, processorId: string, value: any, params?: any): any {

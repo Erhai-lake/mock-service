@@ -24,7 +24,7 @@ export class i18nEngine {
 		return this.service.internal.i18nRegistry.t(key)
 	}
 
-	getTranslateTable() {
+	getTranslateTable(): any {
 		return this.service.internal.i18nRegistry
 	}
 }
