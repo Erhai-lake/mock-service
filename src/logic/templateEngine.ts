@@ -5,7 +5,8 @@ import {parseParams} from "../tools/template/parseParams"
 import {resolveParamValue} from "../tools/template/resolveParamValue"
 
 export class templateEngine {
-	constructor(private service: mockService) {}
+	constructor(private service: mockService) {
+	}
 
 	generateTemplate(config: generateTemplateConfig): string {
 		const {category, generator, params = {}, processors = []} = config
@@ -86,5 +87,30 @@ export class templateEngine {
 		let result: string = string
 		for (const TEMPLATE of TEMPLATES) result = result.replace(TEMPLATE, String(this.templateGenerateData(TEMPLATE)))
 		return result
+	}
+
+	objectResolve(input: any, maxDepth = 10): any {
+		if (maxDepth < 0) {
+			return input
+		}
+		// 处理数组
+		if (Array.isArray(input)) {
+			return input.map(item => this.objectResolve(item, maxDepth - 1))
+		}
+		// 处理对象
+		if (input !== null && typeof input === "object") {
+			const NEW_OBJ: any = {}
+			for (const KEY in input) {
+				if (Object.prototype.hasOwnProperty.call(input, KEY)) {
+					const SHOULD_RESOLVE = maxDepth > 0
+					const RESOLVED_KEY = SHOULD_RESOLVE ? this.resolveTemplate(String(KEY)) : KEY
+					NEW_OBJ[RESOLVED_KEY] = this.objectResolve(input[KEY], maxDepth - 1)
+				}
+			}
+			return NEW_OBJ
+		}
+		// 处理字符串
+		if (typeof input === "string") return this.resolveTemplate(input)
+		return input
 	}
 }

@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 import {TIMEZONE_OPTIONS} from "../../generator/constants/timezones"
 import {parseToDateTime} from "../../public/parseToDateTime"
 import {DateTime} from "luxon"

@@ -1,7 +1,8 @@
 import type {mockService} from "../index"
 
 export class i18nEngine {
-	constructor(private service: mockService) {}
+	constructor(private service: mockService) {
+	}
 
 	setLocale(locale: string, fallbackLocale: string) {
 		this.service.internal.i18nRegistry.setLocale(locale)

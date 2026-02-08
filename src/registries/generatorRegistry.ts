@@ -89,10 +89,6 @@ export class generatorRegistry {
 		return Array.from(this.generators.values())
 	}
 
-	removeGenerator(id: string): boolean {
-		return this.generators.delete(id)
-	}
-
 	addProcessorIdToAll(processorCategoryId: string) {
 		for (const GENERATOR of this.generators.values()) {
 			if (!GENERATOR.processorIds) GENERATOR.processorIds = []

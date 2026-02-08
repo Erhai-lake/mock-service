@@ -1,4 +1,6 @@
 export * from "./i18nEngine"
+export * from "./getOriginalEngine"
+export * from "./getInfoEngine"
 export * from "./generatorEngine"
-export * from "./processorEngine"
+export * from "./generatorProcessorEngine"
 export * from "./templateEngine"

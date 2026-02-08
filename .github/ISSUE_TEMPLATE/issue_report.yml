@@ -1,6 +1,6 @@
 name: 报告问题 / Issue Report
 description: 提交问题报告 / File an issue report
-labels: [ bug ]
+labels: [ bug, triage ]
 body:
     -   type: textarea
         id: bug-description

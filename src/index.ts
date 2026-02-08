@@ -19,7 +19,7 @@ import {processorDateCategory} from "./builtin/processors/date"
 import {i18nZhCN} from "./builtin/i18n/registerZhCN"
 import {i18nEnUS} from "./builtin/i18n/registerEnUS"
 
-import {i18nEngine, generatorEngine, processorEngine, templateEngine} from "./logic"
+import {i18nEngine, getOriginalEngine, getInfoEngine, generatorEngine, generatorProcessorEngine, templateEngine} from "./logic"
 
 export type {generatorCategoryRegistry, processorCategoryRegistry, i18nRegistry} from "./registries"
 export {mockTranslate}
@@ -69,8 +69,10 @@ export class mockService {
 	private i18nRegistry = createI18nRegistry()
 	// logic
 	private i18nEngine = new i18nEngine(this)
+	private getOriginalEngine = new getOriginalEngine(this)
+	private getInfoEngine = new getInfoEngine(this)
 	private generatorEngine = new generatorEngine(this)
-	private processorEngine = new processorEngine(this)
+	private generatorProcessorEngine = new generatorProcessorEngine(this)
 	private templateEngine = new templateEngine(this)
 	// 内置
 	private readonly BUILTIN_GENERATORS = [
@@ -233,175 +235,175 @@ export class mockService {
 	 * 获取所有分类
 	 */
 	getAllGeneratorCategory(): generatorCategory[] {
-		return this.generatorEngine.getAllGeneratorCategory()
+		return this.getOriginalEngine.getAllGeneratorCategory()
 	}
 
 	/**
 	 * 获取某生成器分类
 	 */
 	getGeneratorCategory(generatorCategoryId: string): generatorCategory {
-		return this.generatorEngine.getGeneratorCategory(generatorCategoryId)
+		return this.getOriginalEngine.getGeneratorCategory(generatorCategoryId)
 	}
 
 	/**
 	 * 获取某生成器分类下的所有生成器
 	 */
 	getAllGenerators(generatorCategoryId: string): generator[] {
-		return this.generatorEngine.getAllGenerators(generatorCategoryId)
+		return this.getOriginalEngine.getAllGenerators(generatorCategoryId)
 	}
 
 	/**
 	 * 获取某生成器
 	 */
 	getGenerator(generatorCategoryId: string, generatorId: string): generator {
-		return this.generatorEngine.getGenerator(generatorCategoryId, generatorId)
+		return this.getOriginalEngine.getGenerator(generatorCategoryId, generatorId)
 	}
 
 	/**
 	 * 获取所有处理器分类
 	 */
 	getAllProcessorCategory(): processorCategory[] {
-		return this.processorEngine.getAllProcessorCategory()
+		return this.getOriginalEngine.getAllProcessorCategory()
 	}
 
 	/**
 	 * 获取某处理器分类
 	 */
 	getProcessorCategory(processorCategoryId: string): processorCategory {
-		return this.processorEngine.getProcessorCategory(processorCategoryId)
+		return this.getOriginalEngine.getProcessorCategory(processorCategoryId)
 	}
 
 	/**
 	 * 获取某处理器分类下的所有处理器
 	 */
 	getAllProcessors(processorCategoryId: string): processor[] {
-		return this.processorEngine.getAllProcessors(processorCategoryId)
+		return this.getOriginalEngine.getAllProcessors(processorCategoryId)
 	}
 
 	/**
 	 * 获某处理器
 	 */
 	getProcessor(processorCategoryId: string, processorId: string): processor {
-		return this.processorEngine.getProcessor(processorCategoryId, processorId)
+		return this.getOriginalEngine.getProcessor(processorCategoryId, processorId)
 	}
 
 	/**
 	 * 获取某生成器下的所有处理器
 	 */
 	getGeneratorAllProcessor(generatorCategoryId: string, generatorId: string): processor[] {
-		return this.processorEngine.getGeneratorAllProcessor(generatorCategoryId, generatorId)
+		return this.getOriginalEngine.getGeneratorAllProcessor(generatorCategoryId, generatorId)
 	}
 
 	/**
 	 * 获取某生成器下的某处理器
 	 */
 	getGeneratorProcessor(generatorCategoryId: string, generatorId: string, processorId: string): processor {
-		return this.processorEngine.getGeneratorProcessor(generatorCategoryId, generatorId, processorId)
+		return this.getOriginalEngine.getGeneratorProcessor(generatorCategoryId, generatorId, processorId)
 	}
 
 	/**
 	 * 获取所有生成器分类信息
 	 */
 	getAllGeneratorCategoryInfo(): generatorCategoryInfo[] {
-		return this.generatorEngine.getAllGeneratorCategoryInfo()
+		return this.getInfoEngine.getAllGeneratorCategoryInfo()
 	}
 
 	/**
 	 * 获取某生成器分类信息
 	 */
 	getGeneratorCategoryInfo(generatorCategoryId: string): generatorCategoryInfo {
-		return this.generatorEngine.getGeneratorCategoryInfo(generatorCategoryId)
+		return this.getInfoEngine.getGeneratorCategoryInfo(generatorCategoryId)
 	}
 
 	/**
 	 * 获取某生成器分类下的所有生成器信息
 	 */
 	getAllGeneratorsInfo(generatorCategoryId: string): generatorInfo[] {
-		return this.generatorEngine.getAllGeneratorsInfo(generatorCategoryId)
+		return this.getInfoEngine.getAllGeneratorsInfo(generatorCategoryId)
 	}
 
 	/**
 	 * 获取某生成器信息
 	 */
 	getGeneratorInfo(generatorCategoryId: string, generatorId: string): generatorInfo {
-		return this.generatorEngine.getGeneratorInfo(generatorCategoryId, generatorId)
+		return this.getInfoEngine.getGeneratorInfo(generatorCategoryId, generatorId)
 	}
 
 	/**
 	 * 获取生成器信息组
 	 */
 	getGeneratorGroups(): generatorGroup[] {
-		return this.generatorEngine.getGeneratorGroups()
+		return this.getInfoEngine.getGeneratorGroups()
 	}
 
 	/**
 	 * 获取所有处理器分类信息
 	 */
 	getAllProcessorCategoryInfo(): processorCategoryInfo[] {
-		return this.processorEngine.getAllProcessorCategoryInfo()
+		return this.getInfoEngine.getAllProcessorCategoryInfo()
 	}
 
 	/**
 	 * 获取某处理器分类信息
 	 */
 	getProcessorCategoryInfo(processorCategoryId: string): processorCategoryInfo {
-		return this.processorEngine.getProcessorCategoryInfo(processorCategoryId)
+		return this.getInfoEngine.getProcessorCategoryInfo(processorCategoryId)
 	}
 
 	/**
 	 * 获取某处理器分类下的所有处理器信息
 	 */
 	getAllProcessorsInfo(processorCategoryId: string): processorInfo[] {
-		return this.processorEngine.getAllProcessorsInfo(processorCategoryId)
+		return this.getInfoEngine.getAllProcessorsInfo(processorCategoryId)
 	}
 
 	/**
 	 * 获某处理器信息
 	 */
 	getProcessorInfo(processorCategoryId: string, processorId: string): processorInfo {
-		return this.processorEngine.getProcessorInfo(processorCategoryId, processorId)
+		return this.getInfoEngine.getProcessorInfo(processorCategoryId, processorId)
 	}
 
 	/**
 	 * 获取某生成器下的所有处理器信息
 	 */
 	getGeneratorAllProcessorInfo(generatorCategoryId: string, generatorId: string): processorInfo[] {
-		return this.processorEngine.getGeneratorAllProcessorInfo(generatorCategoryId, generatorId)
+		return this.getInfoEngine.getGeneratorAllProcessorInfo(generatorCategoryId, generatorId)
 	}
 
 	/**
 	 * 获取某生成器下的某处理器信息
 	 */
 	getGeneratorProcessorInfo(generatorCategoryId: string, generatorId: string, processorId: string): processorInfo {
-		return this.processorEngine.getGeneratorProcessorInfo(generatorCategoryId, generatorId, processorId)
+		return this.getInfoEngine.getGeneratorProcessorInfo(generatorCategoryId, generatorId, processorId)
 	}
 
 	/**
 	 * 获取处理器信息组
 	 */
 	getProcessorGroups(): processorGroup[] {
-		return this.processorEngine.getProcessorGroups()
+		return this.getInfoEngine.getProcessorGroups()
 	}
 
 	/**
 	 * 获取某生成器的处理器信息组
 	 */
 	getGeneratorProcessorGroups(generatorCategoryId: string, generatorId: string): processorGroup[] {
-		return this.processorEngine.getGeneratorProcessorGroups(generatorCategoryId, generatorId)
+		return this.getInfoEngine.getGeneratorProcessorGroups(generatorCategoryId, generatorId)
 	}
 
 	/**
 	 * 调用生成器生成
 	 */
 	generateData(generatorCategoryId: string, generatorId: string, params?: any): any {
-		return this.generatorEngine.generateData(generatorCategoryId, generatorId, params)
+		return this.generatorProcessorEngine.generateData(generatorCategoryId, generatorId, params)
 	}
 
 	/**
 	 * 应用处理器
 	 */
 	applyProcessor(processorCategoryId: string, processorId: string, value: any, params?: any): any {
-		return this.processorEngine.applyProcessor(processorCategoryId, processorId, value, params)
+		return this.generatorProcessorEngine.applyProcessor(processorCategoryId, processorId, value, params)
 	}
 
 	/**
@@ -409,7 +411,7 @@ export class mockService {
 	 * 使用生成器允许的处理器, 防止异常调用
 	 */
 	applyProcessor2(generatorCategoryId: string, generatorId: string, processorId: string, value: any, params?: any): any {
-		return this.processorEngine.applyProcessor2(generatorCategoryId, generatorId, processorId, value, params)
+		return this.generatorProcessorEngine.applyProcessor2(generatorCategoryId, generatorId, processorId, value, params)
 	}
 
 	/**
@@ -438,6 +440,13 @@ export class mockService {
 	 */
 	resolveTemplate(string: string): any {
 		return this.templateEngine.resolveTemplate(string)
+	}
+
+	/**
+	 * 递归解析对象或数组中的所有模板
+	 */
+	objectResolve(input: any, currentDepth = 0): any {
+		return this.templateEngine.objectResolve(input, currentDepth)
 	}
 }
 

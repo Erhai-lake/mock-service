@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 import {DateTime} from "luxon"
 
 /**
