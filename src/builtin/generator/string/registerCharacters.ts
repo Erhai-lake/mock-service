@@ -1,13 +1,20 @@
+import {clampNumber} from "../../public/clampNumber"
+
 interface params {
 	characters: string
 	min: number
 	max: number
 }
 
+const LIMITS = {
+	min: {default: 21, min: 1, step: 1},
+	max: {default: 21, min: 1, step: 1}
+}
+
 const PARAMS: params = {
 	characters: "a,b,c,abc,1,2,3,4,5,6,123,456",
-	min: 21,
-	max: 21
+	min: LIMITS.min.default,
+	max: LIMITS.max.default
 }
 
 export const registerCharacters = (CATEGORY: any): void => {
@@ -29,8 +36,8 @@ export const registerCharacters = (CATEGORY: any): void => {
 				description: "generator.string.characters.params.min.description",
 				type: "number",
 				default: PARAMS.min,
-				min: 1,
-				step: 1
+				min: LIMITS.min.min,
+				step: LIMITS.min.step
 			},
 			{
 				id: "max",
@@ -38,15 +45,17 @@ export const registerCharacters = (CATEGORY: any): void => {
 				description: "generator.string.characters.params.max.description",
 				type: "number",
 				default: PARAMS.max,
-				min: 1,
-				step: 1
+				min: LIMITS.max.min,
+				step: LIMITS.max.step
 			}
 		],
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {characters, min, max} = {...PARAMS, ...params}
-			if (max < min) throw new Error("error.maxIsLessThanMin")
-			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
+			const FINAL_MIN = clampNumber(min, LIMITS.min.min, undefined, LIMITS.min.step)
+			const FINAL_MAX = clampNumber(max, LIMITS.max.min, undefined, LIMITS.max.step)
+			if (FINAL_MAX < FINAL_MIN) throw new Error("error.maxIsLessThanMin")
+			const FINAL_LENGTH = Math.floor(Math.random() * (FINAL_MAX - FINAL_MIN + 1)) + FINAL_MIN
 			const POOL = characters.split(",").map(s => s.trim()).filter(Boolean)
 			if (POOL.length) throw new Error("error.poolIsEmpty")
 			let result = ""

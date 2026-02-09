@@ -1,3 +1,4 @@
+import {clampNumber} from "../../public/clampNumber"
 import {wordsPick} from "../../public/wordsPick"
 import {EN_TEMPLATES} from "../constants/wordsEN"
 import {ZH_TEMPLATES} from "../constants/wordsZH"
@@ -9,11 +10,17 @@ interface params {
 	newlines: number
 }
 
+const LIMITS = {
+	min: {default: 3, min: 1, step: 1},
+	max: {default: 3, min: 1, step: 1},
+	newlines: {default: 2, min: 1, step: 1}
+}
+
 const PARAMS: params = {
 	language: "zh",
-	min: 3,
-	max: 3,
-	newlines: 2
+	min: LIMITS.min.default,
+	max: LIMITS.max.default,
+	newlines: LIMITS.newlines.default
 }
 
 export const registerParagraphs = (CATEGORY: any): void => {
@@ -39,8 +46,8 @@ export const registerParagraphs = (CATEGORY: any): void => {
 				description: "generator.lorem.paragraphs.params.min.description",
 				type: "number",
 				default: PARAMS.min,
-				min: 1,
-				step: 1
+				min: LIMITS.min.min,
+				step: LIMITS.min.step
 			},
 			{
 				id: "max",
@@ -48,8 +55,8 @@ export const registerParagraphs = (CATEGORY: any): void => {
 				description: "generator.lorem.paragraphs.params.max.description",
 				type: "number",
 				default: PARAMS.max,
-				min: 1,
-				step: 1
+				min: LIMITS.max.min,
+				step: LIMITS.max.step
 			},
 			{
 				id: "newlines",
@@ -57,15 +64,18 @@ export const registerParagraphs = (CATEGORY: any): void => {
 				description: "generator.lorem.paragraphs.params.newlines.description",
 				type: "number",
 				default: PARAMS.newlines,
-				min: 1,
-				step: 1
+				min: LIMITS.newlines.min,
+				step: LIMITS.newlines.step
 			}
 		],
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {language, min, max, newlines} = {...PARAMS, ...params}
-			if (max < min) throw new Error("error.maxIsLessThanMin")
-			const PARAGRAPH_COUNT = Math.floor(Math.random() * (max - min + 1)) + min
+			const FINAL_MIN = clampNumber(min, LIMITS.min.min, undefined, LIMITS.min.step)
+			const FINAL_MAX = clampNumber(max, LIMITS.max.min, undefined, LIMITS.max.step)
+			if (FINAL_MAX < FINAL_MIN) throw new Error("error.maxIsLessThanMin")
+			const FINAL_NEWLINES = clampNumber(newlines, LIMITS.newlines.min, undefined, LIMITS.newlines.step)
+			const PARAGRAPH_COUNT = Math.floor(Math.random() * (FINAL_MAX - FINAL_MIN + 1)) + FINAL_MIN
 			const WORD_TEMPLATES = language === "zh" ? ZH_TEMPLATES : EN_TEMPLATES
 			const PARAGRAPHS: string[] = []
 			for (let p = 0; p < PARAGRAPH_COUNT; p++) {
@@ -84,7 +94,7 @@ export const registerParagraphs = (CATEGORY: any): void => {
 				}
 				PARAGRAPHS.push(SENTENCES.join(" "))
 			}
-			return PARAGRAPHS.join("\n".repeat(newlines))
+			return PARAGRAPHS.join("\n".repeat(FINAL_NEWLINES))
 		}
 	})
 }

@@ -1,10 +1,16 @@
+import {clampNumber} from "../../public/clampNumber"
+
 interface params {
 	maxLength: number
 	fillString: string
 }
 
+const LIMITS = {
+	maxLength: {default: 0, min: 0, step: 1}
+}
+
 const PARAMS: params = {
-	maxLength: 0,
+	maxLength: LIMITS.maxLength.default,
 	fillString: ""
 }
 
@@ -20,8 +26,8 @@ export const registerPadEnd = (CATEGORY: any): void => {
 				description: "processors.string.padEnd.params.maxLength.description",
 				type: "number",
 				default: PARAMS.maxLength,
-				min: 0,
-				step: 1
+				min: LIMITS.maxLength.min,
+				step: LIMITS.maxLength.step
 			},
 			{
 				id: "fillString",
@@ -33,7 +39,8 @@ export const registerPadEnd = (CATEGORY: any): void => {
 		],
 		apply(value: string, params: Partial<params> = {}): string {
 			const {maxLength = 0, fillString = ""} = {...PARAMS, ...params}
-			return String(value).padEnd(maxLength, fillString)
+			const FINAL_MAX_LENGTH = clampNumber(maxLength, LIMITS.maxLength.min, undefined, LIMITS.maxLength.step)
+			return String(value).padEnd(FINAL_MAX_LENGTH, fillString)
 		}
 	})
 }

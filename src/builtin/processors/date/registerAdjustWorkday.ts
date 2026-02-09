@@ -1,3 +1,4 @@
+import {clampNumber} from "../../public/clampNumber"
 import {adjustDateTime} from "../../public/adjustDateTime"
 
 interface params {
@@ -6,8 +7,12 @@ interface params {
 	workdaysList: string
 }
 
+const LIMITS = {
+	amount: {default: 1, min: 1, max: 365, step: 1}
+}
+
 const PARAMS: params = {
-	amount: 1,
+	amount: LIMITS.amount.default,
 	increase: "add",
 	workdaysList: "1,2,3,4,5"
 }
@@ -24,9 +29,9 @@ export const registerAdjustWorkday = (CATEGORY: any): void => {
 				description: "processors.date.adjustWorkday.params.amount.description",
 				type: "number",
 				default: PARAMS.amount,
-				min: 1,
-				max: 365,
-				step: 1
+				min: LIMITS.amount.min,
+				max: LIMITS.amount.max,
+				step: LIMITS.amount.step
 			},
 			{
 				id: "increase",
@@ -49,9 +54,10 @@ export const registerAdjustWorkday = (CATEGORY: any): void => {
 		],
 		apply(value: string, params: Partial<params> = {}): string {
 			const {amount, increase, workdaysList} = {...PARAMS, ...params}
+			const FINAL_AMOUNT = clampNumber(amount, LIMITS.amount.min, LIMITS.amount.max, LIMITS.amount.step)
 			return adjustDateTime({
 				value,
-				amount,
+				amount: FINAL_AMOUNT,
 				unit: "days",
 				increase: increase === "add",
 				workday: true,

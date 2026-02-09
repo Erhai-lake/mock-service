@@ -1,3 +1,4 @@
+import {clampNumber} from "../../public/clampNumber"
 import {WORD_EN} from "../constants/wordEN"
 import {WORD_ZH} from "../constants/wordZH"
 
@@ -8,10 +9,15 @@ interface params {
 	separator: string
 }
 
+const LIMITS = {
+	min: {default: 3, min: 1, step: 1},
+	max: {default: 3, min: 1, step: 1}
+}
+
 const PARAMS: params = {
 	language: "zh",
-	min: 3,
-	max: 3,
+	min: LIMITS.min.default,
+	max: LIMITS.max.default,
 	separator: ""
 }
 
@@ -38,8 +44,8 @@ export const registerWords = (CATEGORY: any): void => {
 				description: "generator.lorem.words.params.min.description",
 				type: "number",
 				default: PARAMS.min,
-				min: 1,
-				step: 1
+				min: LIMITS.min.min,
+				step: LIMITS.min.step
 			},
 			{
 				id: "max",
@@ -47,8 +53,8 @@ export const registerWords = (CATEGORY: any): void => {
 				description: "generator.lorem.words.params.max.description",
 				type: "number",
 				default: PARAMS.max,
-				min: 1,
-				step: 1
+				min: LIMITS.max.min,
+				step: LIMITS.max.step
 			},
 			{
 				id: "separator",
@@ -61,9 +67,11 @@ export const registerWords = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {language, min, max, separator} = {...PARAMS, ...params}
-			if (max < min) throw new Error("error.maxIsLessThanMin")
+			const FINAL_MIN = clampNumber(min, LIMITS.min.min, undefined, LIMITS.min.step)
+			const FINAL_MAX = clampNumber(max, LIMITS.max.min, undefined, LIMITS.max.step)
+			if (FINAL_MAX < FINAL_MIN) throw new Error("error.maxIsLessThanMin")
 			const WORD = language === "zh" ? WORD_ZH : WORD_EN
-			const COUNT = Math.floor(Math.random() * (max - min + 1)) + min
+			const COUNT = Math.floor(Math.random() * (FINAL_MAX - FINAL_MIN + 1)) + FINAL_MIN
 			const BLOCKS: string[] = []
 			for (let i = 0; i < COUNT; i++) {
 				BLOCKS.push(WORD[Math.floor(Math.random() * WORD.length)])

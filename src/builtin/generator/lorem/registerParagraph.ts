@@ -1,3 +1,4 @@
+import {clampNumber} from "../../public/clampNumber"
 import {wordsPick} from "../../public/wordsPick"
 import {EN_TEMPLATES} from "../constants/wordsEN"
 import {ZH_TEMPLATES} from "../constants/wordsZH"
@@ -8,10 +9,15 @@ interface params {
 	max: number
 }
 
+const LIMITS = {
+	min: {default: 2, min: 1, step: 1},
+	max: {default: 6, min: 1, step: 1}
+}
+
 const PARAMS: params = {
 	language: "zh",
-	min: 2,
-	max: 6
+	min: LIMITS.min.default,
+	max: LIMITS.max.default
 }
 
 export const registerParagraph = (CATEGORY: any): void => {
@@ -37,8 +43,8 @@ export const registerParagraph = (CATEGORY: any): void => {
 				description: "generator.lorem.paragraph.params.min.description",
 				type: "number",
 				default: PARAMS.min,
-				min: 1,
-				step: 1
+				min: LIMITS.min.min,
+				step: LIMITS.min.step
 			},
 			{
 				id: "max",
@@ -46,15 +52,17 @@ export const registerParagraph = (CATEGORY: any): void => {
 				description: "generator.lorem.paragraph.params.max.description",
 				type: "number",
 				default: PARAMS.max,
-				min: 1,
-				step: 1
+				min: LIMITS.max.min,
+				step: LIMITS.max.step
 			}
 		],
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {language, min, max} = {...PARAMS, ...params}
-			if (max < min) throw new Error("error.maxIsLessThanMin")
-			const SENTENCE_COUNT = Math.floor(Math.random() * (max - min + 1)) + min
+			const FINAL_MIN = clampNumber(min, LIMITS.min.min, undefined, LIMITS.min.step)
+			const FINAL_MAX = clampNumber(max, LIMITS.max.min, undefined, LIMITS.max.step)
+			if (FINAL_MAX < FINAL_MIN) throw new Error("error.maxIsLessThanMin")
+			const SENTENCE_COUNT = Math.floor(Math.random() * (FINAL_MAX - FINAL_MIN + 1)) + FINAL_MIN
 			const WORD_TEMPLATES = language === "zh" ? ZH_TEMPLATES : EN_TEMPLATES
 			const PARAGRAPH: string[] = []
 			for (let s = 0; s < SENTENCE_COUNT; s++) {

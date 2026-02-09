@@ -1,13 +1,21 @@
+import {clampNumber} from "../../public/clampNumber"
+
 interface params {
 	min: number
 	max: number
 	multipleOf: number
 }
 
+const LIMITS = {
+	min: {default: 1, min: 1, max: Number.MAX_SAFE_INTEGER, step: 1},
+	max: {default: Number.MAX_SAFE_INTEGER, min: 1, max: Number.MAX_SAFE_INTEGER, step: 1},
+	multipleOf: {default: 1, min: 1, max: Number.MAX_SAFE_INTEGER, step: 1}
+}
+
 const PARAMS: params = {
-	min: 1,
-	max: Number.MAX_SAFE_INTEGER,
-	multipleOf: 1
+	min: LIMITS.min.default,
+	max: LIMITS.max.default,
+	multipleOf: LIMITS.multipleOf.default
 }
 
 export const registerPositiveInt = (CATEGORY: any): void => {
@@ -22,9 +30,9 @@ export const registerPositiveInt = (CATEGORY: any): void => {
 				description: "generator.number.positiveInt.params.min.description",
 				type: "number",
 				default: PARAMS.min,
-				min: 1,
-				max: Number.MAX_SAFE_INTEGER,
-				step: 1
+				min: LIMITS.min.min,
+				max: LIMITS.min.max,
+				step: LIMITS.min.step
 			},
 			{
 				id: "max",
@@ -32,9 +40,9 @@ export const registerPositiveInt = (CATEGORY: any): void => {
 				description: "generator.number.positiveInt.params.max.description",
 				type: "number",
 				default: PARAMS.max,
-				min: 1,
-				max: Number.MAX_SAFE_INTEGER,
-				step: 1
+				min: LIMITS.max.min,
+				max: LIMITS.max.max,
+				step: LIMITS.max.step
 			},
 			{
 				id: "multipleOf",
@@ -42,17 +50,20 @@ export const registerPositiveInt = (CATEGORY: any): void => {
 				description: "generator.number.positiveInt.params.multipleOf.description",
 				type: "number",
 				default: PARAMS.multipleOf,
-				min: 1,
-				max: Number.MAX_SAFE_INTEGER,
-				step: 1
+				min: LIMITS.multipleOf.min,
+				max: LIMITS.multipleOf.max,
+				step: LIMITS.multipleOf.step
 			}
 		],
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): number {
 			const {min, max, multipleOf} = {...PARAMS, ...params}
-			if (max < min) throw new Error("error.maxIsLessThanMin")
-			const RANDOM_INT = Math.floor(Math.random() * (max - min + 1)) + min
-			return Math.floor(RANDOM_INT / multipleOf) * multipleOf
+			const FINAL_MIN = clampNumber(min, LIMITS.min.min, LIMITS.min.max, LIMITS.min.step)
+			const FINAL_MAX = clampNumber(max, LIMITS.max.min, LIMITS.max.max, LIMITS.max.step)
+			if (FINAL_MAX < FINAL_MIN) throw new Error("error.maxIsLessThanMin")
+			const FINAL_MULTIPLE_OF = clampNumber(multipleOf, LIMITS.multipleOf.min, LIMITS.multipleOf.max, LIMITS.multipleOf.step)
+			const RANDOM_INT = Math.floor(Math.random() * (FINAL_MAX - FINAL_MIN + 1)) + FINAL_MIN
+			return Math.floor(RANDOM_INT / FINAL_MULTIPLE_OF) * FINAL_MULTIPLE_OF
 		}
 	})
 }
