@@ -59,7 +59,7 @@ export const registerHexadecimal = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {prefix, casing, min, max} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			let bits = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) bits += Math.floor(Math.random() * 16).toString(16)

@@ -1089,6 +1089,16 @@ export const i18nEnUS = (i18nRegistry: i18nRegistry) => {
 					}
 				}
 			}
+		},
+		error: {
+			maxIsLessThanMin: "max parameter must be greater than or equal to min parameter",
+			poolIsEmpty: "character pool cannot be empty",
+			poolIsEmptyAfterExclude: "character pool cannot be empty after excluding characters",
+			unsupportedDate: "unsupported date time format: {format}",
+			fractionDigitsIsLessThanMultipleOf: "fractionDigits parameter must be greater than or equal to multipleOf parameter",
+			customNamespaceInvalid: "CUSTOM namespace requires a valid UUID",
+			unsupportedNamespaceType: "unsupported namespace type: {type}",
+			uuidVersionEmptyName: "UUID{version} cannot be empty"
 		}
 	})
 }

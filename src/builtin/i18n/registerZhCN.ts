@@ -1089,6 +1089,16 @@ export const i18nZhCN = (i18nRegistry: i18nRegistry) => {
 					}
 				}
 			}
+		},
+		error: {
+			maxIsLessThanMin: "max 参数必须大于或等于 min 参数",
+			poolIsEmpty: "字符池不能为空",
+			poolIsEmptyAfterExclude: "排除字符后字符池不能为空",
+			unsupportedDate: "不支持的日期时间格式: {format}",
+			fractionDigitsIsLessThanMultipleOf: "fractionDigits 参数必须大于或等于 multipleOf 参数",
+			customNamespaceInvalid: "CUSTOM 命名空间要求提供一个有效的 UUID",
+			unsupportedNamespaceType: "不支持的命名空间类型: {type}",
+			uuidVersionEmptyName: "UUID{version} 不能为空"
 		}
 	})
 }

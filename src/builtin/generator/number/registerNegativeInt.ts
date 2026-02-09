@@ -50,7 +50,7 @@ export const registerNegativeInt = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): number {
 			const {min, max, multipleOf} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			const RANDOM_INT = Math.floor(Math.random() * (max - min + 1)) + min
 			if (multipleOf > 0) return Math.floor(RANDOM_INT / multipleOf) * multipleOf
 			return RANDOM_INT

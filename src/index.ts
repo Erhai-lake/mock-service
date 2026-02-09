@@ -4,8 +4,6 @@ import type {generator} from "./registries/generatorRegistry"
 import type {processorCategory} from "./registries/processorCategoryRegistry"
 import type {processor} from "./registries/processorRegistry"
 
-import mockTranslate from "./tools/mockTranslate"
-
 import {generatorStringCategory} from "./builtin/generator/string"
 import {generatorLoremCategory} from "./builtin/generator/lorem"
 import {generatorNumberCategory} from "./builtin/generator/number"
@@ -19,10 +17,17 @@ import {processorDateCategory} from "./builtin/processors/date"
 import {i18nZhCN} from "./builtin/i18n/registerZhCN"
 import {i18nEnUS} from "./builtin/i18n/registerEnUS"
 
-import {i18nEngine, getOriginalEngine, getInfoEngine, generatorEngine, generatorProcessorEngine, templateEngine} from "./logic"
+import {
+	i18nEngine,
+	translateEngine,
+	getOriginalEngine,
+	getInfoEngine,
+	generatorEngine,
+	generatorProcessorEngine,
+	templateEngine
+} from "./logic"
 
 export type {generatorCategoryRegistry, processorCategoryRegistry, i18nRegistry} from "./registries"
-export {mockTranslate}
 
 export type {generatorCategory, generator, processorCategory, processor}
 export type generatorCategoryInfo = Omit<generatorCategory, "generators">
@@ -67,8 +72,10 @@ export class mockService {
 	private generatorRegistry = createCategoryRegistry()
 	private processorRegistry = createProcessorCategoryRegistry()
 	private i18nRegistry = createI18nRegistry()
+	private throwError = true
 	// logic
 	private i18nEngine = new i18nEngine(this)
+	private translateEngine = new translateEngine(this)
 	private getOriginalEngine = new getOriginalEngine(this)
 	private getInfoEngine = new getInfoEngine(this)
 	private generatorEngine = new generatorEngine(this)
@@ -93,6 +100,7 @@ export class mockService {
 			generatorRegistry: this.generatorRegistry,
 			processorRegistry: this.processorRegistry,
 			i18nRegistry: this.i18nRegistry,
+			throwError: this.throwError,
 			resolveGeneratorProcessors: (generator: any) => this._resolveGeneratorProcessors(generator)
 		}
 	}
@@ -162,6 +170,13 @@ export class mockService {
 	}
 
 	/**
+	 * 切换错误输出
+	 */
+	switchErrorOutput(throwError: boolean) {
+		this.throwError = throwError
+	}
+
+	/**
 	 * 为某生成器分类下的所有生成器, 批量添加处理器分类
 	 */
 	addProcessorCategoryToGeneratorCategory(generatorCategoryId: string, processorCategoryId: string) {
@@ -220,15 +235,36 @@ export class mockService {
 	/**
 	 * 调用内部翻译
 	 */
-	translate(key: string): string {
-		return this.i18nEngine.translate(key)
+	translate(key: string, params?: Record<string, any>): string {
+		return this.i18nEngine.translate(key, params)
 	}
 
 	/**
-	 * 获取翻译表
+	 * 翻译生成器分类
 	 */
-	getTranslateTable(): any {
-		return this.i18nEngine.getTranslateTable()
+	translateGeneratorCategory(category: generatorCategory): generatorCategory {
+		return this.translateEngine.translateGeneratorCategory(category)
+	}
+
+	/**
+	 * 翻译生成器
+	 */
+	translateGenerator(generator: generator): generator {
+		return this.translateEngine.translateGenerator(generator)
+	}
+
+	/**
+	 * 翻译处理器分类
+	 */
+	translateProcessorCategory(category: processorCategory): processorCategory {
+		return this.translateEngine.translateProcessorCategory(category)
+	}
+
+	/**
+	 * 翻译处理器
+	 */
+	translateProcessor(processor: processor): processor {
+		return this.translateEngine.translateProcessor(processor)
 	}
 
 	/**

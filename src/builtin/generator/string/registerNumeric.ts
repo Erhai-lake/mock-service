@@ -54,7 +54,7 @@ export const registerNumeric = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {min, max, allowLeadingZero, exclude} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			let pool = "0123456789"
 			if (exclude) {
@@ -66,13 +66,13 @@ export const registerNumeric = (CATEGORY: any): void => {
 				)
 				pool = pool.split("").filter(ch => !EXCLUDE_SET.has(ch)).join("")
 			}
-			if (!pool) throw new Error("pool is empty")
+			if (!pool) throw new Error("error.poolIsEmpty")
 			let result = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) {
 				let currentPool = pool
 				if (!allowLeadingZero && i === 0) {
 					currentPool = currentPool.replace("0", "")
-					if (!currentPool) throw new Error("pool is empty after exclude")
+					if (!currentPool) throw new Error("error.poolIsEmptyAfterExclude")
 				}
 				result += currentPool[Math.floor(Math.random() * currentPool.length)]
 			}

@@ -38,7 +38,7 @@ export const registerTestFn3 = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		apply(value: string, params: Partial<params> = {}): string {
 			const {min, max} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			return value + "|" + Math.floor(Math.random() * (max - min + 1) + min) + "|" + value
 		}
 	})

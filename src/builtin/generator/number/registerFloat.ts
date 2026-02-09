@@ -62,11 +62,11 @@ export const registerFloat = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): number {
 			const {min, max, fractionDigits, multipleOf} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			let value = Math.random() * (max - min) + min
 			if (multipleOf > 0) {
 				const DECIMAL_PLACES = String(multipleOf).includes(".") ? String(multipleOf).split(".")[1].length : 0
-				if (fractionDigits < DECIMAL_PLACES) throw new Error("fractionDigits must be >= decimal digits of multipleOf")
+				if (fractionDigits < DECIMAL_PLACES) throw new Error("error.fractionDigitsIsLessThanMultipleOf")
 				value = Math.round(value / multipleOf) * multipleOf
 			}
 			return Number(value.toFixed(fractionDigits))

@@ -1,4 +1,5 @@
 export * from "./i18nEngine"
+export * from "./translateEngine"
 export * from "./getOriginalEngine"
 export * from "./getInfoEngine"
 export * from "./generatorEngine"

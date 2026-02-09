@@ -21,8 +21,8 @@ export class i18nEngine {
 		return this.service.internal.i18nRegistry.getFallbackLocale()
 	}
 
-	translate(key: string): string {
-		return this.service.internal.i18nRegistry.t(key)
+	translate(key: string, params?: Record<string, any>): string {
+		return this.service.internal.i18nRegistry.translate(key, params)
 	}
 
 	getTranslateTable(): any {

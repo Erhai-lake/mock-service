@@ -64,7 +64,7 @@ export const registerBirthdate = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding", "date"],
 		generate(params: Partial<params> = {}): string {
 			const {min, max, refDate, representation} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			const REF_DATETIME = parseToDateTime(refDate).date
 			const BASE = refDate ? DateTime.fromISO(String(REF_DATETIME)) : DateTime.now()
 			const SAFE_BASE = BASE.isValid ? BASE : DateTime.now()

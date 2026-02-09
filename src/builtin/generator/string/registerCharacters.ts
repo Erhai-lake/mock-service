@@ -45,10 +45,10 @@ export const registerCharacters = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {characters, min, max} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			const POOL = characters.split(",").map(s => s.trim()).filter(Boolean)
-			if (POOL.length) throw new Error("pool is empty")
+			if (POOL.length) throw new Error("error.poolIsEmpty")
 			let result = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) {
 				const INDEX = Math.floor(Math.random() * POOL.length)

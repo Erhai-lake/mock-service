@@ -14,7 +14,9 @@ const mock = createMockService(MOCK_SERVICE_OPTIONS)
 
 mock.reload()
 
-console.log(mock.extractTemplates("{{$string.uuid}}"))
+mock.switchErrorOutput(false)
+console.log(mock.applyProcessor("date", "format", "202308sas1512as3456"))
+console.log(mock.templateGenerateData('{{$lorem.paragraph(min=10,max=9)}}'))
 
 console.log(mock.templateGenerateData('{{$string.uuid}}'))
 

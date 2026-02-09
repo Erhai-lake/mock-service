@@ -82,5 +82,5 @@ export const parseToDateTime = (value: string, ref: DateTime = DateTime.now(), t
 	// ISO(extended / basic / offset / Z)
 	let iso = DateTime.fromISO(value, {setZone: true})
 	if (iso.isValid) return {date: timezone ? iso.setZone(timezone) : iso, format: "iso"}
-	throw new Error(`Unsupported date format: ${value}`)
+	throw new Error(`error.unsupportedDate|${JSON.stringify({ format: value })}`)
 }

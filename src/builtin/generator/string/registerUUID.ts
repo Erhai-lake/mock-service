@@ -11,11 +11,11 @@ type namespaceType = keyof typeof UUID_NAMESPACE | "CUSTOM"
 
 const resolveNamespace = (type: namespaceType, custom?: string): string => {
 	if (type === "CUSTOM") {
-		if (!custom) throw new Error("CUSTOM namespace requires a valid UUID")
+		if (!custom) throw new Error("error.customNamespaceInvalid")
 		return custom
 	}
 	const NAMESPACE = UUID_NAMESPACE[type]
-	if (!NAMESPACE) throw new Error(`Unsupported namespace type: ${type}`)
+	if (!NAMESPACE) throw new Error(`error.unsupportedNamespaceType|${JSON.stringify({type})}`)
 	return NAMESPACE
 }
 
@@ -95,12 +95,12 @@ export const registerUUID = (CATEGORY: any): void => {
 				case "v1":
 					return v1()
 				case "v3":
-					if (!name) throw new Error(`UUID${version} requires a non-empty name`)
+					if (!name) throw new Error(`error.uuidVersionEmptyName|${JSON.stringify({version})}`)
 					return v3(name, resolveNamespace(<namespaceType>namespaceType, namespace))
 				case "v4":
 					return v4()
 				case "v5":
-					if (!name) throw new Error(`UUID${version} requires a non-empty name`)
+					if (!name) throw new Error(`error.uuidVersionEmptyName|${JSON.stringify({version})}`)
 					return v5(name, resolveNamespace(<namespaceType>namespaceType, namespace))
 				case "v7":
 					return v7()

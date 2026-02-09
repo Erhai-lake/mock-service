@@ -38,7 +38,7 @@ export const registerSlug = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {min, max} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			const COUNT = Math.floor(Math.random() * (max - min + 1)) + min
 			const BLOCKS: string[] = []
 			for (let i = 0; i < COUNT; i++) {

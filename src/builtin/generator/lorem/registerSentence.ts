@@ -53,7 +53,7 @@ export const registerSentence = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {language, min, max} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			const WORD_COUNT = Math.floor(Math.random() * (max - min + 1)) + min
 			const BLOCK_COUNT = Math.max(1, Math.floor(WORD_COUNT / 2))
 			const WORD_TEMPLATES = language === "zh" ? ZH_TEMPLATES : EN_TEMPLATES

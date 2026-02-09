@@ -61,7 +61,7 @@ export const registerAlpha = (CATEGORY: any): void => {
 		processors: ["string", "encodingDecoding"],
 		generate(params: Partial<params> = {}): string {
 			const {min, max, casing, exclude} = {...PARAMS, ...params}
-			if (max < min) throw new Error("max must be greater than or equal to min")
+			if (max < min) throw new Error("error.maxIsLessThanMin")
 			const FINAL_LENGTH = Math.floor(Math.random() * (max - min + 1)) + min
 			const LETTERS = "abcdefghijklmnopqrstuvwxyz"
 			let pool = ""
@@ -80,7 +80,7 @@ export const registerAlpha = (CATEGORY: any): void => {
 					break
 			}
 			pool = excludePools(pool, exclude)
-			if (!pool) throw new Error("pool is empty")
+			if (!pool) throw new Error("error.poolIsEmpty")
 			let result = ""
 			for (let i = 0; i < FINAL_LENGTH; i++) {
 				result += pool[Math.floor(Math.random() * pool.length)]

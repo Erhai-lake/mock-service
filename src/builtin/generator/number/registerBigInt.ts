@@ -34,7 +34,7 @@ export const registerBigInt = (CATEGORY: any): void => {
 			const {min, max} = {...PARAMS, ...params}
 			const MIN_BIGINT = BigInt(min)
 			const MAX_BIGINT = BigInt(max)
-			if (MAX_BIGINT < MIN_BIGINT) throw new Error("max must be greater than or equal to min")
+			if (MAX_BIGINT < MIN_BIGINT) throw new Error("error.maxIsLessThanMin")
 			const RANGE = MAX_BIGINT - MIN_BIGINT + 1n
 			const randBigInt = () => {
 				const BITS_NEEDED = RANGE.toString(2).length

@@ -25,13 +25,23 @@ export class i18nRegistry {
 		return this.fallbackLocale
 	}
 
-	t(key?: string): string {
+	translate(key: string, params?: Record<string, any>): string {
 		if (!key) return ""
+		let template
 		const CURRENT = this.messages.get(this.currentLocale)
-		if (CURRENT && key in CURRENT) return CURRENT[key]
 		const FALLBACK = this.messages.get(this.fallbackLocale)
-		if (FALLBACK && key in FALLBACK) return FALLBACK[key]
-		return key
+		if (CURRENT && key in CURRENT) {
+			template = CURRENT[key]
+		} else if (FALLBACK && key in FALLBACK) {
+			template = FALLBACK[key]
+		} else {
+			template = key
+		}
+		if (!params || !template.includes("{")) return template
+		return template.replace(/\{(\w+)}/g, (MATCH, VAR_NAME) => {
+			const VALUE = params[VAR_NAME]
+			return VALUE !== undefined ? String(VALUE) : MATCH
+		})
 	}
 }
 
