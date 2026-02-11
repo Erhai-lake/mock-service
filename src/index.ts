@@ -4,6 +4,7 @@ import type {generator} from "./registries/generatorRegistry"
 import type {processorCategory} from "./registries/processorCategoryRegistry"
 import type {processor} from "./registries/processorRegistry"
 
+import {generatorVarCategory} from "./builtin/generator/var"
 import {generatorStringCategory} from "./builtin/generator/string"
 import {generatorLoremCategory} from "./builtin/generator/lorem"
 import {generatorNumberCategory} from "./builtin/generator/number"
@@ -72,6 +73,7 @@ export class mockService {
 	private generatorRegistry = createCategoryRegistry()
 	private processorRegistry = createProcessorCategoryRegistry()
 	private i18nRegistry = createI18nRegistry()
+	private variables = new Map<string, any>()
 	private throwError = true
 	// logic
 	private i18nEngine = new i18nEngine(this)
@@ -83,8 +85,8 @@ export class mockService {
 	private templateEngine = new templateEngine(this)
 	// 内置
 	private readonly BUILTIN_GENERATORS = [
-		generatorStringCategory, generatorLoremCategory, generatorNumberCategory,
-		generatorDateCategory, generatorPersonCategory
+		generatorVarCategory, generatorStringCategory, generatorLoremCategory,
+		generatorNumberCategory, generatorDateCategory, generatorPersonCategory
 	]
 	private readonly BUILTIN_PROCESSORS = [
 		processorStringCategory, processorEncodingDecodingCategory, processorDateCategory
@@ -100,6 +102,7 @@ export class mockService {
 			generatorRegistry: this.generatorRegistry,
 			processorRegistry: this.processorRegistry,
 			i18nRegistry: this.i18nRegistry,
+			variables: this.variables,
 			throwError: this.throwError,
 			resolveGeneratorProcessors: (generator: any) => this._resolveGeneratorProcessors(generator)
 		}
@@ -125,6 +128,7 @@ export class mockService {
 		this.generatorRegistry = createCategoryRegistry()
 		this.processorRegistry = createProcessorCategoryRegistry()
 		this.i18nRegistry = createI18nRegistry()
+		this.clearVar()
 		this._applyAll()
 		if (PREV_LOCALE) this.i18nRegistry.setLocale(PREV_LOCALE)
 		if (PREV_FALLBACK) this.i18nRegistry.setFallbackLocale(PREV_FALLBACK)
@@ -265,6 +269,47 @@ export class mockService {
 	 */
 	translateProcessor(processor: processor): processor {
 		return this.translateEngine.translateProcessor(processor)
+	}
+
+	/**
+	 * 写入变量
+	 */
+	setVar(key: string, value: any, isReturn: boolean = false): any {
+		this.variables.set(key, value)
+		return isReturn ? value : ""
+	}
+
+	/**
+	 * 批量写入变量
+	 */
+	setVars(vars: Record<string, any>) {
+		if (!vars || typeof vars !== "object") return
+		for (const KEY in vars) {
+			if (Object.prototype.hasOwnProperty.call(vars, KEY)) {
+				this.variables.set(KEY, vars[KEY])
+			}
+		}
+	}
+
+	/**
+	 * 读取变量
+	 */
+	getVar(key: string): any {
+		return this.variables.get(key)
+	}
+
+	/**
+	 * 读取所有变量
+	 */
+	getVars(): Record<string, any> {
+		return Object.fromEntries(this.variables)
+	}
+
+	/**
+	 * 清空变量
+	 */
+	clearVar() {
+		this.variables.clear()
 	}
 
 	/**
@@ -436,18 +481,18 @@ export class mockService {
 	}
 
 	/**
-	 * 应用处理器
+	 * 应用全局处理器
 	 */
-	applyProcessor(processorCategoryId: string, processorId: string, value: any, params?: any): any {
-		return this.generatorProcessorEngine.applyProcessor(processorCategoryId, processorId, value, params)
+	applyGlobalProcessor(processorId: string, value: any, params?: any): any {
+		return this.generatorProcessorEngine.applyGlobalProcessor(processorId, value, params)
 	}
 
 	/**
-	 * 应用处理器2
+	 * 应用处理器
 	 * 使用生成器允许的处理器, 防止异常调用
 	 */
-	applyProcessor2(generatorCategoryId: string, generatorId: string, processorId: string, value: any, params?: any): any {
-		return this.generatorProcessorEngine.applyProcessor2(generatorCategoryId, generatorId, processorId, value, params)
+	applyProcessor(generatorCategoryId: string, generatorId: string, processorId: string, value: any, params?: any): any {
+		return this.generatorProcessorEngine.applyProcessor(generatorCategoryId, generatorId, processorId, value, params)
 	}
 
 	/**

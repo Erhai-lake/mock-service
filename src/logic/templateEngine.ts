@@ -57,26 +57,48 @@ export class templateEngine {
 	}
 
 	templateGenerateData(template: any): any {
-		if (typeof template !== "string") return template
-		if (!template.startsWith("{{")) return template
-		const CONTENT = template.trim().replace(/^\{\{\$/, "").replace(/}}$/, "")
-		const PARTS = splitByTopLevelPipe(CONTENT)
+		if (typeof template !== "string" || !template.startsWith("{{")) return template
+		// 移除外层的 {{ 和 }}
+		const CONTENT = template.trim().replace(/^\{\{/, "").replace(/}}$/, "")
+		// 识别标识符: $ 为生成器, @ 为变量
+		const IDENTIFIER = CONTENT[0]
+		const RAW_BODY = CONTENT.slice(1)
+		// 处理处理链
+		const PARTS = splitByTopLevelPipe(RAW_BODY)
 		const MAIN = PARTS.shift()
 		if (!MAIN) return template
-		const MAIN_MATCH = MAIN.match(/^(\w+)\.(\w+)(?:\((.*)\))?$/)
-		if (!MAIN_MATCH) throw new Error(`Invalid template: ${template}`)
-		const [, CATEGORY_ID, GENERATOR_ID, MAIN_PARAMS_STR] = MAIN_MATCH
-		const RESOLVED_MAIN_PARAMS_STR = this.resolveTemplate(MAIN_PARAMS_STR)
-		const MAIN_PARAMS = parseParams(RESOLVED_MAIN_PARAMS_STR)
-		let value = this.service.generateData(CATEGORY_ID, GENERATOR_ID, MAIN_PARAMS)
-		// 应用处理器
-		for (const P of PARTS) {
-			const MATCH = P.match(/^(\w+)(?:\((.*)\))?$/)
+		let value: any
+		let categoryId = ""
+		let generatorId = ""
+		switch (IDENTIFIER) {
+			case "@":
+				value = this.service.getVar(MAIN.trim())
+				break
+			case "$":
+				const MAIN_MATCH = MAIN.match(/^(\w+)\.(\w+)(?:\((.*)\))?$/)
+				if (!MAIN_MATCH) throw new Error(`生成器模板无效: ${template}`)
+				const [, CATEGORY_ID, GENERATOR_ID, MAIN_PARAMS_STR] = MAIN_MATCH
+				categoryId = CATEGORY_ID
+				generatorId = GENERATOR_ID
+				const RESOLVED_MAIN_PARAMS_STR = this.resolveTemplate(MAIN_PARAMS_STR || "")
+				const MAIN_PARAMS = parseParams(RESOLVED_MAIN_PARAMS_STR)
+				value = this.service.generateData(categoryId, generatorId, MAIN_PARAMS)
+				break
+			default:
+				return template
+		}
+		// 应用后置处理器
+		for (const PARE of PARTS) {
+			const MATCH = PARE.match(/^(\w+)(?:\((.*)\))?$/)
 			if (!MATCH) continue
 			const [, PROCESSOR_ID, PARAM_STR] = MATCH
 			const RAW_PARAMS = parseParams(PARAM_STR)
 			const RESOLVED_PARAMS = Array.isArray(RAW_PARAMS) ? RAW_PARAMS.map(value => resolveParamValue(value, this)) : resolveParamValue(RAW_PARAMS, this)
-			value = this.service.applyProcessor2(CATEGORY_ID, GENERATOR_ID, PROCESSOR_ID, value, RESOLVED_PARAMS)
+			if (IDENTIFIER === "$") {
+				value = this.service.applyProcessor(categoryId, generatorId, PROCESSOR_ID, value, RESOLVED_PARAMS)
+			} else {
+				value = this.service.applyGlobalProcessor(PROCESSOR_ID, value, RESOLVED_PARAMS)
+			}
 		}
 		return value
 	}

@@ -5,6 +5,15 @@ export class generatorProcessorEngine {
 	constructor(private service: mockService) {
 	}
 
+	private _createContext() {
+		return {
+			getVar: (KEY: string) => this.service.getVar(KEY),
+			setVar: (KEY: string, VALUE: any, IS_RETURN: boolean = false) => this.service.setVar(KEY, VALUE, IS_RETURN),
+			setVars: (VARS: Record<string, any>) => this.service.setVars(VARS),
+			clearVar: () => this.service.clearVar()
+		}
+	}
+
 	private handleError(error: any, fallbackValue: string): never | string {
 		const RAW_MESSAGE = error instanceof Error ? error.message : String(error)
 		let finalMessage: string
@@ -31,28 +40,46 @@ export class generatorProcessorEngine {
 		try {
 			const GENERATOR: generator = this.service.getGenerator(generatorCategoryId, generatorId)
 			const FINAL_PARAMS = normalizeCallParams(GENERATOR.params, params)
-			return FINAL_PARAMS === undefined ? GENERATOR.generate() : GENERATOR.generate(FINAL_PARAMS)
+			const CONTEXT = this._createContext()
+			return FINAL_PARAMS === undefined ? GENERATOR.generate({}, CONTEXT) : GENERATOR.generate(FINAL_PARAMS, CONTEXT)
 		} catch (error) {
 			return this.handleError(error, `${generatorCategoryId}.${generatorId}:${JSON.stringify(params)}`)
 		}
 	}
 
-	applyProcessor(processorCategoryId: string, processorId: string, value: any, params?: any): any {
+	applyGlobalProcessor(processorId: string, value: any, params?: any): any {
+		let targetProcessor: any = null
+		const CATEGORIES = this.service.getAllProcessorCategory()
+		for (const CATEGORIE of CATEGORIES) {
+			try {
+				const PROCESSOR = CATEGORIE.processors.getProcessor(processorId)
+				if (PROCESSOR) {
+					targetProcessor = PROCESSOR
+					break
+				}
+			} catch {
+			}
+		}
+		if (!targetProcessor) {
+			const ERR_KEY = `error.processorNotFound|${JSON.stringify({id: processorId})}`
+			return this.handleError(ERR_KEY, `global.${processorId}:${value}:${JSON.stringify(params)}`)
+		}
 		try {
-			const PROCESSOR = this.service.getProcessor(processorCategoryId, processorId)
-			const FINAL_PARAMS = normalizeCallParams(PROCESSOR.params, params)
-			return FINAL_PARAMS === undefined ? PROCESSOR.apply(value) : PROCESSOR.apply(value, FINAL_PARAMS)
+			const FINAL_PARAMS = normalizeCallParams(targetProcessor.params, params)
+			const CONTEXT = this._createContext()
+			return FINAL_PARAMS === undefined ? targetProcessor.apply(value, {}, CONTEXT) : targetProcessor.apply(value, FINAL_PARAMS, CONTEXT)
 		} catch (error) {
-			return this.handleError(error, `${processorCategoryId}.${processorId}:${value}:${JSON.stringify(params)}`)
+			return this.handleError(error, `global.${processorId}:${value}:${JSON.stringify(params)}`)
 		}
 	}
 
-	applyProcessor2(generatorCategoryId: string, generatorId: string, processorId: string, value: any, params?: any): any {
+	applyProcessor(generatorCategoryId: string, generatorId: string, processorId: string, value: any, params?: any): any {
 		try {
 			const GENERATOR = this.service.getGenerator(generatorCategoryId, generatorId)
 			const PROCESSOR = GENERATOR.getProcessor(processorId)
 			const FINAL_PARAMS = normalizeCallParams(PROCESSOR.params, params)
-			return FINAL_PARAMS === undefined ? PROCESSOR.apply(value) : PROCESSOR.apply(value, FINAL_PARAMS)
+			const CONTEXT = this._createContext()
+			return FINAL_PARAMS === undefined ? PROCESSOR.apply(value, {}, CONTEXT) : PROCESSOR.apply(value, FINAL_PARAMS, CONTEXT)
 		} catch (error) {
 			return this.handleError(error, `${generatorCategoryId}.${generatorId}.${processorId}:${value}:${JSON.stringify(params)}`)
 		}

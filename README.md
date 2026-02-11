@@ -2,17 +2,17 @@
 
 ## Introduction / 简介
 
-mock-service is a JavaScript library for generating mock data.
+**mock-service** is a JavaScript library for generating simulation data and supporting variables and templates.
 
-mock-service 是一个用于生成模拟数据的 JavaScript 库.
+**mock-service** 是一个用于生成模拟数据, 支持变量, 模板的 JavaScript 库.
 
 It provides a wealth of generators, as well as the corresponding processor, can help developers quickly generate simulation data that meet the requirements.
 
 它提供了丰富的生成器, 以及对应的处理器, 可以帮助开发人员快速生成符合要求的模拟数据.
 
-A fully extensible mock data generation library with categories, methods, and processors.
+An extensible simulation data generation library that can be called directly or through templates.
 
-一个可扩展的模拟数据生成库, 包含分类, 方法和处理器.
+一个可扩展, 可直接调用, 也可通过模板调用的模拟数据生成库.
 
 [Documentation / 文档](https://docs.elake.top/project/mock_service/)
 
@@ -59,8 +59,8 @@ const UUIDV7 = mock.generateData("string", "uuid", {version: "v7"})
 console.log(UUIDV7)
 
 // 处理器使用
-console.log(mock.applyProcessor("encodingDecoding", "sha", UUIDV7))
-console.log(mock.applyProcessor("encodingDecoding", "sha", UUIDV7, "SHA512"))
+console.log(mock.applyGlobalProcessor("sha", UUIDV7))
+console.log(mock.applyGlobalProcessor("sha", UUIDV7, "SHA512"))
 
 // 通过模板调用
 console.log(mock.templateGenerateData("{{$string.uuid}}"))

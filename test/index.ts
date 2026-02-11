@@ -14,8 +14,16 @@ const mock = createMockService(MOCK_SERVICE_OPTIONS)
 
 mock.reload()
 
+mock.setVar("testVar", "testValue")
+console.log(mock.getVar("testVar"))
+console.log(mock.templateGenerateData('{{$var.getVar("testVar")}}'))
+console.log(mock.templateGenerateData('{{@testVar}}'))
+console.log(mock.templateGenerateData('{{@testVar|md5}}'))
+console.log(mock.templateGenerateData('{{$var.clearVar}}'))
+console.log(mock.templateGenerateData('{{$var.getVar("testVar")}}'))
+
 mock.switchErrorOutput(false)
-console.log(mock.applyProcessor("date", "format", "202308sas1512as3456"))
+console.log(mock.applyGlobalProcessor("format", "202308sas1512as3456"))
 console.log(mock.templateGenerateData('{{$lorem.paragraph(min=10,max=9)}}'))
 
 console.log(mock.templateGenerateData('{{$string.uuid}}'))

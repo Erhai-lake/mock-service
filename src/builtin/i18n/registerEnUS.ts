@@ -3,6 +3,42 @@ import {i18nRegistry} from "../../registries"
 export const i18nEnUS = (i18nRegistry: i18nRegistry) => {
 	i18nRegistry.register("en-US", {
 		generator: {
+			var: {
+				title: "Variable System",
+				description: "Methods related to the variable system",
+				getVar: {
+					title: "Get Variable",
+					description: "Get the variable value based on the variable key",
+					params: {
+						key: {
+							title: "Variable Key",
+							description: "The variable key to retrieve"
+						}
+					}
+				},
+				setVar: {
+					title: "Set Variable",
+					description: "Set the variable value based on the variable key",
+					params: {
+						key: {
+							title: "Variable Key",
+							description: "The variable key to set"
+						},
+						value: {
+							title: "Variable Value",
+							description: "The variable value to set"
+						},
+						isReturn: {
+							title: "Is Return",
+							description: "Whether to return the set variable value"
+						}
+					}
+				},
+				clearVar: {
+					title: "Clear Variables",
+					description: "Clear all variables"
+				}
+			},
 			string: {
 				title: "Strings / UUID etc.",
 				description: "String-related utilities",
@@ -1091,6 +1127,7 @@ export const i18nEnUS = (i18nRegistry: i18nRegistry) => {
 			}
 		},
 		error: {
+			processorNotFound: "processor not found: {id}",
 			maxIsLessThanMin: "max parameter must be greater than or equal to min parameter",
 			poolIsEmpty: "character pool cannot be empty",
 			poolIsEmptyAfterExclude: "character pool cannot be empty after excluding characters",

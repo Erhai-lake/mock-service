@@ -3,6 +3,42 @@ import {i18nRegistry} from "../../registries"
 export const i18nZhCN = (i18nRegistry: i18nRegistry) => {
 	i18nRegistry.register("zh-CN", {
 		generator: {
+			var: {
+				title: "变量系统",
+				description: "变量系统的相关方法",
+				getVar: {
+					title: "获取变量",
+					description: "根据变量键获取变量值",
+					params: {
+						key: {
+							title: "变量键",
+							description: "要获取的变量键"
+						}
+					}
+				},
+				setVar: {
+					title: "设置变量",
+					description: "根据变量键设置变量值",
+					params: {
+						key: {
+							title: "变量键",
+							description: "要设置的变量键"
+						},
+						value: {
+							title: "变量值",
+							description: "要设置的变量值"
+						},
+						isReturn: {
+							title: "是否返回",
+							description: "是否返回设置的变量值"
+						}
+					}
+				},
+				clearVar: {
+					title: "清除变量",
+					description: "清除所有变量"
+				}
+			},
 			string: {
 				title: "字符串 / UUID 等",
 				description: "字符串相关的方法",
@@ -1091,6 +1127,7 @@ export const i18nZhCN = (i18nRegistry: i18nRegistry) => {
 			}
 		},
 		error: {
+			processorNotFound: "未找到处理器: {id}",
 			maxIsLessThanMin: "max 参数必须大于或等于 min 参数",
 			poolIsEmpty: "字符池不能为空",
 			poolIsEmptyAfterExclude: "排除字符后字符池不能为空",
