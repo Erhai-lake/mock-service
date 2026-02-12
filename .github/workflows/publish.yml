@@ -61,12 +61,13 @@ jobs:
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-            -   name: Pack Release Asset / 打包发布资产
+            -   name: Pack Project / 打包项目产物
                 if: env.CURRENT_VERSION != ''
-                id: pack_asset
                 run: |
-                    PACK_NAME=$(pnpm pack)
-                    echo "TGZ_FILENAME=$PACK_NAME" >> $GITHUB_ENV
+                    pnpm pack
+                    TGZ_FILE=$(ls *.tgz | head -n 1)
+                    echo "TGZ_FILENAME=$TGZ_FILE" >> $GITHUB_ENV
+                    echo "成功打包产物: $TGZ_FILE"
 
             -   name: Create GitHub Release / 创建 GitHub 发布
                 uses: softprops/action-gh-release@v2
