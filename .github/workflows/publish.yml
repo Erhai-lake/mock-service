@@ -61,9 +61,12 @@ jobs:
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-            -   name: Zip Build Assets / 打包构建资产
+            -   name: Pack Release Asset / 打包发布资产
                 if: env.CURRENT_VERSION != ''
-                run: zip -r ${{ env.CURRENT_VERSION }}.zip dist/*
+                id: pack_asset
+                run: |
+                    PACK_NAME=$(pnpm pack)
+                    echo "TGZ_FILENAME=$PACK_NAME" >> $GITHUB_ENV
 
             -   name: Create GitHub Release / 创建 GitHub 发布
                 uses: softprops/action-gh-release@v2
@@ -72,5 +75,5 @@ jobs:
                     tag_name: v${{ env.CURRENT_VERSION }}
                     name: Release v${{ env.CURRENT_VERSION }}
                     files: |
-                        ${{ env.CURRENT_VERSION }}.zip
+                        ${{ env.TGZ_FILENAME }}
                     generate_release_notes: true
