@@ -25,7 +25,8 @@ export const registerMillisecondsTimestamp = (CATEGORY: any): void => {
 			}
 		],
 		processors: ["string", "encodingDecoding", "date"],
-		generate(timezone: string = PARAMS.timezone): string {
+		generate(params: Partial<params> = {}): string {
+			const {timezone} = {...PARAMS, ...params}
 			const MILLIS = DateTime.now().setZone(timezone).toMillis()
 			return String(MILLIS)
 		}

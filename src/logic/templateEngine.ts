@@ -66,7 +66,7 @@ export class templateEngine {
 		}
 		// 移除外层的 {{ 和 }}
 		const CONTENT = template.trim().replace(/^\{\{/, "").replace(/}}$/, "")
-		// 识别标识符: $ 为生成器, @ 为变量
+		// 识别标识符
 		const IDENTIFIER = CONTENT[0]
 		const RAW_BODY = CONTENT.slice(1)
 		// 处理处理链

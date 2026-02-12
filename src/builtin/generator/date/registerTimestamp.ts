@@ -25,7 +25,8 @@ export const registerTimestamp = (CATEGORY: any): void => {
 			}
 		],
 		processors: ["string", "encodingDecoding", "date"],
-		generate(timezone: string = PARAMS.timezone): string {
+		generate(params: Partial<params> = {}): string {
+			const {timezone} = {...PARAMS, ...params}
 			const SECONDS = DateTime.now().setZone(timezone).toSeconds()
 			return String(Math.floor(SECONDS))
 		}

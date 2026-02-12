@@ -28,7 +28,8 @@ export const registerWord = (CATEGORY: any): void => {
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(language: string = PARAMS.language): string {
+		generate(params: Partial<params> = {}): string {
+			const {language} = {...PARAMS, ...params}
 			const WORD = language === "zh" ? WORD_ZH : WORD_EN
 			return WORD[Math.floor(Math.random() * WORD.length)]
 		}

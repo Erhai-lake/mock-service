@@ -27,7 +27,8 @@ export const registerFirstName = (CATEGORY: any): void => {
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(sex: string = PARAMS.sex): string {
+		generate(params: Partial<params> = {}): string {
+			const {sex} = {...PARAMS, ...params}
 			const NAME = sex === "male" ? MALE_NAME_ZH : FEMALE_NAME_ZH
 			return NAME[Math.floor(Math.random() * NAME.length)]
 		}

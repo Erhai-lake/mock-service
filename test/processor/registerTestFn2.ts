@@ -20,7 +20,8 @@ export const registerTestFn2 = (CATEGORY: any): void => {
 				default: PARAMS.a
 			}
 		],
-		apply(value: string, a = PARAMS.a): string {
+		apply(value: string, params: Partial<params>): string {
+			const {a} = {...PARAMS, ...params}
 			return value + "|" + a + "|" + value
 		}
 	})

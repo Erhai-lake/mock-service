@@ -11,11 +11,6 @@ export const buildParamsString = (schemaParams: any[] = [], actualParams: Record
 	})
 	const DIFF = Object.entries(actualParams).filter(([key, value]) => value !== DEFAULTS[key])
 	if (DIFF.length === 0) return ""
-	if (schemaParams.length === 1) {
-		const PARAM = schemaParams[0]
-		const VALUE = stringifyValue(DIFF[0][1], PARAM.type)
-		return `(${VALUE})`
-	}
 	return (
 		"(" +
 		DIFF.map(([key, value]) => {

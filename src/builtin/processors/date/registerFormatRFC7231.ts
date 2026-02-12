@@ -27,7 +27,8 @@ export const registerFormatRFC7231 = (CATEGORY: any): void => {
 				default: PARAMS.timezone
 			}
 		],
-		apply(value: string, timezone: string = PARAMS.timezone): string {
+		apply(value: string, params: Partial<params>): string {
+			const {timezone} = {...PARAMS, ...params}
 			const DATE = parseToDateTime(value, DateTime.now(), timezone).date
 			const WEEKDAY = WEEKDAYS_ABBREVIATED_EN[DATE.weekday % 7]
 			const DAY = String(DATE.day).padStart(2, "0")

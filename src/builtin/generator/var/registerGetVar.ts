@@ -21,7 +21,8 @@ export const registerGetVar = (CATEGORY: any): void => {
 			}
 		],
 		processors: ["string", "encodingDecoding", "date"],
-		generate(key: string = PARAMS.key, context: any): string {
+		generate(params: Partial<params> = {}, context: any): string {
+			const {key} = {...PARAMS, ...params}
 			if (!key) return ""
 			return context.getVar(key)
 		}

@@ -20,7 +20,8 @@ export const registerLConcat = (CATEGORY: any): void => {
 				default: PARAMS.startString
 			}
 		],
-		apply(value: string, startString: string = PARAMS.startString): string {
+		apply(value: string, params: Partial<params>): string {
+			const {startString} = {...PARAMS, ...params}
 			return startString.concat(String(value))
 		}
 	})

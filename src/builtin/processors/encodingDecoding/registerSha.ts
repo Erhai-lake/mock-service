@@ -29,7 +29,8 @@ export const registerSha = (CATEGORY: any): void => {
 				default: PARAMS.algorithm
 			}
 		],
-		apply(value: string, algorithm: string = PARAMS.algorithm): string {
+		apply(value: string, params: Partial<params>): string {
+			const {algorithm} = {...PARAMS, ...params}
 			switch (algorithm) {
 				case "SHA1":
 					return String(CryptoJS.SHA1(value))

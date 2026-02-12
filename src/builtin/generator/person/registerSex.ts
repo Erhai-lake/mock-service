@@ -25,7 +25,8 @@ export const registerSex = (CATEGORY: any): void => {
 			}
 		],
 		processors: ["string", "encodingDecoding"],
-		generate(language: string = PARAMS.language): string {
+		generate(params: Partial<params> = {}): string {
+			const {language} = {...PARAMS, ...params}
 			const SEX = language === "zh" ? ["男", "女"] : ["male", "female"]
 			return SEX[Math.floor(Math.random() * SEX.length)]
 		}

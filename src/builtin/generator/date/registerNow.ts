@@ -25,7 +25,8 @@ export const registerNow = (CATEGORY: any): void => {
 			}
 		],
 		processors: ["string", "encodingDecoding", "date"],
-		generate(timezone: string = PARAMS.timezone): string {
+		generate(params: Partial<params> = {}): string {
+			const {timezone} = {...PARAMS, ...params}
 			return DateTime.now().setZone(timezone).toFormat("yyyy-MM-dd HH:mm:ss")
 		}
 	})
