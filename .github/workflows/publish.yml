@@ -44,18 +44,20 @@ jobs:
                 if: github.ref == 'refs/heads/build/release'
                 id: release_final
                 run: |
-                    npm version patch -m "chore: release %s"
+                    npm version patch -m "chore: release %s [skip ci]"
                     echo "CURRENT_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
                     pnpm publish --no-git-checks --access public
+                    git push origin build/release --follow-tags
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             -   name: Release Beta
                 if: github.ref == 'refs/heads/build/beta'
                 run: |
-                    npm version prerelease --preid=beta -m "chore: release beta %s"
+                    npm version prerelease --preid=beta -m "chore: release beta %s [skip ci]"
                     echo "CURRENT_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
                     pnpm publish --no-git-checks --tag beta --access public
+                    git push origin build/beta --follow-tags
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
