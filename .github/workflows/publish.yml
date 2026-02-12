@@ -1,0 +1,65 @@
+name: Publish Workflow
+on:
+    push:
+        branches:
+            - "build/release"
+            - "build/beta"
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
+        steps:
+            -   name: Checkout Code
+                uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
+
+            -   name: Install pnpm
+                uses: pnpm/action-setup@v3
+                with:
+                    version: latest
+
+            -   name: Setup Node
+                uses: actions/setup-node@v4
+                with:
+                    node-version: 25
+                    cache: "pnpm"
+                    registry-url: "https://registry.npmjs.org"
+
+            -   name: Install Dependencies
+                run: pnpm install --frozen-lockfile
+
+            -   name: Build Project
+                run: pnpm run build
+
+            -   name: Release Final
+                if: github.ref == 'refs/heads/build/release'
+                id: release_final
+                run: |
+                    git config --local user.email "action@github.com"
+                    git config --local user.name "GitHub Action"
+                    npm version patch -m "chore: release %s"
+                    NEW_VERSION=$(node -p "require('./package.json').version")
+                    echo "CURRENT_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+                    pnpm publish --no-git-checks --access public
+                env:
+                    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+            -   name: Release Beta
+                if: github.ref == 'refs/heads/build/beta'
+                run: |
+                    npm version prerelease --preid=beta -m "chore: release beta %s"
+                    pnpm publish --no-git-checks --tag beta --access public
+                env:
+                    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+                    
+            -   name: Create GitHub Release
+                uses: softprops/action-gh-release@v2
+                if: env.CURRENT_VERSION != ''
+                with:
+                    tag_name: v${{ env.CURRENT_VERSION }}
+                    name: Release v${{ env.CURRENT_VERSION }}
+                    generate_release_notes: true

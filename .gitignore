@@ -3,4 +3,5 @@
 /node_modules
 /pnpm-lock.yaml
 
+/gitFlow.md
 /erhai_lake-mock-service-*.tgz

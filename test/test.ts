@@ -1,7 +1,5 @@
 import mock from "../dist/index.js"
 
-console.log(mock.templateGenerateData("{{$date.millisecondsTimestamp|formatRFC7231}}"))
-
 // 重载
 mock.reload()
 
