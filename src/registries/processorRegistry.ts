@@ -25,17 +25,17 @@ export class processorRegistry {
 
 	registerProcessor(definition: processor): processor {
 		const {id, title, description} = definition
-		if (!id) throw new Error("处理器必须具有id!")
-		if (!title) throw new Error("处理器必须具有标题!")
-		if (!description) throw new Error("处理器必须具有描述!")
-		if (this.processors.has(id)) throw new Error(`处理器 [${id}] 已存在`)
+		if (!id) throw new Error("global.processorRegistry.idEmpty")
+		if (!title) throw new Error("global.processorRegistry.titleEmpty")
+		if (!description) throw new Error("global.processorRegistry.descriptionEmpty")
+		if (this.processors.has(id)) throw new Error(`global.processorRegistry.idDuplicate|${JSON.stringify({id})}`)
 		this.processors.set(id, definition)
 		return definition
 	}
 
 	getProcessor(id: string): processor {
 		const PROCESSOR = this.processors.get(id)
-		if (!PROCESSOR) throw new Error(`处理器 [${id}] 不存在`)
+		if (!PROCESSOR) throw new Error(`global.processorRegistry.processorEmpty|${JSON.stringify({id})}`)
 		return PROCESSOR
 	}
 

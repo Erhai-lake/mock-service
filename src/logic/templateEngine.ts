@@ -58,6 +58,12 @@ export class templateEngine {
 
 	templateGenerateData(template: any): any {
 		if (typeof template !== "string" || !template.startsWith("{{")) return template
+		const reportInvalid = () => {
+			const MSG = this.service.translate("global.templateInvalid", {template})
+			if (this.service.internal.throwError) throw new Error(MSG)
+			console.error(MSG)
+			return template
+		}
 		// 移除外层的 {{ 和 }}
 		const CONTENT = template.trim().replace(/^\{\{/, "").replace(/}}$/, "")
 		// 识别标识符: $ 为生成器, @ 为变量
@@ -76,7 +82,7 @@ export class templateEngine {
 				break
 			case "$":
 				const MAIN_MATCH = MAIN.match(/^(\w+)\.(\w+)(?:\((.*)\))?$/)
-				if (!MAIN_MATCH) throw new Error(`生成器模板无效: ${template}`)
+				if (!MAIN_MATCH) return reportInvalid()
 				const [, CATEGORY_ID, GENERATOR_ID, MAIN_PARAMS_STR] = MAIN_MATCH
 				categoryId = CATEGORY_ID
 				generatorId = GENERATOR_ID
@@ -85,7 +91,7 @@ export class templateEngine {
 				value = this.service.generateData(categoryId, generatorId, MAIN_PARAMS)
 				break
 			default:
-				return template
+				return reportInvalid()
 		}
 		// 应用后置处理器
 		for (const PARE of PARTS) {

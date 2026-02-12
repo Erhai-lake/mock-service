@@ -2,6 +2,43 @@ import {i18nRegistry} from "../../registries"
 
 export const i18nEnUS = (i18nRegistry: i18nRegistry) => {
 	i18nRegistry.register("en-US", {
+		global: {
+			i18nRegistry: {
+				localeEmpty: "Locale cannot be empty"
+			},
+			generatorCategoryRegistry: {
+				idEmpty: "Generator category ID cannot be empty",
+				titleEmpty: "Generator category title cannot be empty",
+				descriptionEmpty: "Generator category description cannot be empty",
+				idDuplicate: "Generator category {id} is duplicated",
+				generatorCategoryEmpty: "Generator category {id} does not exist"
+			},
+			generatorRegistry: {
+				idEmpty: "Generator ID cannot be empty",
+				titleEmpty: "Generator title cannot be empty",
+				descriptionEmpty: "Generator description cannot be empty",
+				idDuplicate: "Generator {id} is duplicated",
+				processorIdEmpty: "Generator {id} must have a processor ID",
+				processorIdDuplicate: "Processor {id} in generator {processorId} is duplicated",
+				processorEmpty: "Processor {id} does not exist",
+				generatorEmpty: "Generator {id} does not exist"
+			},
+			processorCategoryRegistry: {
+				idEmpty: "Processor category ID cannot be empty",
+				titleEmpty: "Processor category title cannot be empty",
+				descriptionEmpty: "Processor category description cannot be empty",
+				idDuplicate: "Processor category {id} is duplicated",
+				processorCategoryEmpty: "Processor category {id} does not exist"
+			},
+			processorRegistry: {
+				idEmpty: "Processor ID cannot be empty",
+				titleEmpty: "Processor title cannot be empty",
+				descriptionEmpty: "Processor description cannot be empty",
+				idDuplicate: "Processor {id} is duplicated",
+				processorEmpty: "Processor {id} does not exist"
+			},
+			templateInvalid: "Template invalid: {template}"
+		},
 		generator: {
 			var: {
 				title: "Variable System",

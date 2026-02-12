@@ -4,6 +4,7 @@ export class i18nRegistry {
 	private fallbackLocale: string = "zh-CN"
 
 	register(locale: string, messages: Record<string, any>) {
+		if (!locale) throw new Error("global.i18nRegistry.localeEmpty")
 		const FLAT_MESSAGES = flattenObject(messages)
 		const EXISTING = this.messages.get(locale) ?? {}
 		this.messages.set(locale, {...EXISTING, ...FLAT_MESSAGES})

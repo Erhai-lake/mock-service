@@ -2,6 +2,43 @@ import {i18nRegistry} from "../../registries"
 
 export const i18nZhCN = (i18nRegistry: i18nRegistry) => {
 	i18nRegistry.register("zh-CN", {
+		global: {
+			i18nRegistry: {
+				localeEmpty: "语言环境不能为空"
+			},
+			generatorCategoryRegistry: {
+				idEmpty: "生成器分类 ID 不能为空",
+				titleEmpty: "生成器分类标题不能为空",
+				descriptionEmpty: "生成器分类描述不能为空",
+				idDuplicate: "生成器分类 {id} 重复",
+				generatorCategoryEmpty: "生成器分类 {id} 不存在"
+			},
+			generatorRegistry: {
+				idEmpty: "生成器 ID 不能为空",
+				titleEmpty: "生成器标题不能为空",
+				descriptionEmpty: "生成器描述不能为空",
+				idDuplicate: "生成器 {id} 重复",
+				processorIdEmpty: "生成器 {id} 必须具有处理器 ID",
+				processorIdDuplicate: "生成器 {id} 中的处理器 {processorId} 重复",
+				processorEmpty: "处理器 {id} 不存在",
+				generatorEmpty: "生成器 {id} 不存在"
+			},
+			processorCategoryRegistry: {
+				idEmpty: "处理器分类 ID 不能为空",
+				titleEmpty: "处理器分类标题不能为空",
+				descriptionEmpty: "处理器分类描述不能为空",
+				idDuplicate: "处理器分类 {id} 重复",
+				processorCategoryEmpty: "处理器分类 {id} 不存在"
+			},
+			processorRegistry: {
+				idEmpty: "处理器 ID 不能为空",
+				titleEmpty: "处理器标题不能为空",
+				descriptionEmpty: "处理器描述不能为空",
+				idDuplicate: "处理器 {id} 重复",
+				processorEmpty: "处理器 {id} 不存在"
+			},
+			templateInvalid: "模板无效: {template}"
+		},
 		generator: {
 			var: {
 				title: "变量系统",

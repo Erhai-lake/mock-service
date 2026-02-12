@@ -22,18 +22,18 @@ export class generatorCategoryRegistry {
 
 	registerCategory(options: registerCategoryOptions): generatorCategory {
 		const {id, title, description} = options
-		if (!id) throw new Error("分类必须具有ID")
-		if (!title) throw new Error("分类必须具有标题")
-		if (!description) throw new Error("分类必须具有描述")
-		if (this.categories.has(id)) throw new Error(`分类 [${id}] 已存在`)
+		if (!id) throw new Error("global.generatorCategoryRegistry.idEmpty")
+		if (!title) throw new Error("global.generatorCategoryRegistry.titleEmpty")
+		if (!description) throw new Error("global.generatorCategoryRegistry.descriptionEmpty")
+		if (this.categories.has(id)) throw new Error(`global.generatorCategoryRegistry.idDuplicate|${JSON.stringify({id})}`)
 		const CATEGORY: generatorCategory = {id, title, description, generators: new generatorRegistry()}
 		this.categories.set(id, CATEGORY)
 		return CATEGORY
 	}
 
-	getCategory(id: string): generatorCategory  {
+	getCategory(id: string): generatorCategory {
 		const CATEGORY = this.categories.get(id)
-		if (!CATEGORY) throw new Error(`分类 [${id}] 不存在`)
+		if (!CATEGORY) throw new Error(`global.generatorCategoryRegistry.generatorCategoryEmpty|${JSON.stringify({id})}`)
 		return CATEGORY
 	}
 

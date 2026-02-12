@@ -46,10 +46,10 @@ export class generatorRegistry {
 
 	registerGenerator(options: registerGeneratorOptions): generator {
 		const {id, title, description, generate, processors} = options
-		if (!id) throw new Error("生成器必须具有id!")
-		if (!title) throw new Error("生成器必须具有标题!")
-		if (!description) throw new Error("生成器必须具有描述!")
-		if (this.generators.has(id)) throw new Error(`生成器 [${id}] 已存在`)
+		if (!id) throw new Error("global.generatorRegistry.idEmpty")
+		if (!title) throw new Error("global.generatorRegistry.titleEmpty")
+		if (!description) throw new Error("global.generatorRegistry.descriptionEmpty")
+		if (this.generators.has(id)) throw new Error(`global.generatorRegistry.idDuplicate|${JSON.stringify({id})}`)
 		const GENERATOR: generator = {
 			id,
 			title,
@@ -59,13 +59,13 @@ export class generatorRegistry {
 			processorIds: processors as string[],
 			processors: new Map(),
 			registerProcessor(processor: processor) {
-				if (!processor?.id) throw new Error("处理器必须具有id!")
-				if (this.processors.has(processor.id)) throw new Error(`处理器 [${processor.id}] 已存在`)
+				if (!processor?.id) throw new Error(`global.generatorRegistry.processorIdEmpty|${JSON.stringify({id})}`)
+				if (this.processors.has(processor.id)) throw new Error(`global.generatorRegistry.processorIdDuplicate|${JSON.stringify({id, processorId: processor.id})}`)
 				this.processors.set(processor.id, processor)
 			},
 			getProcessor(id: string) {
 				const PROCESSOR = this.processors.get(id)
-				if (!PROCESSOR) throw new Error(`处理器 [${id}] 不存在`)
+				if (!PROCESSOR) throw new Error(`global.generatorRegistry.processorEmpty|${JSON.stringify({id, processorId: id})}`)
 				return PROCESSOR
 			},
 			getAllProcessors() {
@@ -81,7 +81,7 @@ export class generatorRegistry {
 
 	getGenerator(id: string): generator {
 		const GENERATOR = this.generators.get(id)
-		if (!GENERATOR) throw new Error(`生成器 [${id}] 不存在`)
+		if (!GENERATOR) throw new Error(`global.generatorRegistry.generatorEmpty|${JSON.stringify({id})}`)
 		return GENERATOR
 	}
 

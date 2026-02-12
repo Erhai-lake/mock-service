@@ -138,12 +138,20 @@ export class mockService {
 	 * 应用所有
 	 */
 	private _applyAll() {
-		const GENERATORS = [...this.BUILTIN_GENERATORS, ...this.generatorPlugins]
-		GENERATORS.forEach(p => p?.(this.generatorRegistry))
-		const PROCESSORS = [...this.BUILTIN_PROCESSORS, ...this.processorPlugins]
-		PROCESSORS.forEach(p => p?.(this.processorRegistry))
 		const I18N = [...this.BUILTIN_I18N, ...this.i18nPlugin]
 		I18N.forEach(p => p?.(this.i18nRegistry))
+		try {
+			const GENERATORS = [...this.BUILTIN_GENERATORS, ...this.generatorPlugins]
+			GENERATORS.forEach(p => p?.(this.generatorRegistry))
+		} catch (error) {
+			return this.handleError(error, "generatorRegistry")
+		}
+		try {
+			const PROCESSORS = [...this.BUILTIN_PROCESSORS, ...this.processorPlugins]
+			PROCESSORS.forEach(p => p?.(this.processorRegistry))
+		} catch (error) {
+			return this.handleError(error, "processorRegistry")
+		}
 		this._resolveAllGeneratorProcessors()
 	}
 
@@ -170,6 +178,31 @@ export class mockService {
 			for (const PROCESSOR of RAW_CATEGORY.processors.getAllProcessors()) {
 				generator.registerProcessor(PROCESSOR)
 			}
+		}
+	}
+
+	/**
+	 * 处理错误
+	 */
+	private handleError(error: any, fallbackValue: string): never | string {
+		const RAW_MESSAGE = error instanceof Error ? error.message : String(error)
+		let finalMessage: string
+		if (RAW_MESSAGE.includes("|")) {
+			const [KEY, PARAMS_STR] = RAW_MESSAGE.split("|")
+			try {
+				const PARAMS = JSON.parse(PARAMS_STR)
+				finalMessage = this.translate(KEY, PARAMS)
+			} catch {
+				finalMessage = this.translate(RAW_MESSAGE)
+			}
+		} else {
+			finalMessage = this.translate(RAW_MESSAGE)
+		}
+		if (this.throwError) {
+			throw new Error(finalMessage)
+		} else {
+			console.error(finalMessage)
+			return fallbackValue
 		}
 	}
 
