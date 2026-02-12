@@ -2,8 +2,8 @@ name: Publish Workflow
 on:
     push:
         branches:
-            - "build/release"
-            - "build/beta"
+            - 'build/release'
+            - 'build/beta'
 
 jobs:
     publish:
@@ -17,30 +17,30 @@ jobs:
                 with:
                     fetch-depth: 0
 
-            -   name: Install pnpm
+            -   name: Install pnpm / 安装 pnpm
                 uses: pnpm/action-setup@v3
                 with:
                     version: latest
 
-            -   name: Setup Node
+            -   name: Setup Node / 配置 Node
                 uses: actions/setup-node@v4
                 with:
                     node-version: 25
-                    cache: "pnpm"
-                    registry-url: "https://registry.npmjs.org"
+                    cache: 'pnpm'
+                    registry-url: 'https://registry.npmjs.org'
 
-            -   name: Install Dependencies
+            -   name: Install Dependencies / 安装依赖
                 run: pnpm install --frozen-lockfile
 
-            -   name: Build Project
+            -   name: Build Project / 构建项目
                 run: pnpm run build
 
-            -   name: Setup Git User
+            -   name: Setup Git User / 配置 Git 用户
                 run: |
                     git config --local user.email "action@github.com"
                     git config --local user.name "GitHub Action"
 
-            -   name: Release Final
+            -   name: Release Final / 发布正式版
                 if: github.ref == 'refs/heads/build/release'
                 id: release_final
                 run: |
@@ -51,7 +51,7 @@ jobs:
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-            -   name: Release Beta
+            -   name: Release Beta / 发布测试版
                 if: github.ref == 'refs/heads/build/beta'
                 run: |
                     npm version prerelease --preid=beta -m "chore: release beta %s [skip ci]"
@@ -61,10 +61,16 @@ jobs:
                 env:
                     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-            -   name: Create GitHub Release
+            -   name: Zip Build Assets / 打包构建资产
+                if: env.CURRENT_VERSION != ''
+                run: zip -r ${{ env.CURRENT_VERSION }}.zip dist/*
+
+            -   name: Create GitHub Release / 创建 GitHub 发布
                 uses: softprops/action-gh-release@v2
                 if: env.CURRENT_VERSION != ''
                 with:
                     tag_name: v${{ env.CURRENT_VERSION }}
                     name: Release v${{ env.CURRENT_VERSION }}
+                    files: |
+                        ${{ env.CURRENT_VERSION }}.zip
                     generate_release_notes: true
