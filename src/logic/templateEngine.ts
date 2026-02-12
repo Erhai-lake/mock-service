@@ -90,6 +90,9 @@ export class templateEngine {
 				const MAIN_PARAMS = parseParams(RESOLVED_MAIN_PARAMS_STR)
 				value = this.service.generateData(categoryId, generatorId, MAIN_PARAMS)
 				break
+			case "=":
+				value = this.service.customExpression(MAIN.trim())
+				break
 			default:
 				return reportInvalid()
 		}

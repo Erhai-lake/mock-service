@@ -529,6 +529,13 @@ export class mockService {
 	}
 
 	/**
+	 * 自定义表达式
+	 */
+	customExpression(expression: string): any {
+		return this.generatorProcessorEngine.customExpression(expression)
+	}
+
+	/**
 	 * 生成模板
 	 */
 	generateTemplate(config: generateTemplateConfig): string {

@@ -50,9 +50,9 @@ export class generatorProcessorEngine {
 	applyGlobalProcessor(processorId: string, value: any, params?: any): any {
 		let targetProcessor: any = null
 		const CATEGORIES = this.service.getAllProcessorCategory()
-		for (const CATEGORIE of CATEGORIES) {
+		for (const ITEM of CATEGORIES) {
 			try {
-				const PROCESSOR = CATEGORIE.processors.getProcessor(processorId)
+				const PROCESSOR = ITEM.processors.getProcessor(processorId)
 				if (PROCESSOR) {
 					targetProcessor = PROCESSOR
 					break
@@ -82,6 +82,24 @@ export class generatorProcessorEngine {
 			return FINAL_PARAMS === undefined ? PROCESSOR.apply(value, {}, CONTEXT) : PROCESSOR.apply(value, FINAL_PARAMS, CONTEXT)
 		} catch (error) {
 			return this.handleError(error, `${generatorCategoryId}.${generatorId}.${processorId}:${value}:${JSON.stringify(params)}`)
+		}
+	}
+
+	customExpression(expression: string): any {
+		const CONTEXT = this._createContext()
+		let finalCode = expression.trim()
+		try {
+			// 单行且不是变量声明, 没有 return, 则补上 return
+			if (!finalCode.includes("return")) {
+				if (!/^(const|let|var|if|for|while|function|class)\s/.test(finalCode)) {
+					finalCode = `return ${finalCode}`
+				}
+			}
+			const RUNNER = new Function("context", finalCode)
+			return RUNNER(CONTEXT)
+		} catch (error) {
+			console.error("[Expression Error]:", error)
+			return `expression_error: ${expression}`
 		}
 	}
 }
