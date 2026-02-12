@@ -3,4 +3,6 @@
 /node_modules
 
 /gitFlow.md
+.DS_Store
+**/.DS_Store
 /erhai_lake-mock-service-*.tgz
