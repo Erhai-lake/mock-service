@@ -772,6 +772,20 @@ export const i18nEnUS = (i18nRegistry: i18nRegistry) => {
 							description: "The language of the gender"
 						}
 					}
+				},
+				idCard: {
+					title: "ID Card",
+					description: "Randomly generate an ID card number",
+					params: {
+						min: {
+							title: "Minimum Age",
+							description: "Minimum age to generate"
+						},
+						max: {
+							title: "Maximum Age",
+							description: "Maximum age to generate"
+						}
+					}
 				}
 			}
 		},

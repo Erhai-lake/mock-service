@@ -4,6 +4,7 @@ import {registerLastName} from "./registerLastName"
 import {registerFirstName} from "./registerFirstName"
 import {registerFullNameEn} from "./registerFullNameEn"
 import {registerSex} from "./registerSex"
+import {registerIdCard} from "./registerIdCard"
 
 export const generatorPersonCategory = (categoryRegistry: generatorCategoryRegistry) => {
 	const CATEGORY = categoryRegistry.registerCategory({
@@ -17,4 +18,5 @@ export const generatorPersonCategory = (categoryRegistry: generatorCategoryRegis
 	registerFirstName(CATEGORY)
 	registerFullNameEn(CATEGORY)
 	registerSex(CATEGORY)
+	registerIdCard(CATEGORY)
 }

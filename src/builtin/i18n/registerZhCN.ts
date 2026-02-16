@@ -772,6 +772,20 @@ export const i18nZhCN = (i18nRegistry: i18nRegistry) => {
 							description: "性别的语言"
 						}
 					}
+				},
+				idCard: {
+					title: "身份证号",
+					description: "随机一个身份证号",
+					params: {
+						min: {
+							title: "最小年龄",
+							description: "要生成的最小年龄"
+						},
+						max: {
+							title: "最大年龄",
+							description: "要生成的最大年龄"
+						}
+					}
 				}
 			}
 		},

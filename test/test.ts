@@ -1,5 +1,7 @@
 import mock from "../dist/index.js"
 
+console.log(mock.templateGenerateData('{{$person.idCard}}'))
+
 // 重载
 mock.reload()
 

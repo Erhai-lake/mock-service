@@ -1,9 +1,21 @@
 {
 	"name": "@erhai_lake/mock-service",
 	"version": "0.0.4-beta.3",
+	"description": "mock-service is a JavaScript library for generating simulation data and supporting variables and templates. It provides a wealth of generators, as well as the corresponding processor, can help developers quickly generate simulation data that meet the requirements.",
+	"keywords": [
+		"mock",
+		"service",
+		"faker",
+		"data-generator"
+	],
+	"license": "MIT",
+	"homepage": "https://github.com/Erhai-lake/mock-service#readme",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Erhai-lake/mock-service.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Erhai-lake/mock-service/issues"
 	},
 	"publishConfig": {
 		"provenance": true
@@ -26,7 +38,8 @@
 	"files": [
 		"dist",
 		"README.md",
-		"LICENSE"
+		"LICENSE",
+		"package.json"
 	],
 	"devDependencies": {
 		"@types/crypto-js": "^4.2.2",
